@@ -1,0 +1,51 @@
+# Final documents
+
+*.dvi
+*.html
+*.pdf
+
+# Program-specific cruft
+
+# ...Emacs
+*~
+auto/
+
+# ...R
+.Rhistory
+.RData
+
+# ...LaTeX
+*.acn
+*.acr
+*.alg
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.idx
+*.ilg
+*.ind
+*.ist
+*.lof
+*.log
+*.lot
+*.maf
+*.mm
+*.mtc
+*.mtc0
+*.nav
+*.nlo
+*.out
+*.pdfsync
+*.ps
+*.pyg
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdy
+*.tdo
