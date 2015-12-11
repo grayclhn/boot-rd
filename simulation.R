@@ -2,6 +2,8 @@ rm(list = ls())
 library(rdrobust)
 library(foreach)
 library(doParallel)
+library(ggplot2)
+library(reshape2)
 
 # N_bc:   number of bootstraps for bias correction
 # N_ci:   number of bootstraps for CI construction
@@ -9,17 +11,20 @@ library(doParallel)
 # N_core: number of cores used for parallel computing
 
 # generate_data:  a function to generate data for three models in Calonic 2014
+# correct_bias:   a function to perform residual sampling and correct bias
 # rd_estimate:    a function to calculate RD estimate
 # rd_ci:          a function to calculate CI for RD estimate
 # simulate:       a function to perform one simulation
-# coverage:       a function to collect results and calculate coverage
+# coverage:       a function to collect simulation results from parallel computing
 
-N_bc    <- 20
+N_bc    <- 50
 N_ci    <- 1000
 N_simu  <- 100
 N_core  <- 15
 
-generate_data <- function(model_n) {
+
+generate_data <- function(model_n) {  
+# input is a scalar: which DGP we are using
   
   x <- 2*rbeta(500, 2, 4) - 1
   e <- rnorm(500, 0, 0.1295)
@@ -42,70 +47,162 @@ generate_data <- function(model_n) {
   return(data.frame(y = y, x = x))
 }
 
-rd_estimate <- function(dta) {
-  bw <- rdbwselect(dta$y, dta$x, bwselect = "CCT")$bws[1]
-  dta <- dta[abs(dta$x) <= bw, ]
-  N_obs <- nrow(dta)
-  dta$x_sq <- dta$x^2
-  dta$r <- dta$x >= 0
+
+
+correct_bias <- function(dta, q) {  
+# dta is a data set which contains x and y. q is the order of the
+# lower order polynomial. The higher order is q+1. q=1 or 1=2.
   
-  linear_ols <- lm(y ~ x + r + x:r, data = dta)
-  quadratic_ols <- lm(y ~ x + x_sq + r + x:r + x_sq:r, data = dta)
-  
-  dta$y_hat <- predict(quadratic_ols)
-  dta$e_hat <- residuals(quadratic_ols)
-  trd_hat <- coefficients(linear_ols)[["rTRUE"]]
-  trd <- coefficients(quadratic_ols)[["rTRUE"]]
-  
-  ## correct bias
-  trd_hat_star <- vector(length = N_bc)
-  for (i in 1:N_bc) {
-    dta_star <- data.frame(y = dta$y_hat + dta$e_hat[sample(c(1:N_obs),N_obs, replace = T)],
-                           x = dta$x,
-                           r = dta$r)
-    trd_hat_star[i] <- coefficients(lm(y ~ x + r + x:r, data = dta_star))[["rTRUE"]]
+  if (q == 1) {
+    l_ols <- lm(y ~ x + r + x:r, data = dta)
+    h_ols <- lm(y ~ x + x_sq + r + x:r + x_sq:r, data = dta)
   }
   
-  trd_bc <- trd_hat - (mean(trd_hat_star) - trd)
+  if (q == 2) {
+    l_ols <- lm(y ~ x + x_sq + r + x:r + x_sq:r, data = dta)
+    h_ols <- lm(y ~ x + x_sq + x_cu + r + x:r + x_sq:r + x_cu:r, data = dta)
+  }
   
-  return(trd_bc)
+  dta$y_hat <- predict(h_ols)
+  dta$e_hat <- residuals(h_ols)
+  trd_hat <- coefficients(l_ols)[["rTRUE"]]
+  trd <- coefficients(h_ols)[["rTRUE"]]
+  
+  trd_hat_star <- vector(length = N_bc)
+  for (i in 1:N_bc) {
+    dta_star <- data.frame(y = dta$y_hat + dta$e_hat[sample(c(1:nrow(dta)),nrow(dta), replace = T)],
+                           x = dta$x, x_sq = dta$x_sq,
+                           r = dta$r)
+    if (q == 1) {
+      trd_hat_star[i] <- coefficients(lm(y ~ x + r + x:r, data = dta_star))[["rTRUE"]]
+    }
+    if (q == 2) {
+      trd_hat_star[i] <- coefficients(lm(y ~ x + x_sq + r + x:r + x_sq:r, data = dta_star))[["rTRUE"]]
+    }
+  }
+  
+  # T_h is the "True" effect from higher order polynomial
+  # T_l is the estimated effect from lower order polynomial
+  # T_bc is the estimated effect after bias correction
+  return(c(T_h = trd, T_l = trd_hat, T_bc = trd_hat - (mean(trd_hat_star) - trd)))
 }
 
-rd_ci <- function(dta, level = c(0.025, 0.975)) {
+
+
+rd_estimate <- function(dta, q = 1) {
+# dta is a data set contains x and y
+# q is the order of lower order polynomial
+  
+  bw <- rdbwselect(dta$y, dta$x, bwselect = "CCT")$bws[1]/2
+  dta <- dta[abs(dta$x) <= bw, ]
+  
+  # if the window contains too few observations, return NA
+  if ((q == 1 & nrow(dta) < 6) | (q == 2 & nrow(dta) < 8)) {
+    return(c(N = NA, T_h = NA, T_l = NA, T_bc = NA))
+  }
+  dta$x_sq <- dta$x^2
+  dta$x_cu <- dta$x^3
+  dta$r <- dta$x >= 0
+  
+  # also return how many observations are used
+  # apply the function "correct_bias"
+  return(c(N = nrow(dta), correct_bias(dta, q)))
+}
+
+
+
+rd_ci <- function(dta, q = 1, level = c(0.025, 0.975)) {
+# dta is a data set contains x and y
+# q is the order of lower order polynomial
+# level defines the percentiles used for CI
+  
+  bw <- rdbwselect(dta$y, dta$x, bwselect = "CCT")$bws[1]/2
+  dta <- dta[abs(dta$x) <= bw, ]
+  
+  # if the window contains too few observations, return NA
+  if ((q == 1 & nrow(dta) < 6) | (q == 2 & nrow(dta) < 8)) {
+    return(c(NA, NA))
+  }
+  dta$x_sq <- dta$x^2
+  dta$x_cu <- dta$x^3
+  dta$r <- dta$x >= 0
+  
+  if (q == 1) {
+    l_ols <- lm(y ~ x + r + x:r, data = dta)
+    h_ols <- lm(y ~ x + x_sq + r + x:r + x_sq:r, data = dta)
+  }
+  
+  if (q == 2) {
+    l_ols <- lm(y ~ x + x_sq + r + x:r + x_sq:r, data = dta)
+    h_ols <- lm(y ~ x + x_sq + x_cu + r + x:r + x_sq:r + x_cu:r, data = dta)
+  }
+  
+  dta$y_hat <- predict(h_ols)
+  dta$e_hat <- residuals(h_ols)
+  
   trd_bc_star <- vector(length = N_ci)
   for (j in 1:N_ci) {
-    dta_star <- dta[sample(1:nrow(dta), nrow(dta), replace = T), ]
-    trd_bc_star[j] <- rd_estimate(dta_star)
+    dta_star <- data.frame(y = dta$y_hat + dta$e_hat[sample(c(1:nrow(dta)),nrow(dta), replace = T)],
+                           x = dta$x, x_sq = dta$x_sq, x_cu = dta$x_cu, r = dta$r)
+    
+    # apply the function "correct_bias"
+    trd_bc_star[j] <- correct_bias(dta_star, q)["T_bc"]
   }
   ci <- quantile(trd_bc_star, level, na.rm = T)
   return(ci)
 }
 
-simulate <- function(seed, model_n) {
-  set.seed(seed)
-  ci <- rd_ci(generate_data(model_n))
+
+
+simulate <- function(model_n, q = 1) {
+# model_n is a scalar: which DGP we are using
+# q is the order of lower order polynomial
+  
+  dta <- generate_data(model_n)
+  estimates <- rd_estimate(dta, q)
+  
+  # if there is not enough observatioins in the window, return NA
+  if (is.na(estimates[1])) return(rep(NA, 7))
+  ci <- rd_ci(dta, q)
+  
+  # determine the true effect for each DGP
   if (model_n == 1 | model_n == 3) t_true <- 0.04
   if (model_n == 2) t_true <- -3.45
   covered <- as.numeric(ci[1] <= t_true & ci[2] >= t_true)
-  return(covered)
+  return(c(estimates, ci, covered = covered))
 }
 
-coverage <- function(model_n) {
+
+
+coverage <- function(model_n, q = 1) {
+# model_n is a scalar: which DGP we are using
+# q is the order of lower order polynomial
+  
   cl <- makeCluster(N_core)
   registerDoParallel(cl)
-  export_obj <- c("N_bc", "N_ci", "generate_data", "rd_estimate", "rd_ci", "simulate")
+  export_obj <- c("N_bc", "N_ci", "generate_data", "correct_bias", "rd_estimate", "rd_ci", "simulate")
   collect_simu <- foreach(i=1:N_simu, .combine="rbind", .packages="rdrobust", .export=export_obj, .inorder=F) %dopar% 
-    simulate(i, model_n)
+    simulate(model_n, q)
   stopCluster(cl)
-  mean(collect_simu)
+  
+  # return a N_simu X 7 matrix. Each row is result from a single simulation
+  return(collect_simu)
 }
 
-coverage(1)
-coverage(2)
-coverage(3)
+set.seed(200)
+results_1.1 <- coverage(1, 1)
+results_2.1 <- coverage(2, 1)
+results_3.1 <- coverage(3, 1)
+results_1.2 <- coverage(1, 2)
+results_2.2 <- coverage(2, 2)
+results_3.2 <- coverage(3, 2)
 
-
-
+summary(results_1.1)
+summary(results_2.1)
+summary(results_3.1)
+summary(results_1.2)
+summary(results_2.2)
+summary(results_3.2)
 
 
 
