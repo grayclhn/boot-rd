@@ -1,0 +1,23 @@
+\usepackage{
+  amsfonts,
+  amsmath,
+  amssymb,
+  amsthm,
+  booktabs,
+  fancyhdr,
+  graphicx,
+  newtxmath,
+  newtxtext,
+}
+
+\frenchspacing
+\usepackage[margin=1in]{geometry}
+
+% Add version information to the paper's date and its page heading.
+\date{\VERSION}
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markboth{}{\footnotesize{\thesection. #1}}}
+\renewcommand{\subsectionmark}[1]{\markboth{}{\footnotesize{\thesubsection. #1}}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\rhead{\footnotesize{\textit{\VERSION}}}
