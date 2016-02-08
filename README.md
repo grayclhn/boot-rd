@@ -21,3 +21,10 @@ it performs well.
 
 * Atlassian makes a very nice and free Git client, SourceTree:
   <https://www.sourcetreeapp.com>
+
+## Generating the pdf
+
+The R script `run_everything.R` runs all of the R code necessary for the
+simulations and empirical exercise presented in the paper. Run it first,
+then generate the pdf by repeatedly calling `pdflatex` and `bibtex` on
+the file `main_paper.tex`.
