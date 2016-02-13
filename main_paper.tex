@@ -14,7 +14,66 @@ This paper proves some results.
 \end{abstract}
 
 \section{Introduction}
+Regression Discontinuity (RD) designs have emerged in the last decade as an 
+important and popular identification strategy to analyze the impact of policies
+and interventions in several fields of the social sciences, including economics,
+political science, public policy, sociology among others.
 
-Our results are great and everyone, everywhere, should use them.
+The strategy exploits arbitrary rules used to assign treatment to units, usually
+relying on some type of ``score,'' the so called running variable. In its basic 
+version, units with score above a certain treshold receive treatment while the 
+ones below that cutoff are left untreated.
+
+The identification of the treatment effect at the treshold is then based on 
+comparing treated and untreated units at the cutoff. As a practical matter this 
+involves comparing units within a bandwidth just above and just below the 
+treshold. That comparison is most commonly done by implementing a local linear
+estimator above and below the cutoff within bandwidths chosen to minimize the 
+asymptotic mean squared error (AMSE) as proposed by Imbens and Kalyanaraman(2012)
+and extensions by Calonico, Cattaneo and Titiunik (2014).
+
+Recently, Calonico, Cattaneo and Titiunik (2014) brought attention to the fact
+that the popular implementation of RD designs coupling optimal-AMSE bandwidths
+and local polynomial estimation provides confidence intervals (CIs) with
+incorrect coverage due to the presence of bias and propose an explicit analytical
+bias correction procedure that re-centers and re-scale the CI by estimating a higher 
+order approximation of the bias term and adjustment its lenght to account for 
+the variation introduced by the bias estimation.
+
+As pointed out by Calonico, Cattaneo and Farrell (2015), ``(...)valid inference
+requires the delicate balancing act of selecting a bandwidth small enough
+to remove smoothing bias, yet large enough to ensure adequate precision.''
+The authors compare the strategies of undersmoothing, and explicit bias 
+correction concluding that direct bias-correction with the corresponding 
+rescalling of the CI's is a superior approach.
+
+This paper contributes to the bias-corrected RD literature by proposing a simple
+bootstrap procedure to correct the first order bias term and directly obtain 
+valid CIs that provide the correct coverage. The algorithm proposed is easy to
+implement and rely on the same conditions as the explicit bias correction
+proposed by Calonico, Cattaneo and Titiunik (2014).
+
+The novel bootstrap procedure is easy to implement and extends to RD designs 
+using higher order polynomials, producing valid CIs which are robust to 
+bandwidth choice and have similar properties to the analytical procedure in 
+Calonico, Cattaneo and Titiunik (2014) while sidestepping the need to derive 
+analytical formulas in each case of interest.
+
+The paper is organized as follows. Section \ref{background} describes the basic
+RD approach, its usual implementation, and the explicit analytical bias 
+correction approach in the literature. Section \ref{boot} presents the proposed 
+bootstrap bias corrected RD algorithm and discusses its properties. Simulation
+evidence that the bootstrap procedure provides valid CIs and its relative 
+performance to the analytical bias correction are presented in Section \ref{sim}.
+Finally, Section \ref{conclusion} concludes.
+
+\section{Background}\label{background}
+
+\section{Bootstrap Bias Correction}\label{boot}
+
+\section{Simulation Evidence}\label{sim}
+
+\section{Conclusion}\label{conclusion}
+
 
 \end{document}
