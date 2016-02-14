@@ -2,9 +2,11 @@
 \input{VERSION}
 \input{tex/setup}
 
-\title{Bootstrap confidence intervals for regression discontinuity estimators
-  with the uniform kernel}
-\author{Ot\'avio Bartalotti \and Gray Calhoun \and Yang He}
+\title{Bootstrap Confidence Intervals for Regression Discontinuity Designs}
+\author{Ot\'avio Bartalotti \and Gray Calhoun \and Yang He\thanks{All authors: 
+Department of Economics, Iowa State University. 260 Heady Hall, Ames, IA  50011.
+Bartalotti: Email: bartalot@iastate.edu. Calhoun: gcalhoun@iastate.edu.
+He: yanghe@iastate.edu.}}
 
 \begin{document}
 \maketitle
@@ -68,6 +70,60 @@ performance to the analytical bias correction are presented in Section \ref{sim}
 Finally, Section \ref{conclusion} concludes.
 
 \section{Background}\label{background}
+In the typical sharp RD setting, a researcher wishes to estimate the local 
+causal effect of treatment at a given threshold. The running variable, $X_{i}$, 
+determines treatment assignment.  Given a known threshold, $\bar{x}$, set to 
+zero without loss of generality, a unit receives treatment if $X_{i} \geq 0$ or 
+does not receive treatment if $X_{i} < 0$. Let $Y_{i}(1)$ and $Y_{i}(0)$ denote 
+the potential outcomes for unit $i$ given it receives treatment and
+ in the absence of treatment, respectively. Hence, the observed sample is 
+ comprised of the running variable, $X_{i}$, and
+ \begin{align}
+  Y_{i}=Y_{i}(0) \mathbbm{1}\{X_{i}<0\}+Y_{i}(1) \mathbbm{1}\{X_{i} \geq 0\}
+ \end{align}
+where $\mathbbm{1}\{ \cdot\}$ denotes the indicator function. For convenience, 
+define
+ \begin{align}
+  \mu(x)= \mathbbm{E}[Y_{i}|X_{i}=x]
+ \end{align}
+Also, let $\mu^{(\eta)}(x)=\frac{d^{\eta}\mu(x)}{dx^{\eta}}$ be the $\eta^{th}$ 
+derivative of the unknown regression function and define 
+$\mu^{(\eta)}_{+}=lim_{x \rightarrow 0^{+}}\mu^{(\eta)}(x)$ and 
+$\mu^{(\eta)}_{-}=lim_{x \rightarrow 0^{-}}\mu^{(\eta)}(x)$.
+In most cases the population parameter of interest is 
+$\tau=\mathbbm{E}[Y(1)-Y(0)|X=\bar{x}]$ (i.e., the average treatment effect 
+at the threshold). Under continuity and smoothness conditions on both the 
+conditional distribution of $X_i$ and the first moments of $Y(0)$ and $Y(1)$ at
+the cutoff, $\tau$ is nonparametrically identifiable (Hahn, Todd and Van der 
+Klaauw, 2001) by:
+\begin{align}
+ \tau&= \mu_{+}- \mu_{-} \nonumber \\ 
+&\text{ where } \mu_{+}=lim_{x \rightarrow 0^{+}}\mu(x),\text{ and } 
+\mu_{-}=lim_{x \rightarrow 0^{-}}\mu(x)
+\end{align}
+
+Naturally, the estimation of $\tau$ in RD designs focuses on the 
+problem of approximating $\mathbbm{E}[Y(1)|X=x]$ and $\mathbbm{E}[Y(0)|X=x]$ 
+near the cutoff. Due to its desirable properties when estimating regression 
+functions at boundary points, we consider the popular approach of fitting 
+separate kernel-weighted local linear regressions in neighborhoods on both 
+sides of the threshold.\footnote{See \cite{HTV2001}, \cite{Porter03} or
+\cite{FanGijbels92} for discussions of the properties of local polynomial 
+regressions for boundary problems.The results presented here are valid for
+higher order polynomials and discontinuities at derivatives, like ``Kink RDD''
+in Card, Lee and Pei (2009). We focus on the linear case for ease in exposition.}
+For the local linear model, we use the following estimator as described in 
+Calonico, Cattaneo and Titiunik (2014)\footnote{Throughout the paper we follow the
+notation on Calonico, Cattaneo and Titiunik (2014) very closely.}
+\begin{align*}
+ \hat{\tau}(h_{n})&=\hat {\mu}_{+}(h_{n}) -\hat{\mu}_{-}(h_{n})\\
+(\hat {\mu}_{+}(h_{n}),\hat {\mu}^{(1)}_{+}(h_{n}))'&= argmin_{b_{0},b_{1}} 
+\sum_{i=1}^{N}\mathbbm{1}\{X_{i} \geq 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2} \cdot K_{h}(X_{i})\\
+(\hat {\mu}_{-}(h_{n}),\hat {\mu}^{(1)}_{-}(h_{n}))' &= argmin_{b_{0},b_{1}}
+\sum_{i=1}^{N}\mathbbm{1}\{X_{i} < 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2}\cdot K_{h}(X_{i})
+\end{align*}
+where $K_{h}(x_{i}) = K\left(\frac{x_{i}}{h}\right)\frac{1}{h}$.
+
 
 \section{Bootstrap Bias Correction}\label{boot}
 
