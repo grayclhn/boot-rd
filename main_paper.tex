@@ -1,6 +1,7 @@
 \documentclass[12pt,fleqn]{article}
 \input{VERSION}
 \input{tex/setup}
+\input{tex/macros}
 
 \title{Bootstrap Confidence Intervals for Regression Discontinuity Designs}
 \author{Ot\'avio Bartalotti \and Gray Calhoun \and Yang He\thanks{All authors: 
@@ -117,9 +118,9 @@ Calonico, Cattaneo and Titiunik (2014)\footnote{Throughout the paper we follow t
 notation on Calonico, Cattaneo and Titiunik (2014) very closely.}
 \begin{align*}
  \hat{\tau}(h_{n})&=\hat {\mu}_{+}(h_{n}) -\hat{\mu}_{-}(h_{n})\\
-(\hat {\mu}_{+}(h_{n}),\hat {\mu}^{(1)}_{+}(h_{n}))'&= argmin_{b_{0},b_{1}} 
+(\hat {\mu}_{+}(h_{n}),\hat {\mu}^{(1)}_{+}(h_{n}))'&= \argmin_{b_{0},b_{1}} 
 \sum_{i=1}^{N}\mathbbm{1}\{X_{i} \geq 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2} \cdot K_{h}(X_{i})\\
-(\hat {\mu}_{-}(h_{n}),\hat {\mu}^{(1)}_{-}(h_{n}))' &= argmin_{b_{0},b_{1}}
+(\hat {\mu}_{-}(h_{n}),\hat {\mu}^{(1)}_{-}(h_{n}))' &= \argmin_{b_{0},b_{1}}
 \sum_{i=1}^{N}\mathbbm{1}\{X_{i} < 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2}\cdot K_{h}(X_{i})
 \end{align*}
 where $K_{h}(x_{i}) = K\left(\frac{x_{i}}{h}\right)\frac{1}{h}$.
