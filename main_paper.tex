@@ -3,7 +3,6 @@
 \input{tex/setup}
 \input{tex/macros}
 
-\title{Bootstrap Confidence Intervals for Regression Discontinuity Designs}
 \author{Ot\'avio Bartalotti \and Gray Calhoun \and Yang He\thanks{All authors: 
 Department of Economics, Iowa State University. 260 Heady Hall, Ames, IA  50011.
 Bartalotti: Email: bartalot@iastate.edu. Calhoun: gcalhoun@iastate.edu.
@@ -71,6 +70,7 @@ performance to the analytical bias correction are presented in Section \ref{sim}
 Finally, Section \ref{conclusion} concludes.
 
 \section{Background}\label{background}
+
 In the typical sharp RD setting, a researcher wishes to estimate the local 
 causal effect of treatment at a given threshold. The running variable, $X_{i}$, 
 determines treatment assignment.  Given a known threshold, $\bar{x}$, set to 
@@ -114,17 +114,143 @@ regressions for boundary problems.The results presented here are valid for
 higher order polynomials and discontinuities at derivatives, like ``Kink RDD''
 in Card, Lee and Pei (2009). We focus on the linear case for ease in exposition.}
 For the local linear model, we use the following estimator as described in 
-Calonico, Cattaneo and Titiunik (2014)\footnote{Throughout the paper we follow the
-notation on Calonico, Cattaneo and Titiunik (2014) very closely.}
+\cite{calonico2014},\footnote{Throughout the paper we follow the
+notation on \cite{calonico2014} very closely.}
 \begin{align*}
  \hat{\tau}(h_{n})&=\hat {\mu}_{+}(h_{n}) -\hat{\mu}_{-}(h_{n})\\
-(\hat {\mu}_{+}(h_{n}),\hat {\mu}^{(1)}_{+}(h_{n}))'&= \argmin_{b_{0},b_{1}} 
+(\hat {\mu}_{+}(h_{n}),\hat {\mu}^{(1)}_{+}(h_{n}))'&= argmin_{b_{0},b_{1}} 
 \sum_{i=1}^{N}\mathbbm{1}\{X_{i} \geq 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2} \cdot K_{h}(X_{i})\\
-(\hat {\mu}_{-}(h_{n}),\hat {\mu}^{(1)}_{-}(h_{n}))' &= \argmin_{b_{0},b_{1}}
+(\hat {\mu}_{-}(h_{n}),\hat {\mu}^{(1)}_{-}(h_{n}))' &= argmin_{b_{0},b_{1}}
 \sum_{i=1}^{N}\mathbbm{1}\{X_{i} < 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2}\cdot K_{h}(X_{i})
 \end{align*}
 where $K_{h}(x_{i}) = K\left(\frac{x_{i}}{h}\right)\frac{1}{h}$.
 
+As shown by \cite{HTV2001}, \cite{Porter03} and expanded by \cite{calonico2014} 
+identification and inference procedures can be developed based on the following 
+assumptions\footnote{The assumptions below are the same as presented by \cite{calonico2014}.}
+\begin{assumption}\label{A1}
+ For some $\kappa_{0} > 0$, the following holds in the neighborhood 
+ $(-\kappa_{0},\kappa_{0})$ around the cutoff $ \bar{x}= 0$:
+ \begin{enumerate}
+  \item $E[\left.Y_{i}^{4}\right|X_{i}=x]$ is bounded and the density of $X$, 
+  $f(x)$, is continuous and bounded away from zero.
+  \item $\mu_{+}(x)=\mathbbm{E}[\left.Y_{i}(1)\right|X_{i}=x]$ and $\mu_{-}(x)=
+  \mathbbm{E}[\left.Y_{i}(0)\right|X_{i}=x]$ are $S$ times continuously 
+  differentiable.
+  \item $\sigma^{2}_{+}(x)=\mathbbm{V}[\left.Y_{i}(1)\right|X_{i}=x]$ and 
+  $\sigma^{2}_{-}(x)=\mathbbm{V}[\left.Y_{i}(0)\right|X_{i}=x]$ are continuous 
+  and bounded away from zero.
+ \end{enumerate}
+\end{assumption}
+
+The conditions in Assumption \ref{A1} are the usual smoothness and existence 
+conditions in which the RD literature relies. Its second part is important for 
+the characterization of the leading bias term that will be the focus of the bias
+correction procedures described in \cite{calonico2014} and in the novel
+ bootstrap procedure proposed in Section \ref{boot}.
+
+The second set of assumptions regards the possible kernel weights used in RD.
+
+\begin{assumption}\label{A2}
+ For some $\kappa>0$, the kernel function $k(\cdot):[0, \kappa] \rightarrow 
+ \mathbbm{R}$ is bounded and nonnegative, zero outside its support, and positive
+ and continuous on $(0, \kappa)$.
+\end{assumption}
+
+Assumption \ref{A2} supports the kernels most commonly used in applications, in 
+particular the broadly used uniform kernel $k(u)=\mathbbm{1}[0\leq u\leq 1]$, 
+which simplifies to the use of a local linear OLS on both sides of the treshold.
+Since the objective of this paper is to present a simple bootstrap procedure to 
+obtain robust confidence intervals in the context of RD designs that can be 
+easily implemented by practitioners, during the remainder of the paper we focus 
+on estimators that use the rectangular kernel. The use of different weighting 
+structures implied by different kernels complicate the bootstrap algorithm in
+meaningful ways and such analysis is left to future work.
+
+\cite{calonico2014} point out that the conventional approaches to construct 
+confidence intervals for $\tau$ using the local linear estimator rely on a 
+large-sample approximation for the standardized $t$-statistic that is valid only
+if the bandwidth shrink fast enough to eliminate the leading bias term 
+contribution to the approximation. Hence, if $nh_{n}^{5}\rightarrow0$ and 
+$nh_{n}\rightarrow \infty$, then
+ \begin{align}
+  T(h_{n})=\frac{\hat{\tau}(h_{n})-\tau}{\sqrt{V(h_{n})}}\rightarrow_{d}N(0,1),
+  \text{        }V(h_{n})=\mathbbm{V}[\left.\tau(h_{n})\right|\chi_{n}],
+  \text{        }\chi_{n}=[X_{1}, \dots X_{n}]^{\prime}
+ \end{align}
+ The conditional variance $V(h_{n})$ depends on the $\sigma^{2}_{+}=
+ lim_{x \rightarrow 0^{+}}\sigma^{2}_{+}(x)$ and $\sigma^{2}_{-}=
+ lim_{x \rightarrow 0^{-}}\sigma^{2}_{-}(x)$ as well as $h_{n}$ and known 
+ quantities that depend on the kernel and order of polynomial used in the 
+ estimation. Under these conditions we could use a conventional confidence 
+ interval for $\tau$ given by
+ \begin{align}
+  I(h_{n})=\left[\hat{\tau}(h_{n})\pm \Phi^{-1}_{1-\frac{\alpha}{2}}\sqrt{V(h_{n})} \right]
+ \end{align}
+with $\Phi^{-1}_{1-\frac{\alpha}{2}}$ being the $\alpha$-quantile of the 
+standard normal distribution. However, most approaches to select the bandwidth, 
+$h_{n}$ in the literature, including the widely used optimal-AMSE bandwidth 
+selector proposed by \cite{IK} lead to bandwidth choices that are ``too large'' 
+since they do not satisfy the condition $nh_{n}^{5}\rightarrow0$, leading to a 
+first-order bias in the distributional approximation used to construct the 
+confidence intervals.
+
+\cite{calonico2014} resolve the problem by deriving the analytical form of the 
+first-order bias and correcting it directly. To obtain correct coverage the 
+confidence interval needs not only to be recentered to correct the bias, but 
+also rescaled to allow for the additional variability introduced by the bias 
+correction. Their approach rely on obtaining a bias-corrected  estimator, 
+$\hat{\tau}^{bc}$ and its adjusted variance. It is important first to note that 
+the first-order bias term itself will depend on the bandwidth $h_{n}$. The 
+approximate bias term can be described as:
+\begin{align*}
+     E[\hat{\tau}(h_{n})|\chi_{n}]-\tau=& h_{n}^{2}\mathsf{B}(h_{n})\{1+o_{p}(1)\}\\
+     \mathsf{B}(h_{n})=&\frac{\mu_{+}^{(2)}}{2!}\mathfrak{B}_{+}(h_{n})-\frac{\mu_{-}^{(2)}}{2!}\mathfrak{B}_{-}(h_{n})
+   \end{align*}
+where $\mathfrak{B}_{+}(h_{n})$ and $\mathfrak{B}_{-}(h_{n})$ are observed 
+quantities that depend on the data, kernel and $h_{n}$. The plug-in 
+bias-corrected estimator then requires estimates for the second derivatives of 
+the conditional mean from above and below the cutoff, $\mu_{+}^{(2)}$ and 
+$\mu_{-}^{(2)}$. \cite{calonico2014} propose using a conventional local quadratic
+estimator, i.e. one order higher than the polynomial used to obtain $\hat{\tau}$,
+using a (potentially) different pilot bandwidth $b_{n}$.
+\begin{align*}
+     \hat{\tau}^{bc}(h_{n}, b_{n})=& \hat{\tau}-h_{n}^{2}\hat{\mathsf{B}}(h_{n},b_{n})\\
+     \hat{\mathsf{B}}(h_{n})=&\frac{\hat{\mu}_{+}^{(2)}(b_{n})}{2!}
+     \mathfrak{B}_{+}(h_{n})-\frac{\hat{\mu}_{-}^{(2)}(b_{n})}{2!}\mathfrak{B}_{-}(h_{n})
+   \end{align*}
+By incorporating the contribution of both $\hat{\tau}(h_{n})$ and 
+$\hat{\mathsf{B}}(h_{n},b_{n})$ to the asymptotic distribution of the estimator,
+\cite{calonico2014} obtain a robust confidence interval with a different 
+asymptotic variance in general. So under Assumptions\ref{A1} and \ref{A2}, if 
+$n\min\{h_{n}^{5}, b_{n}^{5}\}max\{h_{n}^{2}, b_{n}^{2}\}\rightarrow 0$ and 
+$n\min\{h_{n}, b_{n}\}\rightarrow \infty$ and $\kappa \max\{h_{n},b_{n}\}< 
+\kappa_{0}$, they show that
+\begin{align}
+  T^{rbc}(h_{n}, b_{n})=\frac{\hat{\tau}^{bc}(h_{n}, b_{n})-\tau}{\sqrt{V^{bc}(h_{n}, b_{n})}}\rightarrow_{d}N(0,1),
+  \text{        }V^{bc}(h_{n}, b_{n})=V(h_{n})+C^{bc}(h_{n}, b_{n})\\
+ \end{align}
+where the additional term $C^{bc}(h_{n}, b_{n})$ depends on the (asymptotic) 
+variability of the bias estimate used for correction as well as its correlation 
+with the original RD estimator $\hat{\tau}(h_{n})$.\footnote{The details of the 
+formulas are currently ommitted from this paper since their form is not relevant
+to the bootstrap procedure innovation proposed. The details can be found at 
+\cite{calonico2014} Appendix}  Under these conditions we can construct a valid 
+confidence interval for $\tau$ given by
+ \begin{align}
+  I^{rbc}(h_{n}, b_{n})=\left[\left(\hat{\tau}(h_{n})-h_{n}^{2}\hat{\mathsf{B}}
+  (h_{n},b_{n})\right)\pm \Phi^{-1}_{1-\frac{\alpha}{2}}\sqrt{V(h_{n})+C^{bc}
+  (h_{n}, b_{n})} \right]
+ \end{align}
+
+This approach is shown by the authors to significantly coverage of the CIs 
+constructed and provides practitioners with a new toolset to perform inference 
+that is more robust to the choice of bandwidth. We build upon the insight 
+provided by \cite{calonico2014} bias-corrected estimator and propose a simple 
+bootstrap procedure that can directly construct the robust CIs without requiring
+the derivation of analytical formulas and direct estimators for the bias, 
+variance and covariance terms, while relying on the same first-order bias 
+correction approximation proposed by that paper.
 
 \section{Bootstrap Bias Correction}\label{boot}
 
