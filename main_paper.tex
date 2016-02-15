@@ -260,9 +260,18 @@ correction approximation proposed by that paper.
 \section{Bootstrap Bias Correction}\label{boot}
 
 \section{Simulation Evidence}\label{sim}
-This section presents evidence from Monte Carlo simulations that the bootstrap bias correction procedures proposed in Section \ref{boot} produces valid, robust confidence intervals similar to the ones obtained by the analytical procedures established in \cite{calonico2014}. The bootstrap CIs obtained compare favourably to the analytical alternative, with coverage closer to the nominal size of the desired test and shorter lenght of the intervals in the specifications implemented.
+This section presents evidence from Monte Carlo simulations that the bootstrap 
+bias correction procedures proposed in Section \ref{boot} produces valid, robust
+confidence intervals similar to the ones obtained by the analytical procedures 
+established in \cite{calonico2014}. The bootstrap CIs obtained compare favourably
+to the analytical alternative, with coverage closer to the nominal size of the 
+desired test and shorter lenght of the intervals in the specifications implemented.
 
-We selected three data generating processes (DGP) that are widely used in the RD literature to evaluate the performance of the proposed bootstrap procedure, those are the same chosen by \cite{calonico2014} and \cite{IK} and provide a good testing ground for bias correction due to their exacerbated curvature. To be specific, the pseudo data are generated as 500 i.i.d. draws from:
+We selected three data generating processes (DGP) that are widely used in the RD
+literature to evaluate the performance of the proposed bootstrap procedure, 
+those are the same chosen by \cite{calonico2014} and \cite{IK} and provide a 
+good testing ground for bias correction due to their exacerbated curvature. 
+To be specific, the pseudo data are generated as 500 i.i.d. draws from:
 \begin{align*}
 & Y_{i} = \mu_{j}(X_{i}) + \epsilon_{i}, \;\;\; X_{i} \sim  (2 B (2,4) - 1)), \\
 & \epsilon_{i} \sim N(0, \sigma^{2}), \;\;\; \sigma = 0.1295, \;\;\; j = 1,2,3.
@@ -290,10 +299,19 @@ Three different choices of functional forms for $\mu_{j}(x)$ are as follows:
 \end{cases}
 \end{align}
 
-The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed by Lee (2008) and Ludwig and Miller (2007), respectively, while $\mu_{3}(x)$ is a transformation of $\mu_{1}(x)$ designed to emphasize its curvature and therefore bias in the usual RD approach. For the simulation studies, we used 250 bootstraps for bias correction, 999 bootstraps to calculate confidence interval and a total 500 replications. All results presented are based on a 0.95 desired confidence level. Table \ref{Tb1} presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$). Table \ref{Tb2} presents similar results for $p=2$ and $q=3$.
+The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed 
+by Lee (2008) and Ludwig and Miller (2007), respectively, while $\mu_{3}(x)$ is
+a transformation of $\mu_{1}(x)$ designed to emphasize its curvature and 
+therefore bias in the usual RD approach. For the simulation studies, we used 
+250 bootstraps for bias correction, 999 bootstraps to calculate confidence 
+interval and a total 500 replications. All results presented are based on a 
+0.95 desired confidence level. Table \ref{Tb1} presents the main results in which
+a local-linear RD estimator ($p=1$) is employed with the bias-correction based 
+on a local-quadratic approximation ($q=2$). Table \ref{Tb2} presents similar 
+results for $p=2$ and $q=3$.
 
 \begin{table}[ht] \label{Tb1}
-	\caption{Summary of estimates ($p = 1, q = 2$)}
+	\caption{Summary of Results ($p = 1, q = 2$)}
 	\centering
 	\begin{tabular}{ccccccc}
 		\hline
@@ -313,7 +331,7 @@ The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed b
 \end{table}
 
 \begin{table}[ht]\label{Tb2}
-	\caption{Summary of estimates from bootstrap ($p = 2, q = 3$)}
+	\caption{Summary of Results ($p = 2, q = 3$)}
 	\centering
 	\begin{tabular}{ccccccc}
 		\hline
@@ -332,7 +350,16 @@ The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed b
 	\end{tabular}
 \end{table}
 
+As can be seen on the tables above, the bootstrap bias-correction procedure
+proposed in this paper provides a simple alternative to obtain valid robust
+confidence intervals in RD designs and performs well compared to the analytical 
+bias correction procedures proposed by \cite{calonico2014}.
+
 \section{Conclusion}\label{conclusion}
 
+%%%%%REFERENCES%%%%%%%%%
+\clearpage
+\bibliographystyle{jpe}
+\bibliography{bootrd}
 
 \end{document}
