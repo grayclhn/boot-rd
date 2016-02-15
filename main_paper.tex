@@ -35,10 +35,10 @@ ones below that cutoff are left untreated.
 The identification of the treatment effect at the threshold is then based on 
 comparing treated and untreated units at the cutoff. As a practical matter this 
 involves comparing units within a bandwidth just above and just below the 
-treshold. That comparison is most commonly done by implementing a local linear
+threshold. That comparison is most commonly done by implementing a local linear
 estimator above and below the cutoff within bandwidths chosen to minimize the 
 asymptotic mean squared error (AMSE) as proposed by Imbens and Kalyanaraman(2012)
-and extensions by \cite{calonico2014} (CCT, henceforth).
+and extended by \cite{calonico2014} (CCT, henceforth).
 
 Recently, CCT brought attention to the fact that the popular implementation of RD designs coupling optimal-AMSE bandwidths
 and local polynomial estimation provides confidence intervals (CIs) with
@@ -146,7 +146,7 @@ The second set of assumptions regards the possible kernel weights used in RD.
  For some $\kappa>0$, the kernel function $k(\cdot):[0, \kappa] \rightarrow \mathbbm{R}$ is bounded and nonnegative, zero outside its support, and positive and continuous on $(0, \kappa)$.
 \end{assumption}
 
-Assumption \ref{A2} supports the kernels most commonly used in applications, in particular the broadly used uniform kernel $k(u)=\mathbbm{1}[0\leq u\leq 1]$, which simplifies to the use of a local linear OLS on both sides of the treshold. Since the objective of this paper is to present a simple bootstrap procedure to obtain robust confidence intervals in the context of RD designs that can be easily implemented by practitioners, during the remainder of the paper we focus on estimators that use the rectangular kernel. The use of different weighting structures implied by different kernels complicate the bootstrap algorithm in meaningful ways and such analysis is left to future work.
+Assumption \ref{A2} supports the kernels most commonly used in applications, in particular the broadly used uniform kernel $k(u)=\mathbbm{1}[0\leq u\leq 1]$, which simplifies to the use of a local linear OLS on both sides of the treshold. Since the objective of this paper is to present a simple bootstrap procedure to obtain robust confidence intervals in the context of RD designs that can be easily implemented by practitioners, during the remainder of the paper we focus on estimators that use the rectangular kernel. The use of different weighting structures implied by different kernels complicates the bootstrap algorithm in meaningful ways and such analysis is left to future work.
 
 \cite{calonico2014} point out that the conventional approaches to construct confidence intervals for $\tau$ using the local linear estimator rely on a large-sample approximation for the standardized $t$-statistic that is valid only if the bandwidth shrink fast enough to eliminate the leading bias term contribution to the approximation. Hence, if $nh_{n}^{5}\rightarrow0$ and $nh_{n}\rightarrow \infty$, then
  \begin{align}
@@ -158,7 +158,7 @@ Assumption \ref{A2} supports the kernels most commonly used in applications, in 
  \end{align}
 with $\Phi^{-1}_{1-\frac{\alpha}{2}}$ being the $\alpha$-quantile of the standard normal distribution. However, most approaches to select the bandwidth, $h_{n}$ in the literature, including the widely used optimal-AMSE bandwidth selector proposed by \cite{IK} lead to bandwidth choices that are ``too large'' since they do not satisfy the condition $nh_{n}^{5}\rightarrow0$, leading to a first-order bias in the distributional approximation used to construct the confidence intervals.
 
-\cite{calonico2014} resolve the problem by deriving the analytical form of the first-order bias and correcting it directly. To obtain correct coverage the confidence interval needs not only to be re-centered to correct the bias, but also rescaled to allow for the additional variability introduced by the bias correction. Their approach rely on obtaining a bias-corrected  estimator, $\hat{\tau}^{bc}$ and its adjusted variance. It is important first to note that the first-order bias term itself will depend on the bandwidth $h_{n}$. The approximate bias term can be described as:
+\cite{calonico2014} resolve the problem by deriving the analytical form of the first-order bias and correcting it directly. To obtain correct coverage the confidence interval needs not only to be re-centered to correct the bias, but also rescaled to allow for the additional variability introduced by the bias correction. Their approach relies on obtaining a bias-corrected  estimator, $\hat{\tau}^{bc}$ and its adjusted variance. It is important first to note that the first-order bias term itself will depend on the bandwidth $h_{n}$. The approximate bias term can be described as:
 \begin{align*}
      E[\hat{\tau}(h_{n})|\chi_{n}]-\tau=& h_{n}^{2}\mathsf{B}(h_{n})\{1+o_{p}(1)\}\\
      \mathsf{B}(h_{n})=&\frac{\mu_{+}^{(2)}}{2!}\mathfrak{B}_{+}(h_{n})-\frac{\mu_{-}^{(2)}}{2!}\mathfrak{B}_{-}(h_{n})
@@ -168,16 +168,16 @@ where $\mathfrak{B}_{+}(h_{n})$ and $\mathfrak{B}_{-}(h_{n})$ are observed quant
      \hat{\tau}^{bc}(h_{n}, b_{n})=& \hat{\tau}-h_{n}^{2}\hat{\mathsf{B}}(h_{n},b_{n})\\
      \hat{\mathsf{B}}(h_{n})=&\frac{\hat{\mu}_{+}^{(2)}(b_{n})}{2!}\mathfrak{B}_{+}(h_{n})-\frac{\hat{\mu}_{-}^{(2)}(b_{n})}{2!}\mathfrak{B}_{-}(h_{n})
    \end{align*}
-By incorporating the contribution of both $\hat{\tau}(h_{n})$ and $\hat{\mathsf{B}}(h_{n},b_{n})$ to the asymptotic distribution of the estimator, CCT obtain a robust confidence interval with a different asymptotic variance in general. So under Assumptions\ref{A1} and \ref{A2}, if $n\min\{h_{n}^{5}, b_{n}^{5}\}max\{h_{n}^{2}, b_{n}^{2}\}\rightarrow 0$ and $n\min\{h_{n}, b_{n}\}\rightarrow \infty$ and $\kappa \max\{h_{n},b_{n}\}< \kappa_{0}$, they show that
+By incorporating the contribution of both $\hat{\tau}(h_{n})$ and $\hat{\mathsf{B}}(h_{n},b_{n})$ to the asymptotic distribution of the estimator, CCT obtain a robust confidence interval with a different asymptotic variance in general. So under Assumptions \ref{A1} and \ref{A2}, if $n\min\{h_{n}^{5}, b_{n}^{5}\}max\{h_{n}^{2}, b_{n}^{2}\}\rightarrow 0$ and $n\min\{h_{n}, b_{n}\}\rightarrow \infty$ and $\kappa \max\{h_{n},b_{n}\}< \kappa_{0}$, they show that
 \begin{align}
   T^{rbc}(h_{n}, b_{n})=\frac{\hat{\tau}^{bc}(h_{n}, b_{n})-\tau}{\sqrt{V^{bc}(h_{n}, b_{n})}}\rightarrow_{d}N(0,1), \text{        }V^{bc}(h_{n}, b_{n})=V(h_{n})+C^{bc}(h_{n}, b_{n})\\
  \end{align}
-where the additional term $C^{bc}(h_{n}, b_{n})$ depends on the (asymptotic) variability of the bias estimate used for correction as well as its correlation with the original RD estimator $\hat{\tau}(h_{n})$.\footnote{The details of the formulas are currently ommitted from this paper since their form is not relevant to the bootstrap procedure innovation proposed. The details can be found at CCT Appendix}  Under these conditions we can construct a valid confidence interval for $\tau$ given by
+where the additional term $C^{bc}(h_{n}, b_{n})$ depends on the (asymptotic) variability of the bias estimate used for correction as well as its correlation with the original RD estimator $\hat{\tau}(h_{n})$.\footnote{The details of the formulas are currently ommitted from this paper since their form is not relevant to the bootstrap procedure innovation proposed. The details can be found at CCT Appendix.}  Under these conditions we can construct a valid confidence interval for $\tau$ given by
  \begin{align}
   I^{rbc}(h_{n}, b_{n})=\left[\left(\hat{\tau}(h_{n})-h_{n}^{2}\hat{\mathsf{B}}(h_{n},b_{n})\right)\pm \Phi^{-1}_{1-\frac{\alpha}{2}}\sqrt{V(h_{n})+C^{bc}(h_{n}, b_{n})} \right]
  \end{align}
 
-This approach is shown by the authors to significantly coverage of the CIs constructed and provides practitioners with a new tool set to perform inference that is more robust to the choice of bandwidth. We build upon the insight provided by CCT bias-corrected estimator and propose a simple bootstrap procedure that can directly construct the robust CIs without requiring the derivation of analytical formulas and direct estimators for the bias, variance and covariance terms, while relying on the same first-order bias correction approximation proposed by that paper.
+This approach is shown by the authors to significantly improve coverage of the CIs constructed and provides practitioners with a new tool set to perform inference that is more robust to the choice of bandwidth. We build upon the insight provided by CCT bias-corrected estimator and propose a simple bootstrap procedure that can directly construct the robust CIs without requiring the derivation of analytical formulas and direct estimators for the bias, variance and covariance terms, while relying on the same first-order bias correction approximation proposed by that paper.
 
 \section{Bootstrap Bias Correction}\label{boot}
 
@@ -186,7 +186,7 @@ Intuitively, for the local-linear RD estimator's case, we will rely on a local h
 
 The first algorithm describes how to use local linear regression to obtain a point estimate and perform bias correction with local quadratic regression. The second algorithm describes how to obtain its confidence interval with correct coverage. For simplicity, we adopt the same optimal-AMSE bandwidth selector proposed by CCT.\footnote{An interesting question is whether one could use a bootstrap based procedure to select a bandwidth that would achieve similar (or improved) results. This is beyond the scope of this particular paper but is part of ongoing research effort.} 
 
-Essentially, we apply CCT's insight that a polynomial one order higher can capture the first-order bias behavior an create a bootstrap procedure that can correctly mimic the behavior of the bias present in the original estimator. For such, for a chosen bandwidth, we estimate a local quadratic regression the same way CCT suggested but then create bootstrap data by imposing the local quadratic functional form as the DGP. Then, in the ``bootstrap data'' the DGP is known. Let the ``true'' treatment effect under the bootstrap DGP be denoted by $\tau^{*}$. We then estimate the treatment effect using the (misspecified) local linear estimator, $\hat{\tau}^{*}$ to the generated data. Hence, the bias for a specific bootstrap data is given by $\tau^{*}-\hat{\tau}^{*}$. More importantly, by generating new bootstrapped data based on the same quadratic DGP and its residual's distribution, we can obtain an estimate of the first-order bias (the part that is captured by $\hat{\mathsf{B}}(h_{n},b_{n})$ in CCT's formulas on Section \ref{background}) in the original estimate by averaging across the bias in all $B$ bootstrapped data estimates,i.e., $\tau^{*} - \sum_{i = 1}^{B} \hat{\tau}_{ i}^{*}$. Algorithm 1 describes this procedure step-by-step for clarity.
+Essentially, we apply CCT's insight that a polynomial one order higher can capture the first-order bias behavior and create a bootstrap procedure that can correctly mimic the behavior of the bias present in the original estimator. For such, for a chosen bandwidth, we estimate a local quadratic regression the same way CCT suggested but then create bootstrap data by imposing the local quadratic functional form as the DGP. Then, in the ``bootstrap data'' the DGP is known. Let the ``true'' treatment effect under the bootstrap DGP be denoted by $\tau^{*}$. We then estimate the treatment effect using the (misspecified) local linear estimator, $\hat{\tau}^{*}$ to the generated data. Hence, the bias for a specific bootstrap data is given by $\tau^{*}-\hat{\tau}^{*}$. More importantly, by generating new bootstrapped data based on the same quadratic DGP and its residual's distribution, we can obtain an estimate of the first-order bias (the part that is captured by $\hat{\mathsf{B}}(h_{n},b_{n})$ in CCT's formulas on Section \ref{background}) in the original estimate by averaging across the bias in all $B$ bootstrapped data estimates,i.e., $\tau^{*} - \sum_{i = 1}^{B} \hat{\tau}_{ i}^{*}$. Algorithm 1 describes this procedure step-by-step for clarity.
 
 \textbf{Algorithm 1}: Bootstrap Bias Corrected Point Estimator
  \begin{enumerate}
@@ -291,7 +291,7 @@ bias correction procedures proposed by CCT.
 
 
 \section{Conclusion}\label{conclusion}
-This paper proposes an novel bootstrap procedure to obtain robust bias-corrected
+This paper proposes a novel bootstrap procedure to obtain robust bias-corrected
 confidence intervals in regression discontinuity designs. 
 The approach proposed builds upon the developments and intuition advanced by CCT and is based on a first-order bias correction.
 Our procedure provides an alternative to the plug-in analytical methods in the literature and is simple to implement generating robust confidence intervals.
