@@ -260,6 +260,77 @@ correction approximation proposed by that paper.
 \section{Bootstrap Bias Correction}\label{boot}
 
 \section{Simulation Evidence}\label{sim}
+This section presents evidence from Monte Carlo simulations that the bootstrap bias correction procedures proposed in Section \ref{boot} produces valid, robust confidence intervals similar to the ones obtained by the analytical procedures established in \cite{calonico2014}. The bootstrap CIs obtained compare favourably to the analytical alternative, with coverage closer to the nominal size of the desired test and shorter lenght of the intervals in the specifications implemented.
+
+We selected three data generating processes (DGP) that are widely used in the RD literature to evaluate the performance of the proposed bootstrap procedure, those are the same chosen by \cite{calonico2014} and \cite{IK} and provide a good testing ground for bias correction due to their exacerbated curvature. To be specific, the pseudo data are generated as 500 i.i.d. draws from:
+\begin{align*}
+& Y_{i} = \mu_{j}(X_{i}) + \epsilon_{i}, \;\;\; X_{i} \sim  (2 B (2,4) - 1)), \\
+& \epsilon_{i} \sim N(0, \sigma^{2}), \;\;\; \sigma = 0.1295, \;\;\; j = 1,2,3.
+\end{align*}
+Three different choices of functional forms for $\mu_{j}(x)$ are as follows:
+\begin{align}
+\mu_{1}(x) & = 
+\begin{cases}
+0.48 + 1.27x + 7.18x^{2} + 20.21x^{3} + 21.54x^{4} + 7.33x^{5}, \;\;\;\; & \text{if} \;\; x < 0, \\
+0.52 + 0.84x - 3.00x^{2} + 7.99x^3 - 9.01x^4 + 3.56x^{5},  & \text{if} \;\; x \ge 0.
+\end{cases}
+\\
+\mu_{2}(x) & = 
+\begin{cases}
+3.71 + 2.30x + 3.28x^2 + 1.45x^3 + 0.23x^4 + 0.03x^5, \;\; & \text{if} \;\; x < 0, \\
+0.26 + 18.49x - 54.81x^2 + 74.30x^3 - 45.02x^4 + 9.83x^5,  & \text{if} \;\; x \ge 0.
+\end{cases}
+\\
+\mu_{3}(x) & =
+\begin{cases}
+0.48 + 1.27x + 0.5 \times 7.18x^{2}+ \\
++ 0.7 \times 20.21x^3 + 1.1 \times 21.54x^4 + 1.5 \times 7.33x^5, \;\;\;\;\;\;\;\;\;\;\;\; & \text{if} \;\; x < 0, \\
+0.52 + 0.84x - 0.1 \times 3.00x^{2}+ \\
++ 0.3 \times 7.99x^3 - 0.1 \times 9.01x^4 + 3.56x^5, & \text{if} \;\; x \ge 0.
+\end{cases}
+\end{align}
+
+The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed by Lee (2008) and Ludwig and Miller (2007), respectively, while $\mu_{3}(x)$ is a transformation of $\mu_{1}(x)$ designed to emphasize its curvature and therefore bias in the usual RD approach. For the simulation studies, we used 250 bootstraps for bias correction, 999 bootstraps to calculate confidence interval and a total 500 replications. All results presented are based on a 0.95 desired confidence level. Table \ref{Tb1} presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$). Table \ref{Tb2} presents similar results for $p=2$ and $q=3$.
+
+\begin{table}[ht] \label{Tb1}
+	\caption{Summary of estimates ($p = 1, q = 2$)}
+	\centering
+	\begin{tabular}{ccccccc}
+		\hline
+		DGP & True & Bias & SD & MSE & CI coverage & CI length \\ 
+		\hline
+		\multicolumn{7}{c}{Panel A: Bootstrap Bias-Correction} \\
+		1 & 0.04 & -0.013 & 0.067 & 0.068 & 0.938 & 0.243 \\ 
+		2 & -3.45 & -0.014 & 0.083 & 0.084 & 0.954 & 0.319 \\ 
+		3 & 0.04 & -0.006 & 0.069 & 0.070 & 0.956 & 0.247 \\ 
+		&&&&&& \\
+		\multicolumn{7}{c}{Panel B: Analytical Bias Correction (CCT 2014)} \\
+		1 & 0.04 & -0.016 & 0.068 & 0.070 & 0.908 & 0.244 \\ 
+		2 & -3.45 & -0.014 & 0.092 & 0.093 & 0.928 & 0.350 \\ 
+		3 & 0.04 & -0.004 & 0.071 & 0.071 & 0.918 & 0.249 \\ 
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[ht]\label{Tb2}
+	\caption{Summary of estimates from bootstrap ($p = 2, q = 3$)}
+	\centering
+	\begin{tabular}{ccccccc}
+		\hline
+		DGP & True & Bias & SD & MSE & CI coverage & CI length \\ 
+		\hline
+		\multicolumn{7}{c}{Panel A: Uniform Kernel} \\
+		1 & 0.04 & -0.002 & 0.075 & 0.075 & 0.958 & 0.295 \\ 
+		2 & -3.45 & 0.002 & 0.087 & 0.086 & 0.934 & 0.302 \\ 
+		3 & 0.04 & -0.008 & 0.083 & 0.083 & 0.942 & 0.292 \\ 
+		&&&&&& \\
+		\multicolumn{7}{c}{Panel B: Analytical Bias Correction (CCT 2014)} \\
+		1 & 0.04 & -0.004 & 0.082 & 0.082 & 0.926 & 0.295 \\ 		
+		2 & -3.45 & -0.005 & 0.078 & 0.078 & 0.960 & 0.323 \\ 		
+		3 & 0.04 & -0.003 & 0.080 & 0.080 & 0.938 & 0.295 \\ 
+		\hline
+	\end{tabular}
+\end{table}
 
 \section{Conclusion}\label{conclusion}
 
