@@ -254,6 +254,37 @@ variance and covariance terms, while relying on the same first-order bias
 correction approximation proposed by that paper.
 
 \section{Bootstrap Bias Correction}\label{boot}
+Building upon the results and intuition developed by CCT we propose to implement a first-order bias correction and obtain valid CIs through a bootstrap procedure.
+Intuitively, for the local-linear RD estimator's case, we will rely on a local higher-order (quadratic) polynomial approximation for the conditional outcome around the cutoff to capture the potential bias present in the original RD estimate. This insight comes directly from CCT using the same local quadratic approximation to estimate bias term as presented in Section \ref{background}.
+
+The first algorithm describes how to use local linear regression to obtain a point estimate and perform bias correction with local quadratic regression. The second algorithm describes how to obtain its confidence interval with correct coverage. For simplicity, we adopt the same optimal-AMSE bandwidth selector proposed by CCT.\footnote{An interesting question is whether one could use a bootstrap based procedure to select a bandwidth that would achieve similar (or improved) results. This is beyond the scope of this particular paper but is part of ongoing research effort.} 
+
+Essentially, we apply CCT's insight that a polynomial one order higher can capture the first-order bias behavior an create a bootstrap procedure that can correctly mimic the behavior of the bias present in the original estimator. For such, for a chosen bandwidth, we estimate a local quadratic regression the same way CCT suggested but then create bootstrap data by imposing the local quadratic functional form as the DGP. Then, in the ``bootstrap data'' the DGP is known. Let the ``true'' treatment effect under the bootstrap DGP be denoted by $\tau^{*}$. We then estimate the treatment effect using the (misspecified) local linear estimator, $\hat{\tau}^{*}$ to the generated data. Hence, the bias for a specific bootstrap data is given by $\tau^{*}-\hat{\tau}^{*}$. More importantly, by generating new bootstrapped data based on the same quadratic DGP and its residual's distribution, we can obtain an estimate of the first-order bias (the part that is captured by $\hat{\mathsf{B}}(h_{n},b_{n})$ in CCT's formulas on Section \ref{background}) in the original estimate by averaging across the bias in all $B$ bootstrapped data estimates,i.e., $\tau^{*} - \sum_{i = 1}^{B} \hat{\tau}_{ i}^{*}$. Algorithm 1 describes this procedure step-by-step for clarity.
+
+\textbf{Algorithm 1}: Bootstrap Bias Corrected Point Estimator
+ \begin{enumerate}
+	\item Obtain bandwidths for both local linear and quadratic regressions $(h_{n}, b_{n})$ using CCT bandwidth choice algorithm procedure.
+	\item Estimate local linear regression on both sides of cutoff using bandwidth from step 1 and calculate $\hat{\tau}(h_{n})$.
+	\item Estimate local quadratic regression on both sides of cutoff using bandwidth $b_{n}$ from step 1 and calculate $\tau^{*}$, the difference of two regression functions evaluated at cutoff.
+	\item Generate bootstrap data $[Y^{*},\chi^{*}]$ imposing the DGP and and residual's distribution estimated in Step 3 on each sides of cutoff.
+	\item Apply step 2 on bootstrap data and obtain $\hat{\tau}^{*}$.
+	\item Repeat step 4 and 5 for $B$ times and the bias corrected point estimate is given by $\hat{\tau}^{bc}=\hat{\tau} + \tau^{*} - \sum_{i = 1}^{B} \hat{\tau}_{ i}^{*}$.
+ \end{enumerate}
+
+With Algorithm 1 at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a fully bias corrected estimate using Algorithm 1 for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h_{n},b_{n})$ in the asymptotic variance formula on Section \ref{background}.
+
+\textbf{Algorithm 2}: Confidence Interval
+ \begin{enumerate}
+	\item Obtain bandwidths for both local linear and quadratic regressions $(h_{n}, b_{n})$ using CCT bandwidth choice algorithm procedure.
+	\item Estimate local quadratic regression on both sides of cutoff using bandwidth $b_{n}$ from step 1.
+	\item Generate bootstrap data $[Y^{*},\chi^{*}]$ imposing the DGP and and residual's distribution estimated in Step 2 on each sides of cutoff.
+	\item Apply Algorithm 1 (starting at step 2) to bootstrap data generated in step 3 and obtain bias corrected estimate $\hat{\tau}^{bc*}$.
+	\item Repeat step 3 and 4 for $B$ times and obtain confidence interval formed by the $\frac{\alpha}{2}$ and $\left(1-\frac{\alpha}{2}\right)$ percentiles of the empirical distribution of $\hat{\tau}^{bc*}$ .
+ \end{enumerate}
+
+Evidence of the usefulness of the procedures proposed above and their relative 
+performance to the analytical bias correction proposed in CCT are presented in a
+series of Monte Carlo simulations in Section \ref{sim}.
 
 \section{Simulation Evidence}\label{sim}
 This section presents evidence from Monte Carlo simulations that the bootstrap 
