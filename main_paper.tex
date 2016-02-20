@@ -230,11 +230,11 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
         \hat\mu_-^*
         &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
           \sum_{i = 1}^{M^-(h_n)} (Y_i^{*-} -
-          (\beta_0 + \beta_1 X_i^{*-} + \cdots + \beta X_i^{*-}))^2 \\
+          (\beta_0 + \beta_1 X_i^{*-} + \cdots + \beta_p (X_i^{*-})^p))^2 \\
         \hat\mu_+^*
         &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
           \sum_{i = 1}^{M^+(h_n)} (Y_i^{*+} -
-          (\beta_0 + \beta_1 X_i^{*+} + \cdots + \beta X_i^{*+}))^2
+          (\beta_0 + \beta_1 X_i^{*+} + \cdots + \beta_p (X_i^{*+})^p))^2
       \end{align}
     \item Save $\hat\mu_+^* - \hat\mu_-^*$ as $\hat\tau^*_k$.
     \end{enumerate}
@@ -292,11 +292,11 @@ With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected co
         \hat\mu_-^*
         &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
           \sum_{i = 1}^{M^-(h_n)} (Y_i^{*-} -
-          (\beta_0 + \beta_1 X_i^{*-} + \cdots + \beta X_i^{*-}))^2 \\
+          (\beta_0 + \beta_1 X_i^{*-} + \cdots + \beta_p (X_i^{*-})^p))^2 \\
         \hat\mu_+^*
         &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
           \sum_{i = 1}^{M^+(h_n)} (Y_i^{*+} -
-          (\beta_0 + \beta_1 X_i^{*+} + \cdots + \beta X_i^{*+}))^2
+          (\beta_0 + \beta_1 X_i^{*+} + \cdots + \beta_p (X_i^{*+})^p))^2
       \end{align}
     \item Apply Algorithm~\ref{Alg1} to the bootstrapped data set,
       \begin{equation*}
