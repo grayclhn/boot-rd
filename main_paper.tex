@@ -213,8 +213,8 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
         Y_i - \hat g_{p+1}^+(X_i) & \otherwise
       \end{cases}
     \end{equation}
-  \item Repeat the following steps $B$ times to produce a sequence of bootstrap
-    estimates $\hat\tau_1^*,\dots,\hat\tau_B^*$. For the $k$th step:
+  \item Repeat the following steps $B_1$ times to produce a sequence of bootstrap
+    estimates $\hat\tau_1^*,\dots,\hat\tau_{B_1}^*$. For the $k$th step:
     \begin{enumerate}
     \item Draw an i.i.d. sample of size $M^-(b_n)$ from
       $\{\hat\varepsilon_i : i \in I^-(b_n)\}$ and one of size $M^+(b_n)$ from
@@ -241,7 +241,7 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
   \item Calculate the bias estimator as
     \begin{equation}
       \label{eq:4}
-      \hat\Delta = \tfrac{1}{B} \sum_{k=1}^B \hat\tau^*_k -
+      \hat\Delta = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k -
       \big[\hat g_{p+1}^+(0) - \hat g_{p+1}^-(0)\big].
     \end{equation}
   \end{enumerate}
