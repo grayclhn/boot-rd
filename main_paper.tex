@@ -191,27 +191,85 @@ Intuitively, for the local-linear RD estimator's case, we will rely on a local h
 
 The first algorithm describes how to use local linear regression to obtain a point estimate and perform bias correction with local quadratic regression. The second algorithm describes how to obtain its confidence interval with correct coverage. For simplicity, we adopt the same optimal-AMSE bandwidth selector proposed by CCT.\footnote{An interesting question is whether one could use a bootstrap based procedure to select a bandwidth that would achieve similar (or improved) results. This is beyond the scope of this particular paper but is part of ongoing research effort.} 
 
-Essentially, we apply CCT's insight that a polynomial one order higher can capture the first-order bias behavior and create a bootstrap procedure that can correctly mimic the behavior of the bias present in the original estimator. For such, for a chosen bandwidth, we estimate a local quadratic regression the same way CCT suggested but then create bootstrap data by imposing the local quadratic functional form as the DGP. Then, in the ``bootstrap data'' the DGP is known. Let the ``true'' treatment effect under the bootstrap DGP be denoted by $\tau^{*}$. We then estimate the treatment effect using the (misspecified) local linear estimator, $\hat{\tau}^{*}$ to the generated data. Hence, the bias for a specific bootstrap data is given by $\tau^{*}-\hat{\tau}^{*}$. More importantly, by generating new bootstrapped data based on the same quadratic DGP and its residual's distribution, we can obtain an estimate of the first-order bias (the part that is captured by $\hat{\mathsf{B}}(h_{n},b_{n})$ in CCT's formulas on Section \ref{background}) in the original estimate by averaging across the bias in all $B$ bootstrapped data estimates,i.e., $\tau^{*} - \sum_{i = 1}^{B} \hat{\tau}_{ i}^{*}$. Algorithm~\ref{alg1} describes this procedure step-by-step for clarity.
+Essentially, we apply CCT's insight that a polynomial one order higher can capture the first-order bias behavior and create a bootstrap procedure that can correctly mimic the behavior of the bias present in the original estimator. For such, for a chosen bandwidth, we estimate a local quadratic regression the same way CCT suggested but then create bootstrap data by imposing the local quadratic functional form as the DGP. Then, in the ``bootstrap data'' the DGP is known. Let the ``true'' treatment effect under the bootstrap DGP be denoted by $\tau^{*}$. We then estimate the treatment effect using the (misspecified) local linear estimator, $\hat{\tau}^{*}$ to the generated data. Hence, the bias for a specific bootstrap data is given by $\tau^{*}-\hat{\tau}^{*}$. More importantly, by generating new bootstrapped data based on the same quadratic DGP and its residual's distribution, we can obtain an estimate of the first-order bias (the part that is captured by $\hat{\mathsf{B}}(h_{n},b_{n})$ in CCT's formulas on Section \ref{background}) in the original estimate by averaging across the bias in all $B$ bootstrapped data estimates,i.e., $\tau^{*} - \sum_{i = 1}^{B} \hat{\tau}_{ i}^{*}$. Algorithm~\ref{Alg1} describes this procedure step-by-step for clarity.
 
-\begin{algorithm}[Bias correction]\label{alg1}\hfill
- \begin{enumerate}
-	\item Obtain bandwidths for both local linear and quadratic regressions $(h_{n}, b_{n})$ using CCT bandwidth choice algorithm procedure.
-	\item Estimate local linear regression on both sides of cutoff using bandwidth from step 1 and calculate $\hat{\tau}(h_{n})$.
-	\item Estimate local quadratic regression on both sides of cutoff using bandwidth $b_{n}$ from step 1 and calculate $\tau^{*}$, the difference of two regression functions evaluated at cutoff.
-	\item Generate bootstrap data $[Y^{*},\chi^{*}]$ imposing the DGP and and residual's distribution estimated in Step 3 on each sides of cutoff.
-	\item Apply step 2 on bootstrap data and obtain $\hat{\tau}^{*}$.
-	\item Repeat step 4 and 5 for $B$ times and the bias corrected point estimate is given by $\hat{\tau}^{bc}=\hat{\tau} + \tau^{*} - \sum_{i = 1}^{B} \hat{\tau}_{ i}^{*}$.
- \end{enumerate}
+\begin{algorithm}[Bias estimation]\label{Alg1}
+  Assume $h_n$ and $b_n$ are bandwidths as described by Assumption~\ref{A3} and
+  define
+  \begin{align}
+    I^-(h) &= \{i : h < X_i < 0\}, &
+    I^+(h) &= \{i : 0 < X_i < h\}.
+  \end{align}
+  Also define $M^-(h_n)$ and $M^+(h_n)$ to be the number of elements in
+  $I^-(h_n)$ and $I^+(h_n)$ respectively.
+  \begin{enumerate}
+  \item Estimate the local polynomials $g_{p+1}^+$ and $g_{p+1}^-$ as defined by
+    Equation --- and define the residuals
+    \begin{equation}
+      \label{eq:1}
+      \hat\varepsilon_i =
+      \begin{cases}
+        Y_i - \hat g_{p+1}^-(X_i) & \textif\ X_i < 0 \\
+        Y_i - \hat g_{p+1}^+(X_i) & \otherwise
+      \end{cases}
+    \end{equation}
+  \item Repeat the following steps $B$ times to produce a sequence of bootstrap
+    estimates $\hat\tau_1^*,\dots,\hat\tau_B^*$. For the $k$th step:
+    \begin{enumerate}
+    \item Draw an i.i.d. sample of size $M^-(b_n)$ from
+      $\{\hat\varepsilon_i : i \in I^-(b_n)\}$ and one of size $M^+(b_n)$ from
+      $\{\hat\varepsilon_i : i \in I^+(h_n)\}$. Let $\varepsilon_i^{*-}$ and
+      $\varepsilon_i^{*+}$ denote the $i$th element of each sample and construct
+      \begin{align}
+        \label{eq:2}
+        Y_i^{*-} &= \hat g_{p+1}^-(X_i^{*-}) + \varepsilon_i^{*-} &
+        Y_i^{*+} &= \hat g_{p+1}^+(X_i^{*+}) + \varepsilon_i^{*+}
+      \end{align}
+    \item Calculate $\hat\mu_+^*$ and $\hat\mu_-^*$ as
+      \begin{align}
+        \hat\mu_-^*
+        &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
+          \sum_{i = 1}^{M^-(h_n)} (Y_i^{*-} -
+          (\beta_0 + \beta_1 X_i^{*-} + \cdots + \beta X_i^{*-}))^2 \\
+        \hat\mu_+^*
+        &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
+          \sum_{i = 1}^{M^+(h_n)} (Y_i^{*+} -
+          (\beta_0 + \beta_1 X_i^{*+} + \cdots + \beta X_i^{*+}))^2
+      \end{align}
+    \item Save $\hat\mu_+^* - \hat\mu_-^*$ as $\hat\tau^*_k$.
+    \end{enumerate}
+  \item Calculate the bias estimator as
+    \begin{equation}
+      \label{eq:4}
+      \hat\Delta = \tfrac{1}{B} \sum_{k=1}^B \hat\tau^*_k -
+      \big[\hat g_{p+1}^+(0) - \hat g_{p+1}^-(0)\big].
+    \end{equation}
+  \end{enumerate}
 \end{algorithm}
 
-With Algorithm~\ref{alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a fully bias corrected estimate using Algorithm~\ref{alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h_{n},b_{n})$ in the asymptotic variance formula on Section \ref{background}.
+Under Assumptions~\ref{A1} and~\ref{A2} the procedure described by
+Algorithm~\ref{Alg1} provides a consistent estimator of the bias component and
+this estimator converges to zero fast enough in probability that it can be be
+used as a correction.
+
+\begin{lemma}\label{L1}
+  Let $\hat\Delta^*$ be the bias estimator defined in Equation~\eqref{eq:4}.
+  Under Assumptions~\ref{A1} and~\ref{A3},
+  \[
+    \hat\Delta - \big[\E(\hat\tau) - \tau\big] = o_p(-).
+  \]
+\end{lemma}
+
+With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a fully bias corrected estimate using Algorithm~\ref{Alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h_{n},b_{n})$ in the asymptotic variance formula on Section \ref{background}.
+
+\begin{algorithm}[Confidence intervals]\label{Alg2}
 
 \begin{algorithm}[Confidence intervals]\hfill
  \begin{enumerate}
 	\item Obtain bandwidths for both local linear and quadratic regressions $(h_{n}, b_{n})$ using CCT bandwidth choice algorithm procedure.
 	\item Estimate local quadratic regression on both sides of cutoff using bandwidth $b_{n}$ from step 1.
 	\item Generate bootstrap data $[Y^{*},\chi^{*}]$ imposing the DGP and and residual's distribution estimated in Step 2 on each sides of cutoff.
-	\item Apply Algorithm~\ref{alg1} (starting at step 2) to bootstrap data generated in step 3 and obtain bias corrected estimate $\hat{\tau}^{bc*}$.
+	\item Apply Algorithm~\ref{Alg1} (starting at step 2) to bootstrap data generated in step 3 and obtain bias corrected estimate $\hat{\tau}^{bc*}$.
 	\item Repeat step 3 and 4 for $B$ times and obtain confidence interval formed by the $\frac{\alpha}{2}$ and $\left(1-\frac{\alpha}{2}\right)$ percentiles of the empirical distribution of $\hat{\tau}^{bc*}$ .
  \end{enumerate}
 \end{algorithm}
