@@ -263,16 +263,80 @@ used as a correction.
 With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a fully bias corrected estimate using Algorithm~\ref{Alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h_{n},b_{n})$ in the asymptotic variance formula on Section \ref{background}.
 
 \begin{algorithm}[Confidence intervals]\label{Alg2}
-
-\begin{algorithm}[Confidence intervals]\hfill
- \begin{enumerate}
-	\item Obtain bandwidths for both local linear and quadratic regressions $(h_{n}, b_{n})$ using CCT bandwidth choice algorithm procedure.
-	\item Estimate local quadratic regression on both sides of cutoff using bandwidth $b_{n}$ from step 1.
-	\item Generate bootstrap data $[Y^{*},\chi^{*}]$ imposing the DGP and and residual's distribution estimated in Step 2 on each sides of cutoff.
-	\item Apply Algorithm~\ref{Alg1} (starting at step 2) to bootstrap data generated in step 3 and obtain bias corrected estimate $\hat{\tau}^{bc*}$.
-	\item Repeat step 3 and 4 for $B$ times and obtain confidence interval formed by the $\frac{\alpha}{2}$ and $\left(1-\frac{\alpha}{2}\right)$ percentiles of the empirical distribution of $\hat{\tau}^{bc*}$ .
- \end{enumerate}
+  Define $I^-$, $I^+$, $M^-$, and $M^+$ as in Algorithm~\ref{Alg1}.
+  \begin{enumerate}
+  \item Estimate the local polynomials $g_{p+1}^+$ and $g_{p+1}^-$ as defined by
+    Equation --- and define the residuals
+    \begin{equation}
+      \label{eq:6}
+      \hat\varepsilon_i =
+      \begin{cases}
+        Y_i - \hat g_{p+1}^-(X_i) & \textif\ X_i < 0 \\
+        Y_i - \hat g_{p+1}^+(X_i) & \otherwise
+      \end{cases}
+    \end{equation}
+  \item Repeat the following steps $B_2$ times to produce a sequence of bootstrap
+    estimates $\hat\tau_1^{\prime*},\dots,\hat\tau_B^{\prime*}$. For the $k$th step:
+    \begin{enumerate}
+    \item Draw an i.i.d. sample of size $M^-(b_n)$ from
+      $\{\hat\varepsilon_i : i \in I^-(b_n)\}$ and one of size $M^+(b_n)$ from
+      $\{\hat\varepsilon_i : i \in I^+(h_n)\}$. Let $\varepsilon_i^{*-}$ and
+      $\varepsilon_i^{*+}$ denote the $i$th element of each sample and construct
+      \begin{align}
+        \label{eq:2}
+        Y_i^{*-} &= \hat g_{p+1}^-(X_i^{*-}) + \varepsilon_i^{*-} &
+        Y_i^{*+} &= \hat g_{p+1}^+(X_i^{*+}) + \varepsilon_i^{*+}
+      \end{align}
+    \item Calculate $\hat\mu_+^*$ and $\hat\mu_-^*$ as
+      \begin{align}
+        \hat\mu_-^*
+        &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
+          \sum_{i = 1}^{M^-(h_n)} (Y_i^{*-} -
+          (\beta_0 + \beta_1 X_i^{*-} + \cdots + \beta X_i^{*-}))^2 \\
+        \hat\mu_+^*
+        &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
+          \sum_{i = 1}^{M^+(h_n)} (Y_i^{*+} -
+          (\beta_0 + \beta_1 X_i^{*+} + \cdots + \beta X_i^{*+}))^2
+      \end{align}
+    \item Apply Algorithm~\ref{Alg1} to the bootstrapped data set,
+      \begin{equation*}
+        (Y_1^{*-}, X_1^{*-}),\dots,(Y_{M^-(b_n)}^{*-},X_{M^-(b_n)}^{*-}),
+        (Y_1^{*+}, X_1^{*+}),\dots,(Y_{M^+(b_n)}^{*+},X_{M^+(b_n)}^{*+}),
+      \end{equation*}
+      using the same bandwidths $h_n$ and $b_n$ that are used in the rest of
+      this algorithm but reestimating all of the local polynomials on the
+      bootstrap data. Let $\hat\Delta^*$ represent the bias estimate returned
+      by Algorithm~\ref{Alg1}.
+    \item Save the bias-corrected estimate
+      $\hat\mu_+^* - \hat\mu_i^* - \hat\Delta^*$ as $\hat\tau_k^{\prime*}$.
+    \end{enumerate}
+  \item Define the confidence interval endpoints $\hat\ell(\alpha)$ and
+    $\hat u(\alpha)$ as the $\alpha/2$ and $1-\alpha/2$ quantiles of the
+    empirical CDF of $\hat\tau_1^{\prime*},\dots,\hat\tau_{B_2}^{\prime*}$.
+  \end{enumerate}
 \end{algorithm}
+
+Under the same assumptions as earlier, this procedure produces asymptotically
+valid confidence intervals.
+\begin{theorem}
+  Suppose Assumptions~\ref{A1} and~\ref{A3} hold and let $\hat \ell(\alpha)$ and
+  $\hat u(\alpha)$ be the interval endpoints produced by Algorithm~\ref{Alg2}
+  for some $\alpha \in (0,1)$. Also let $\Pr_\tau$ represent the probability
+  distribution of the random variables under the assumption that $\tau$ is
+  the true value of the ATE. Then
+  \begin{equation}
+    \label{eq:5}
+    \plim_{n \to \infty} \sup_\tau
+    \Pr_\tau[\hat\ell(\alpha) \leq \tau \leq \hat u(\alpha)] \geq 1 - \alpha.
+  \end{equation}
+  Each of the one-sided intervals is asymptotically valid as well:
+  \begin{align}
+    \plim_{n \to \infty} \sup_\tau
+    \Pr_\tau[\hat\ell(\alpha) \leq \tau ] &\geq 1 - \alpha / 2, &
+    \plim_{n \to \infty} \sup_\tau
+    \Pr_\tau[\tau \leq \hat u(\alpha)] &\geq 1 - \alpha / 2.
+  \end{align}
+\end{theorem}
 
 Evidence of the usefulness of the procedures proposed above and their relative performance to the analytical bias correction proposed in CCT are presented in a series of Monte Carlo simulations in Section \ref{sim}.
 
