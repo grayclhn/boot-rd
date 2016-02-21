@@ -143,14 +143,14 @@ The conditions in Assumption \ref{A1} are the usual smoothness and existence con
 The second set of assumptions regards the possible kernel weights used in RD.
 
 \begin{assumption}[Kernel]\label{A2}
- For some $\kappa>0$, the kernel function $k(\cdot):[0, \kappa] \rightarrow \mathbbm{R}$ is bounded and nonnegative, zero outside its support, and positive and continuous on $(0, \kappa)$.
+ For some $\kappa>0$, the kernel function $k(\cdot):[0, \kappa] \rightarrow \RR$ is bounded and nonnegative, zero outside its support, and positive and continuous on $(0, \kappa)$.
 \end{assumption}
 
 Assumption \ref{A2} supports the kernels most commonly used in applications, in particular the broadly used uniform kernel $k(u)=\1[0\leq u\leq 1]$, which simplifies to the use of a local linear OLS on both sides of the treshold. Since the objective of this paper is to present a simple bootstrap procedure to obtain robust confidence intervals in the context of RD designs that can be easily implemented by practitioners, during the remainder of the paper we focus on estimators that use the rectangular kernel. The use of different weighting structures implied by different kernels complicates the bootstrap algorithm in meaningful ways and such analysis is left to future work.
 
 \begin{assumption}[Bandwidth]\label{A3}
-Let $h_n$ be the bandwidth used to estimate the local polynomial of order $p$ and let $b_n$ be the bandwidth used for $p+1$. Then $h_n$, $b_n = o(n^{-1/5})$ and
-$n h_n$, $n b_n \to \infty$ as $n \to \infty$.\footnote{Unless otherwise stated, all limits in this paper are assumed to hold as $n \to \infty$.}
+Let $h_n$ be the bandwidth used to estimate the local polynomial of order $p$ and let $b_n$ be the bandwidth used for $p+1$. Then $h_n$, $b_n = o(n^{-1/5})$,
+$n h_n$, $n b_n \to \infty$ as $n \to \infty$, and $h_n \leq b_n$ for all $n$.\footnote{Unless otherwise stated, all limits in this paper are assumed to hold as $n \to \infty$.}
 \end{assumption}
 
 \cite{calonico2014} point out that the conventional approaches to construct confidence intervals for $\tau$ using the local linear estimator rely on a large-sample approximation for the standardized $t$-statistic that is valid only if the bandwidth shrink fast enough to eliminate the leading bias term contribution to the approximation. Hence, if $nh_{n}^{5}\rightarrow0$ and $nh_{n}\rightarrow \infty$, then
@@ -242,22 +242,26 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
     \begin{equation}
       \label{eq:4}
       \hat\Delta = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k -
-      \big[\hat g_{p+1}^+(0) - \hat g_{p+1}^-(0)\big].
+      \big[\hat g_{p+1}^+(0) - \hat g_{p+1}^-(0)\big]
     \end{equation}
   \end{enumerate}
 \end{algorithm}
+Obviously, the distribution of $\hat\Delta$ depends on $B_1$ and we could
+incorporate that dependency into our notation by wrting
+$\hat\Delta_{B_1}$. However, we will follow standard practice in the bootstrap
+literature and assume that $B_1$ is large enough that it can be ignored and
+define $\hat\Delta = \plim_{B_1 \to \infty} \hat\Delta_{B_1}$
 
 Under Assumptions~\ref{A1} and~\ref{A2} the procedure described by
 Algorithm~\ref{Alg1} provides a consistent estimator of the bias component and
 this estimator converges to zero fast enough in probability that it can be be
-used as a correction.
+used as a correction. As is standard in the bootstrap literature, we will assume
+that the number of bootstrap replications, $B_1$, is large enough that the
+simulation error can be ignored.
 
 \begin{lemma}\label{L1}
-  Let $\hat\Delta^*$ be the bias estimator defined in Equation~\eqref{eq:4}.
   Under Assumptions~\ref{A1} and~\ref{A3},
-  \[
-    \hat\Delta - \big[\E(\hat\tau) - \tau\big] = o_p(-).
-  \]
+  $\hat\Delta = \E \hat\tau - \tau + o_p()$.
 \end{lemma}
 
 With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a fully bias corrected estimate using Algorithm~\ref{Alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h_{n},b_{n})$ in the asymptotic variance formula on Section \ref{background}.
@@ -316,20 +320,34 @@ With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected co
   \end{enumerate}
 \end{algorithm}
 
-Under the same assumptions as earlier, this procedure produces asymptotically
-valid confidence intervals.
-\begin{theorem}
-  Suppose Assumptions~\ref{A1} and~\ref{A3} hold and let $\hat \ell(\alpha)$ and
-  $\hat u(\alpha)$ be the interval endpoints produced by Algorithm~\ref{Alg2}
-  for some $\alpha \in (0,1)$. Also let $\Pr_\tau$ represent the probability
-  distribution of the random variables under the assumption that $\tau$ is
-  the true value of the ATE. Then
+As earlier, we assume that $B_1$ and $B_2$ are large enough that simulation
+error can be ignored. Define the limiting values
+\begin{align*}
+\hat\Delta^* &= \plim_{B_1,B_2 \to \infty} \hat\Delta^*_{B_1,B_2} \\
+\hat\ell^*(\alpha) &= \plim_{B_1,B_2 \to \infty} \hat\ell^*_{B_1,B_2}(\alpha) \\
+\hat u^*(\alpha) &= \plim_{B_1,B_2 \to \infty} \hat u^*_{B_1,B_2}(\alpha).
+\end{align*}
+Two results follow. The first is that the secondary bootstrap step produces
+a consistent estimator of the bias under the bootstrap distribution. The
+second is that the intervals overall are asymptotically valid.
+
+\begin{lemma}\label{L2}
+  Under Assumptions~\ref{A1} and~\ref{A3},
+  $\hat\Delta^* = \E^* \hat\tau^* - \tau^* + o_{p^*}(-)$.
+\end{lemma}
+
+
+\begin{theorem}\label{T1}
+  Let $\Pr_\tau$ represent the probability distribution of the random variables
+  under the assumption that $\tau$ is the true value of the ATE and suppose
+  Assumptions~\ref{A1} and~\ref{A3} hold. Then
   \begin{equation}
     \label{eq:5}
     \plim_{n \to \infty} \sup_\tau
     \Pr_\tau[\hat\ell(\alpha) \leq \tau \leq \hat u(\alpha)] \geq 1 - \alpha.
   \end{equation}
-  Each of the one-sided intervals is asymptotically valid as well:
+  Both of the one-sided intervals are asymptotically valid under the same
+  assumptions as well:
   \begin{align}
     \plim_{n \to \infty} \sup_\tau
     \Pr_\tau[\hat\ell(\alpha) \leq \tau ] &\geq 1 - \alpha / 2, &
