@@ -149,8 +149,13 @@ The second set of assumptions regards the possible kernel weights used in RD.
 Assumption \ref{A2} supports the kernels most commonly used in applications, in particular the broadly used uniform kernel $k(u)=\1[0\leq u\leq 1]$, which simplifies to the use of a local linear OLS on both sides of the treshold. Since the objective of this paper is to present a simple bootstrap procedure to obtain robust confidence intervals in the context of RD designs that can be easily implemented by practitioners, during the remainder of the paper we focus on estimators that use the rectangular kernel. The use of different weighting structures implied by different kernels complicates the bootstrap algorithm in meaningful ways and such analysis is left to future work.
 
 \begin{assumption}[Bandwidth]\label{A3}
-Let $h_n$ be the bandwidth used to estimate the local polynomial of order $p$ and let $b_n$ be the bandwidth used for $p+1$. Then $h_n$, $b_n = o(n^{-1/5})$,
-$n h_n$, $n b_n \to \infty$ as $n \to \infty$, and $h_n \leq b_n$ for all $n$.\footnote{Unless otherwise stated, all limits in this paper are assumed to hold as $n \to \infty$.}
+  Let $h_n$ be the bandwidth used to estimate the local polynomial of
+  order $p$ and let $b_n$ be the bandwidth used for $p+1$. Then
+  $h_n = o(n^{-1/5})$, $b_n = o(n^{-1/5})$, $n h_n \to \infty$, and
+  $n b_n \to \infty$ as $n \to \infty$.\footnote{%
+    Unless otherwise stated, all limits in this paper are assumed to
+    hold as $n \to \infty$.} %
+  The relationship $h_n \leq b_n$ also holds for all $n$.
 \end{assumption}
 
 \cite{calonico2014} point out that the conventional approaches to construct confidence intervals for $\tau$ using the local linear estimator rely on a large-sample approximation for the standardized $t$-statistic that is valid only if the bandwidth shrink fast enough to eliminate the leading bias term contribution to the approximation. Hence, if $nh_{n}^{5}\rightarrow0$ and $nh_{n}\rightarrow \infty$, then
@@ -238,19 +243,19 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
       \end{align}
     \item Save $\hat\mu_+^* - \hat\mu_-^*$ as $\hat\tau^*_k$.
     \end{enumerate}
-  \item Calculate the bias estimator as
+  \item Estimate the bias as
     \begin{equation}
       \label{eq:4}
-      \hat\Delta = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k -
+      \Delta^* = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k -
       \big[\hat g_{p+1}^+(0) - \hat g_{p+1}^-(0)\big]
     \end{equation}
   \end{enumerate}
 \end{algorithm}
-Obviously, the distribution of $\hat\Delta$ depends on $B_1$ and we could
+Obviously, the distribution of $\Delta^*$ depends on $B_1$ and we could
 incorporate that dependency into our notation by wrting
-$\hat\Delta_{B_1}$. However, we will follow standard practice in the bootstrap
+$\Delta^*_{B_1}$. However, we will follow standard practice in the bootstrap
 literature and assume that $B_1$ is large enough that it can be ignored and
-define $\hat\Delta = \plim_{B_1 \to \infty} \hat\Delta_{B_1}$
+define $\Delta^* = \plim_{B_1 \to \infty} \Delta^*_{B_1}$
 
 Under Assumptions~\ref{A1} and~\ref{A2} the procedure described by
 Algorithm~\ref{Alg1} provides a consistent estimator of the bias component and
@@ -261,7 +266,7 @@ simulation error can be ignored.
 
 \begin{lemma}\label{L1}
   Under Assumptions~\ref{A1} and~\ref{A3},
-  $\hat\Delta = \E \hat\tau - \tau + o_p()$.
+  $\Delta^* = \E \hat\tau - \tau + o_p()$.
 \end{lemma}
 
 With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a fully bias corrected estimate using Algorithm~\ref{Alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h_{n},b_{n})$ in the asymptotic variance formula on Section \ref{background}.
@@ -309,10 +314,10 @@ With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected co
       \end{equation*}
       using the same bandwidths $h_n$ and $b_n$ that are used in the rest of
       this algorithm but reestimating all of the local polynomials on the
-      bootstrap data. Let $\hat\Delta^*$ represent the bias estimate returned
+      bootstrap data. Let $\Delta^{**}$ represent the bias estimator returned
       by Algorithm~\ref{Alg1}.
-    \item Save the bias-corrected estimate
-      $\hat\mu_+^* - \hat\mu_i^* - \hat\Delta^*$ as $\hat\tau_k^{\prime*}$.
+    \item Save the bias-corrected estimator
+      $\hat\tau_k^{\prime*} = \hat\mu_+^* - \hat\mu_i^* - \Delta^{**}$.
     \end{enumerate}
   \item Define the confidence interval endpoints $\hat\ell(\alpha)$ and
     $\hat u(\alpha)$ as the $\alpha/2$ and $1-\alpha/2$ quantiles of the
@@ -323,7 +328,7 @@ With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected co
 As earlier, we assume that $B_1$ and $B_2$ are large enough that simulation
 error can be ignored. Define the limiting values
 \begin{align*}
-\hat\Delta^* &= \plim_{B_1,B_2 \to \infty} \hat\Delta^*_{B_1,B_2} \\
+\Delta^{**} &= \plim_{B_1,B_2 \to \infty} \Delta^{**}_{B_1,B_2} \\
 \hat\ell^*(\alpha) &= \plim_{B_1,B_2 \to \infty} \hat\ell^*_{B_1,B_2}(\alpha) \\
 \hat u^*(\alpha) &= \plim_{B_1,B_2 \to \infty} \hat u^*_{B_1,B_2}(\alpha).
 \end{align*}
@@ -333,7 +338,7 @@ second is that the intervals overall are asymptotically valid.
 
 \begin{lemma}\label{L2}
   Under Assumptions~\ref{A1} and~\ref{A3},
-  $\hat\Delta^* = \E^* \hat\tau^* - \tau^* + o_{p^*}(-)$.
+  $\Delta^{**} = \E^* \hat\tau^* - \tau^* + o_{p^*}(-)$.
 \end{lemma}
 
 
