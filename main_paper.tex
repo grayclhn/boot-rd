@@ -161,14 +161,6 @@ As shown by \cite{HTV2001}, \cite{Porter03} and expanded by CCT identification a
 
 The conditions in Assumption \ref{A1} are the usual smoothness and existence conditions in which the RD literature relies. Its second part is important for the characterization of the leading bias term that will be the focus of the bias correction procedures described in CCT and in the novel  bootstrap procedure proposed in Section \ref{boot}.
 
-The second set of assumptions regards the possible kernel weights used in RD.
-
-\begin{assumption}[Kernel]\label{A2}
- For some $\kappa>0$, the kernel function $k(\cdot):[0, \kappa] \rightarrow \RR$ is bounded and nonnegative, zero outside its support, and positive and continuous on $(0, \kappa)$.
-\end{assumption}
-
-Assumption \ref{A2} supports the kernels most commonly used in applications, in particular the broadly used uniform kernel $k(u)=\1[0\leq u\leq 1]$, which simplifies to the use of a local linear OLS on both sides of the treshold. Since the objective of this paper is to present a simple bootstrap procedure to obtain robust confidence intervals in the context of RD designs that can be easily implemented by practitioners, during the remainder of the paper we focus on estimators that use the rectangular kernel. The use of different weighting structures implied by different kernels complicates the bootstrap algorithm in meaningful ways and such analysis is left to future work.
-
 \begin{assumption}[Bandwidth]\label{A3}
   Let $h_n$ be the bandwidth used to estimate the local polynomial of
   order $p$ and let $b_n$ be the bandwidth used for $p+1$. Then
