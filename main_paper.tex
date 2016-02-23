@@ -141,12 +141,21 @@ notation on CCT very closely.}
 where $K_{h}(x_{i}) = K\left(\frac{x_{i}}{h}\right)\frac{1}{h}$.
 
 As shown by \cite{HTV2001}, \cite{Porter03} and expanded by CCT identification and inference procedures can be developed based on the following assumptions\footnote{The assumptions below are the same as presented by CCT.}
+
 \begin{assumption}[Behavior of the DGP near the cutoff]\label{A1}
- For some $\kappa_{0} > 0$, the following holds in the neighborhood $(-\kappa_{0},\kappa_{0})$ around the cutoff $ \bar{x}= 0$:
- \begin{enumerate}
-  \item $E[\left.Y_{i}^{4}\right|X_{i}=x]$ is bounded and the density of $X$, $f(x)$, is continuous and bounded away from zero.
-  \item $\mu_{+}(x)=\E[\left.Y_{i}(1)\right|X_{i}=x]$ and $\mu_{-}(x)=\E[\left.Y_{i}(0)\right|X_{i}=x]$ are $S$ times continuously differentiable.
-  \item $\sigma^{2}_{+}(x)=\V[\left.Y_{i}(1)\right|X_{i}=x]$ and $\sigma^{2}_{-}(x)=\V[\left.Y_{i}(0)\right|X_{i}=x]$ are continuous and bounded away from zero.
+  The random variables $Y_i, X_i$ are i.i.d.\ and
+  there exists a positive number $\kappa_0$ such that the following
+  conditions hold for all $x$ in the neighborhood
+  $(-\kappa_{0},\kappa_{0})$ around zero:
+  \begin{enumerate}
+  \item $\E[Y_{i}^{4} \mid X_{i}=x]$ is bounded and the density of $X$
+    is continuous and bounded away from zero.
+  \item $\mu_{+}(x) = \E[ Y_{i}(1) \mid X_{i}=x ]$ and
+    $\mu_{-}(x) = \E[ Y_{i}(0) \mid X_{i}=x ]$ are $p+2$ times
+    continuously differentiable.
+  \item $\sigma^{2}_{+}(x)=\V[ Y_{i}(1) \mid X_{i}=x ]$ and
+    $\sigma^{2}_{-}(x)=\V[ Y_{i}(0) \mid X_{i}=x ]$ are continuous and
+    bounded away from zero.
  \end{enumerate}
 \end{assumption}
 
