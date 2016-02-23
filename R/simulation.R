@@ -2,24 +2,25 @@ rm(list = ls())
 library(rdrobust)
 library(foreach)
 library(doParallel)
+library(doRNG)
 library(xtable)
-try(source("slackrISE.R"), silent = T)
+try(source("slackrISE.R"), T)
 
 source("RDfunctions.R")
 
 #### for testing in my computer ####
-N.ci <- 20
-level <- 0.95
-N.simu <- 20
-N.core <- 2
-N.bc <- 20
+# N.ci <- 20
+# level <- 0.95
+# N.simu <- 20
+# N.core <- 2
+# N.bc <- 20
 
 #### to run in servor ####
-# N.ci <- 999
-# level <- 0.95
-# N.simu <- 3000
-# N.core <- 15
-# N.bc <- 500
+N.ci <- 999
+level <- 0.95
+N.simu <- 1500
+N.core <- 15
+N.bc <- 500
 
 ## simulation 1: coverage of CI from bootstrap
 
@@ -39,7 +40,7 @@ simulation.1 <- function(model.id, p, q, kernel, bc) {
   cl <- makeCluster(N.core)
   registerDoParallel(cl)
   export.obj <- c("N.ci", "N.bc", "level", "generate.data", "k.weight", "rd.estimate", "lpreg", "rd.ci")
-  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dopar% 
+  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng% 
     simu()
   stopCluster(cl)
   
@@ -68,7 +69,7 @@ simulation.2 <- function(model.id, p, q, kernel) {
   cl <- makeCluster(N.core)
   registerDoParallel(cl)
   export.obj <- c("generate.data", "level")
-  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dopar% 
+  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng% 
     simu()
   stopCluster(cl)
   
@@ -88,34 +89,39 @@ gen.table <- function(model.id, p, q){
   table <- matrix(0, nrow = 4, ncol = 6)
   colnames(table) <- c("true", "bias", "SD", "MSE", "coverage", "length")
   rownames(table) <- c("cct.tri", "cct.uni", "boot.uni", "boot.uni(uncorrected)")
+
+  try(environment(slackr) <- environment(), T)
   
   table[1, ] <- simulation.2(model.id, p, q, "tri")
+  try(slackr(print(table[1,])), T)
   table[2, ] <- simulation.2(model.id, p, q, "uni")
+  try(slackr(print(table[2,])), T)
   table[3, ] <- simulation.1(model.id, p, q, "uni", T)
+  try(slackr(print(table[3,])), T)
   table[4, ] <- simulation.1(model.id, p, q, "uni", F)
+  try(slackr(print(table[4,])), T)
   
   table
 }
 
 set.seed(798)
-
 table.112 <- gen.table(1, 1, 2)
-try(slackr("table.112 done 1/6"))
+try(slackr("table.112 done 1/6"), T)
 
 table.212 <- gen.table(2, 1, 2)
-try(slackr("table.212 done 2/6"))
+try(slackr("table.212 done 2/6"), T)
 
 table.312 <- gen.table(3, 1, 2)
-try(slackr("table.312 done 3/6"))
+try(slackr("table.312 done 3/6"), T)
 
 table.123 <- gen.table(1, 2, 3)
-try(slackr("table.123 done 4/6"))
+try(slackr("table.123 done 4/6"), T)
 
 table.223 <- gen.table(2, 2, 3)
-try(slackr("table.223 done 5/6"))
+try(slackr("table.223 done 5/6"), T)
 
 table.323 <- gen.table(3, 2, 3)
-try(slackr("table.323 done 6/6"))
+try(slackr("table.323 done 6/6"), T)
 
 ## table 1: p = 1, q = 2
 
