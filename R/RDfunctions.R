@@ -104,7 +104,8 @@ rd.ci <- function(dta, p, q, bw.p, bw.q, N.bc, N.ci, level, kernel, bc = T) {
                                                            right$yhat + sample(right$res, nrow(dta.q.r), T, right$weight))),
                                           p, q, bw.p, bw.q, N.bc, kernel, bc))
   ci <- quantile(trd.star, c((1 - level)/2, 1 - (1 - level)/2), na.rm = T)
-  return(ci)
+  sd <- sd(trd.star)
+  return(list(ci = ci, sd = sd))
 }
 
 bw.select <- function(dta, r1, r2, N.bw, kernel, hstart = NULL) {
