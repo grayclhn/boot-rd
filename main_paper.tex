@@ -161,7 +161,7 @@ As shown by \cite{HTV2001}, \cite{Porter03} and expanded by CCT identification a
 
 The conditions in Assumption \ref{A1} are the usual smoothness and existence conditions in which the RD literature relies. Its second part is important for the characterization of the leading bias term that will be the focus of the bias correction procedures described in CCT and in the novel  bootstrap procedure proposed in Section \ref{boot}.
 
-\begin{assumption}[Bandwidth]\label{A3}
+\begin{assumption}[Bandwidth]\label{A2}
   Let $h_n$ be the bandwidth used to estimate the local polynomial of
   order $p$ and let $b_n$ be the bandwidth used for $p+1$. Then
   $h_n = o(n^{-1/5})$, $b_n = o(n^{-1/5})$, $n h_n \to \infty$, and
@@ -212,7 +212,7 @@ The first algorithm describes how to use local linear regression to obtain a poi
 Essentially, we apply CCT's insight that a polynomial one order higher can capture the first-order bias behavior and create a bootstrap procedure that can correctly mimic the behavior of the bias present in the original estimator. For such, for a chosen bandwidth, we estimate a local quadratic regression the same way CCT suggested but then create bootstrap data by imposing the local quadratic functional form as the DGP. Then, in the ``bootstrap data'' the DGP is known. Let the ``true'' treatment effect under the bootstrap DGP be denoted by $\tau^{*}$. We then estimate the treatment effect using the (misspecified) local linear estimator, $\hat{\tau}^{*}$ to the generated data. Hence, the bias for a specific bootstrap data is given by $\tau^{*}-\hat{\tau}^{*}$. More importantly, by generating new bootstrapped data based on the same quadratic DGP and its residual's distribution, we can obtain an estimate of the first-order bias (the part that is captured by $\hat{\Bs}(h_{n},b_{n})$ in CCT's formulas on Section \ref{background}) in the original estimate by averaging across the bias in all $B$ bootstrapped data estimates,i.e., $\tau^{*} - \sum_{i = 1}^{B} \hat{\tau}_{ i}^{*}$. Algorithm~\ref{Alg1} describes this procedure step-by-step for clarity.
 
 \begin{algorithm}[Bias estimation]\label{Alg1}
-  Assume $h_n$ and $b_n$ are bandwidths as described by Assumption~\ref{A3} and
+  Assume $h_n$ and $b_n$ are bandwidths as described by Assumption~\ref{A2} and
   define
   \begin{align}
     I^-(h) &= \{i : h < X_i < 0\}, &
@@ -239,7 +239,6 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
       $\{\hat\varepsilon_i : i \in I^+(h_n)\}$. Let $\varepsilon_i^{*-}$ and
       $\varepsilon_i^{*+}$ denote the $i$th element of each sample and construct
       \begin{align}
-        \label{eq:2}
         Y_i^{*-} &= \hat g_{p+1}^-(X_i^{*-}) + \varepsilon_i^{*-} &
         Y_i^{*+} &= \hat g_{p+1}^+(X_i^{*+}) + \varepsilon_i^{*+}
       \end{align}
@@ -258,7 +257,7 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
     \end{enumerate}
   \item Estimate the bias as
     \begin{equation}
-      \label{eq:4}
+      \label{eq:2}
       \Delta^* = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k -
       \big[\hat g_{p+1}^+(0) - \hat g_{p+1}^-(0)\big]
     \end{equation}
@@ -278,7 +277,7 @@ that the number of bootstrap replications, $B_1$, is large enough that the
 simulation error can be ignored.
 
 \begin{theorem}\label{T1}
-  Under Assumptions~\ref{A1} and~\ref{A3},
+  Under Assumptions~\ref{A1} and~\ref{A2},
   $(\hat\tau(h_n,b_n) - \Delta^*(h_n,b_n) - \tau) / V^{1/2}(h_n, b_n) \to^d N(0,1)$.
 \end{theorem}
 
@@ -290,7 +289,7 @@ With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected co
   \item Estimate the local polynomials $g_{p+1}^+$ and $g_{p+1}^-$ as defined by
     Equation --- and define the residuals
     \begin{equation}
-      \label{eq:6}
+      \label{eq:3}
       \hat\varepsilon_i =
       \begin{cases}
         Y_i - \hat g_{p+1}^-(X_i) & \textif\ X_i < 0 \\
@@ -305,7 +304,6 @@ With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected co
       $\{\hat\varepsilon_i : i \in I^+(h_n)\}$. Let $\varepsilon_i^{*-}$ and
       $\varepsilon_i^{*+}$ denote the $i$th element of each sample and construct
       \begin{align}
-        \label{eq:2}
         Y_i^{*-} &= \hat g_{p+1}^-(X_i^{*-}) + \varepsilon_i^{*-} &
         Y_i^{*+} &= \hat g_{p+1}^+(X_i^{*+}) + \varepsilon_i^{*+}
       \end{align}
@@ -350,7 +348,7 @@ a consistent estimator of the bias under the bootstrap distribution. The
 second is that the intervals overall are asymptotically valid.
 
 \begin{lemma}\label{L2}
-  Under Assumptions~\ref{A1} and~\ref{A3},
+  Under Assumptions~\ref{A1} and~\ref{A2},
   $\Delta^{**} = \E^* \hat\tau^* - \tau^* + o_{p^*}(-)$.
 \end{lemma}
 
@@ -358,9 +356,9 @@ second is that the intervals overall are asymptotically valid.
 \begin{theorem}\label{T2}
   Let $\Pr_\tau$ represent the probability distribution of the random variables
   under the assumption that $\tau$ is the true value of the ATE and suppose
-  Assumptions~\ref{A1} and~\ref{A3} hold. Then
+  Assumptions~\ref{A1} and~\ref{A2} hold. Then
   \begin{equation}
-    \label{eq:5}
+    \label{eq:4}
     \plim_{n \to \infty} \sup_\tau
     \Pr_\tau[\hat\ell(\alpha) \leq \tau \leq \hat u(\alpha)] \geq 1 - \alpha.
   \end{equation}
@@ -473,12 +471,12 @@ We have
 
 The design of the bootstrap ensures that
 \begin{equation*}
-  \label{eq:7}
+  \label{eq:5}
   \E^* \hat\mu_{\pm}^*(h) - \mu_{\pm}^{*} = h^{2} \mu_\pm^{*(2)} \Bf_{\pm}(h)/2,
 \end{equation*}
 almost surely, implying that
 \begin{equation*}
-  \label{eq:20}
+  \label{eq:6}
     \E^* \hat\tau^{*} - \tau^{*} = h_n^2\, \mu_+^{*(2)} \Bf(h_n)/2
       - h_n^2\, \mu_{-}^{*(2)} \Bf_{-}(h_n)/2.
 \end{equation*}
