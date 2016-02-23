@@ -277,10 +277,10 @@ used as a correction. As is standard in the bootstrap literature, we will assume
 that the number of bootstrap replications, $B_1$, is large enough that the
 simulation error can be ignored.
 
-\begin{lemma}\label{L1}
+\begin{theorem}\label{T1}
   Under Assumptions~\ref{A1} and~\ref{A3},
-  $\Delta^* = \E \hat\tau - \tau + o_p()$.
-\end{lemma}
+  $(\hat\tau(h_n,b_n) - \Delta^*(h_n,b_n) - \tau) / V^{1/2}(h_n, b_n) \to^d N(0,1)$.
+\end{theorem}
 
 With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a fully bias corrected estimate using Algorithm~\ref{Alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h_{n},b_{n})$ in the asymptotic variance formula on Section \ref{background}.
 
@@ -355,7 +355,7 @@ second is that the intervals overall are asymptotically valid.
 \end{lemma}
 
 
-\begin{theorem}\label{T1}
+\begin{theorem}\label{T2}
   Let $\Pr_\tau$ represent the probability distribution of the random variables
   under the assumption that $\tau$ is the true value of the ATE and suppose
   Assumptions~\ref{A1} and~\ref{A3} hold. Then
@@ -462,6 +462,41 @@ The approach proposed builds upon the developments and intuition advanced by CCT
 Our procedure provides an alternative to the plug-in analytical methods in the literature and is simple to implement generating robust confidence intervals.
 Simulation evidence is presented that the proposed bootstrap bias correction and confidence intervals have improved coverage and shorter length relative to the analytical alternatives proposed by CCT.
 
+\appendix
+\section{Mathematical Appendix}
+\subsection{Proof of Theorem~\ref{T1}}
+We have
+\begin{equation*}
+  \hat\tau - \Delta^* - \tau = (\hat\tau - \E \hat \tau) +
+  (\E \hat \tau - \tau) - (\E^* \hat \tau^* - \tau^*)
+\end{equation*}
+
+The design of the bootstrap ensures that
+\begin{equation*}
+  \label{eq:7}
+  \E^* \hat\mu_{\pm}^*(h) - \mu_{\pm}^{*} = h^{2} \mu_\pm^{*(2)} \Bf_{\pm}(h)/2,
+\end{equation*}
+almost surely, implying that
+\begin{equation*}
+  \label{eq:20}
+    \E^* \hat\tau^{*} - \tau^{*} = h_n^2\, \mu_+^{*(2)} \Bf(h_n)/2
+      - h_n^2\, \mu_{-}^{*(2)} \Bf_{-}(h_n)/2.
+\end{equation*}
+Combining this result with CCT's Lemma A1, gives
+\begin{align*}
+  \hat\tau &- \E \hat\tau + (\E \hat\tau - \tau) - (\E^* \hat\tau^* - \tau^*)\\
+  &= \hat\tau - \E\hat\tau
+   + h_n^2 \big((\mu_{-}^{*(2)} - \mu_{-}^{(2)}) \Bf_{-}(h_{n}) /2
+   - (\mu_+^{*(2)}-\mu_+^{(2)}) \Bf_{+}(h_{n}) / 2 \big) + O_p(h_n^{3}) \\
+  &= \hat\tau - \E\hat\tau
+   + h_n^2 (\hat\mu_-^{(2)}(b_n) - \mu_-^{(2)}) \Bf_{-}(h_{n}) /2
+   - h_n^2 (\hat\mu_+^{(2)}(b_n) - \mu_+^{(2)}) \Bf_{+}(h_{n}) / 2 + O_p(h_n^{3})
+\end{align*}
+The second equality holds because
+$\mu_\pm^{*(2)} = \hat\mu_{\pm}^{(2)}(b_n)$ a.s. Asymptotic normality then
+follows from normality of $\hat\tau - \E\hat\tau$ and
+$\hat\mu_\pm^{(2)}(b_n) - \mu_\pm^{(2)}$ using
+similar arguments to CCT's Lemma SA4.D.\qed
 
 \clearpage
 \bibliographystyle{jpe}
