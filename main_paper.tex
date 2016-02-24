@@ -24,12 +24,12 @@ He: yanghe@iastate.edu.} \\ PRELIMINARY AND INCOMPLETE \\PLEASE DO NOT CITE OR C
 \begin{document}
 \maketitle
 
-\begin{abstract}\noindent%
+\begin{abstract}\noindent
   This paper develops a novel bootstrap procedure to obtain robust
   bias-corrected confidence intervals in regression discontinuity designs that
   use the uniform kernel. The procedure uses a residual bootstrap to estimate
-  the bias of the RD estimator, which is then removed from the original RD
-  estimator. The bias-corrected estimator is then bootstrapped itself to
+  the bias of the RD estimator, which is then removed from the original estimator.
+ The bias-corrected estimator is then bootstrapped itself to
   generate valid confidence intervals. This procedure is valid for empirically
   relevant bandwidths when the residual bootstraps use a polynomial of higher
   order than used to estimate the treatment effect and can be applied under the
@@ -53,8 +53,11 @@ comparing treated and untreated units at the cutoff. As a practical matter this
 involves comparing units within a bandwidth just above and just below the 
 threshold. That comparison is most commonly done by implementing a local linear
 estimator above and below the cutoff within bandwidths chosen to minimize the 
-asymptotic mean squared error (AMSE) as proposed by Imbens and Kalyanaraman(2012)
+asymptotic mean squared error (AMSE) as proposed by \cite{IK}
 and extended by \cite{calonico2014} (CCT, henceforth).
+
+RD designs have been used as a strategy to estimate effects of interest in a large range of topics in several areas. For just a few examples, RD designs are common in education, evaluating the impact of investments in school facilities, class sizes, remedial education, early childhood education, and financial aid effects on student achievement and later outcomes \citep{cellini2010,urquiola2009,jacoblefgren2004,ludwig2007,vdk2002}; in health by analyzing the impact of healthcare provision through Medicare, and neo-natal care on low birth weight children mortality \citep{Card2009,barreca2011saving}; in political science providing evidence regarding incumbency advantage in elections, electoral enfranchising and policy changes associated with the introduction of electronic voting, strategic voting behavior, and local media effects and ad expenditure in presidential elections in the U.S. \citep{lee2008,Caughey2011,erikson2015,Fujiwara2015,Fujiwara2011,keele2014geographic}. Several more examples of the breadth of RD designs are listed by \cite{lee2010}.
+
 
 Recently, CCT brought attention to the fact that the popular implementation of RD designs coupling optimal-AMSE bandwidths
 and local polynomial estimation provides confidence intervals (CIs) with
