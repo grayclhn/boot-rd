@@ -8,10 +8,22 @@
 \DeclareMathOperator{\V}{\mathbbm{V}}
 
 \renewcommand{\Pr}{\operatorname{Pr}}
-\newcommand{\RR}{\mathbbm{R}}
 \newcommand{\textif}{\text{if}}
 \newcommand{\otherwise}{\text{otherwise}}
 
-\DeclareMathOperator{\Bf}{\mathfrak{B}}
-\DeclareMathOperator{\Bs}{\mathsf{B}}
+\newcommand{\Bf}{\mathfrak{B}}
+\newcommand{\Bs}{\mathsf{B}}
+\newcommand{\Fc}{\mathcal{F}}
+\newcommand{\RR}{\mathbbm{R}}
+
+% Local sum, average, and scaled average macros.
+% - 's' stands for 'set index'
+% - 'o' stands for 'ordered index'
+\newcommand\ssum[3][\pm]{\sum_{#2 \in I_{#3}^{#1}}}
+\newcommand\savg[3][\pm]{\tfrac{1}{M_{#3}^{#1}} \ssum[#1]{#2}{#3}}
+\newcommand\sclt[3][\pm]{\tfrac{1}{\sqrt{M_{#3}^{#1}}} \ssum[#1]{#2}{#3}}
+
+\newcommand\osum[3][\pm]{\sum_{#2 = 1}^{M_{#3}^{#1}}}
+\newcommand\oavg[3][\pm]{\tfrac{1}{M_{#3}^{#1}} \osum[#1]{#2}{#3}}
+\newcommand\oclt[3][\pm]{\tfrac{1}{\sqrt{M_{#3}^{#1}}} \osum[#1]{#2}{#3}}
 

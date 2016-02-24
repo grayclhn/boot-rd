@@ -101,29 +101,27 @@ the potential outcomes for unit $i$ given it receives treatment and
 where $\1\{ \cdot\}$ denotes the indicator function. For convenience,
 define
  \begin{align}
-  \mu(x)= \E[Y_{i}|X_{i}=x]
+  \mu(x)= \E[Y_{i} \mid X_{i}=x]
  \end{align}
 Also, let $\mu^{(\eta)}(x)=\frac{d^{\eta}\mu(x)}{dx^{\eta}}$ be the $\eta^{th}$ 
 derivative of the unknown regression function and define 
 $\mu^{(\eta)}_{+}=lim_{x \rightarrow 0^{+}}\mu^{(\eta)}(x)$ and 
 $\mu^{(\eta)}_{-}=lim_{x \rightarrow 0^{-}}\mu^{(\eta)}(x)$.
 In most cases the population parameter of interest is 
-$\tau=\E[Y(1)-Y(0)|X=\bar{x}]$ (i.e., the average treatment effect
+$\tau=\E[Y(1)-Y(0) \mid X=\bar{x}]$ (i.e., the average treatment effect
 at the threshold). Under continuity and smoothness conditions on both the 
 conditional distribution of $X_i$ and the first moments of $Y(0)$ and $Y(1)$ at
-the cutoff, $\tau$ is nonparametrically identifiable (Hahn, Todd and Van der 
-Klaauw, 2001) by:
-\begin{align}
- \tau&= \mu_{+}- \mu_{-} \nonumber \\ 
-&\text{ where } \mu_{+}=lim_{x \rightarrow 0^{+}}\mu(x),\text{ and } 
-\mu_{-}=lim_{x \rightarrow 0^{-}}\mu(x)
-\end{align}
+the cutoff, $\tau$ is nonparametrically identifiable
+$\tau = \mu_{+}- \mu_{-}$
+where $\mu_{+}=lim_{x \rightarrow 0^{+}}\mu(x)$ and
+$\mu_{-}=lim_{x \rightarrow 0^{-}}\mu(x)$
+(Hahn, Todd and Van der Klaauw, 2001)
 
 Naturally, the estimation of $\tau$ in RD designs focuses on the 
-problem of approximating $\E[Y(1)|X=x]$ and $\E[Y(0)|X=x]$
+problem of approximating $\E[Y(1) \mid X=x]$ and $\E[Y(0) \mid X=x]$
 near the cutoff. Due to its desirable properties when estimating regression 
 functions at boundary points, we consider the popular approach of fitting 
-separate kernel-weighted local linear regressions in neighborhoods on both 
+local linear regressions in neighborhoods on both
 sides of the threshold.\footnote{See \cite{HTV2001}, \cite{Porter03} or
 \cite{FanGijbels92} for discussions of the properties of local polynomial 
 regressions for boundary problems.The results presented here are valid for
@@ -133,12 +131,11 @@ For the local linear model, we use the following estimator as described in
 notation on CCT very closely.}
 \begin{align*}
  \hat{\tau}(h_{n})&=\hat {\mu}_{+}(h_{n}) -\hat{\mu}_{-}(h_{n})\\
-(\hat {\mu}_{+}(h_{n}),\hat {\mu}^{(1)}_{+}(h_{n}))'&= argmin_{b_{0},b_{1}} 
-\sum_{i=1}^{N}\1\{X_{i} \geq 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2} \cdot K_{h}(X_{i})\\
-(\hat {\mu}_{-}(h_{n}),\hat {\mu}^{(1)}_{-}(h_{n}))' &= argmin_{b_{0},b_{1}}
-\sum_{i=1}^{N}\1\{X_{i} < 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2}\cdot K_{h}(X_{i})
+(\hat {\mu}_{+}(h_{n}),\hat {\mu}^{(1)}_{+}(h_{n}))'&= \argmin_{b_{0},b_{1}}
+\sum_{i=1}^{N}\1\{h_n > X_{i} \geq 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2} \\
+(\hat {\mu}_{-}(h_{n}),\hat {\mu}^{(1)}_{-}(h_{n}))' &= \argmin_{b_{0},b_{1}}
+\sum_{i=1}^{N}\1\{0 > X_{i} > -h_n \}(Y_{i}-b_{0}-X_{i}b_{1})^{2}
 \end{align*}
-where $K_{h}(x_{i}) = K\left(\frac{x_{i}}{h}\right)\frac{1}{h}$.
 
 As shown by \cite{HTV2001}, \cite{Porter03} and expanded by CCT identification and inference procedures can be developed based on the following assumptions\footnote{The assumptions below are the same as presented by CCT.}
 
@@ -162,18 +159,19 @@ As shown by \cite{HTV2001}, \cite{Porter03} and expanded by CCT identification a
 The conditions in Assumption \ref{A1} are the usual smoothness and existence conditions in which the RD literature relies. Its second part is important for the characterization of the leading bias term that will be the focus of the bias correction procedures described in CCT and in the novel  bootstrap procedure proposed in Section \ref{boot}.
 
 \begin{assumption}[Bandwidth]\label{A2}
-  Let $h_n$ be the bandwidth used to estimate the local polynomial of
-  order $p$ and let $b_n$ be the bandwidth used for $p+1$. Then
-  $h_n = o(n^{-1/5})$, $b_n = o(n^{-1/5})$, $n h_n \to \infty$, and
-  $n b_n \to \infty$ as $n \to \infty$.\footnote{%
-    Unless otherwise stated, all limits in this paper are assumed to
-    hold as $n \to \infty$.} %
+  Let $h_n$ be the bandwidth used to estimate the local linear model and let
+  $b_n$ be the bandwidth used for a local quadratic model. Then
+  $n h_n \to \infty$, $n b_n \to \infty$, $n h_n^5 b_n^2 \to 0$, and
+  $n b_n^5 h_n^2 \to 0$ as $n \to \infty$.\footnote{%
+    Unless otherwise stated, all limits in this paper are assumed to hold as
+    $n \to \infty$.} %
   The relationship $h_n \leq b_n$ also holds for all $n$.
 \end{assumption}
 
 \cite{calonico2014} point out that the conventional approaches to construct confidence intervals for $\tau$ using the local linear estimator rely on a large-sample approximation for the standardized $t$-statistic that is valid only if the bandwidth shrink fast enough to eliminate the leading bias term contribution to the approximation. Hence, if $nh_{n}^{5}\rightarrow0$ and $nh_{n}\rightarrow \infty$, then
  \begin{align}
-  T(h_{n})=\frac{\hat{\tau}(h_{n})-\tau}{\sqrt{V(h_{n})}}\rightarrow_{d}N(0,1), \text{        }V(h_{n})=\V[\left.\tau(h_{n})\right|\chi_{n}], \text{        }\chi_{n}=[X_{1}, \dots X_{n}]^{\prime}
+  T(h_{n}) &=\frac{\hat{\tau}(h_{n})-\tau}{\sqrt{V(h_{n})}}\rightarrow_{d}N(0,1), &
+  V(h_{n}) &=\V[\tau(h_{n}) \mid X_1,\dots,X_n]
  \end{align}
  The conditional variance $V(h_{n})$ depends on the $\sigma^{2}_{+}=lim_{x \rightarrow 0^{+}}\sigma^{2}_{+}(x)$ and $\sigma^{2}_{-}=lim_{x \rightarrow 0^{-}}\sigma^{2}_{-}(x)$ as well as $h_{n}$ and known quantities that depend on the kernel and order of polynomial used in the estimation. Under these conditions we could use a conventional confidence interval for $\tau$ given by
  \begin{align}
@@ -183,7 +181,7 @@ with $\Phi^{-1}_{1-\frac{\alpha}{2}}$ being the $\alpha$-quantile of the standar
 
 \cite{calonico2014} resolve the problem by deriving the analytical form of the first-order bias and correcting it directly. To obtain correct coverage the confidence interval needs not only to be re-centered to correct the bias, but also rescaled to allow for the additional variability introduced by the bias correction. Their approach relies on obtaining a bias-corrected  estimator, $\hat{\tau}^{bc}$ and its adjusted variance. It is important first to note that the first-order bias term itself will depend on the bandwidth $h_{n}$. The approximate bias term can be described as:
 \begin{align*}
-     \E[\hat{\tau}(h_{n})|\chi_{n}]-\tau=& h_{n}^{2}\Bs(h_{n})\{1+o_{p}(1)\}\\
+     \E[\hat{\tau}(h_{n}) \mid \chi_{n}]-\tau=& h_{n}^{2}\Bs(h_{n})\{1+o_{p}(1)\}\\
      \Bs(h_{n})=&\frac{\mu_{+}^{(2)}}{2!}\Bf_{+}(h_{n})-\frac{\mu_{-}^{(2)}}{2!}\Bf_{-}(h_{n})
    \end{align*}
 where $\Bf_{+}(h_{n})$ and $\Bf_{-}(h_{n})$ are observed quantities that depend on the data, kernel and $h_{n}$. The plug-in bias-corrected estimator then requires estimates for the second derivatives of the conditional mean from above and below the cutoff, $\mu_{+}^{(2)}$ and $\mu_{-}^{(2)}$. CCT propose using a conventional local quadratic estimator, i.e. one order higher than the polynomial used to obtain $\hat{\tau}$,  using a (potentially) different pilot bandwidth $b_{n}$.
@@ -343,33 +341,23 @@ error can be ignored. Define the limiting values
 \hat\ell^*(\alpha) &= \plim_{B_1,B_2 \to \infty} \hat\ell^*_{B_1,B_2}(\alpha) \\
 \hat u^*(\alpha) &= \plim_{B_1,B_2 \to \infty} \hat u^*_{B_1,B_2}(\alpha).
 \end{align*}
-Two results follow. The first is that the secondary bootstrap step produces
-a consistent estimator of the bias under the bootstrap distribution. The
-second is that the intervals overall are asymptotically valid.
 
-\begin{lemma}\label{L2}
-  Under Assumptions~\ref{A1} and~\ref{A2},
-  $\Delta^{**} = \E^* \hat\tau^* - \tau^* + o_{p^*}(-)$.
-\end{lemma}
-
+Theorem~\ref{T2} establishes that this ``bootstrap-within-bootstrap''
+approximates the asymptotic distribution of the bias-corrected
+statistic proposed by Algorithm~\ref{Alg1} and justifies this second
+algorithm.
 
 \begin{theorem}\label{T2}
-  Let $\Pr_\tau$ represent the probability distribution of the random variables
-  under the assumption that $\tau$ is the true value of the ATE and suppose
-  Assumptions~\ref{A1} and~\ref{A2} hold. Then
-  \begin{equation}
+  Under Assumptions~\ref{A1} and~\ref{A2},
+  \begin{gather}
     \label{eq:4}
-    \plim_{n \to \infty} \sup_\tau
-    \Pr_\tau[\hat\ell(\alpha) \leq \tau \leq \hat u(\alpha)] \geq 1 - \alpha.
-  \end{equation}
-  Both of the one-sided intervals are asymptotically valid under the same
-  assumptions as well:
-  \begin{align}
-    \plim_{n \to \infty} \sup_\tau
-    \Pr_\tau[\hat\ell(\alpha) \leq \tau ] &\geq 1 - \alpha / 2, &
-    \plim_{n \to \infty} \sup_\tau
-    \Pr_\tau[\tau \leq \hat u(\alpha)] &\geq 1 - \alpha / 2.
-  \end{align}
+    \V^*(\hat\tau^{*} - \Delta^{**})/V(h_n,b_n) \to^p 1
+  \intertext{and}
+  \label{eq:5}
+    \sup_{x}
+    \Big\rvert \Pr^*[\hat\tau^{*} - \Delta^{**} - \tau^* \leq x ]
+    - \Pr[\hat\tau - \Delta^* - \tau \leq x] \Big\lvert \to^p 0.
+  \end{gather}
 \end{theorem}
 
 Evidence of the usefulness of the procedures proposed above and their relative performance to the analytical bias correction proposed in CCT are presented in a series of Monte Carlo simulations in Section \ref{sim}.
@@ -460,7 +448,7 @@ The approach proposed builds upon the developments and intuition advanced by CCT
 Our procedure provides an alternative to the plug-in analytical methods in the literature and is simple to implement generating robust confidence intervals.
 Simulation evidence is presented that the proposed bootstrap bias correction and confidence intervals have improved coverage and shorter length relative to the analytical alternatives proposed by CCT.
 
-\appendix
+\newpage\appendix
 \section{Mathematical Appendix}
 \subsection{Proof of Theorem~\ref{T1}}
 We have
@@ -468,15 +456,15 @@ We have
   \hat\tau - \Delta^* - \tau = (\hat\tau - \E \hat \tau) +
   (\E \hat \tau - \tau) - (\E^* \hat \tau^* - \tau^*)
 \end{equation*}
-
 The design of the bootstrap ensures that
 \begin{equation*}
-  \label{eq:5}
-  \E^* \hat\mu_{\pm}^*(h) - \mu_{\pm}^{*} = h^{2} \mu_\pm^{*(2)} \Bf_{\pm}(h)/2,
+  \label{eq:6}
+  \E^* \hat\mu_{\pm}^*(h_n) - \mu_{\pm}^{*} =
+  h_n^{2} \mu_\pm^{*(2)} \Bf_{\pm}(h_n)/2,
 \end{equation*}
 almost surely, implying that
 \begin{equation*}
-  \label{eq:6}
+  \label{eq:7}
     \E^* \hat\tau^{*} - \tau^{*} = h_n^2\, \mu_+^{*(2)} \Bf(h_n)/2
       - h_n^2\, \mu_{-}^{*(2)} \Bf_{-}(h_n)/2.
 \end{equation*}
@@ -495,6 +483,106 @@ $\mu_\pm^{*(2)} = \hat\mu_{\pm}^{(2)}(b_n)$ a.s. Asymptotic normality then
 follows from normality of $\hat\tau - \E\hat\tau$ and
 $\hat\mu_\pm^{(2)}(b_n) - \mu_\pm^{(2)}$ using
 similar arguments to CCT's Lemma SA4.D.\qed
+
+\subsection{Proof of Theorem~\ref{T2}}
+We can repeat the steps from Theorem~\ref{T1}'s proof to show that
+\begin{align*}
+  \hat\tau^* - \Delta^{**} - \tau^* &= (\hat\tau^* - \E^* \hat \tau^*) +
+  (\E^* \hat \tau^* - \tau^*) - (\E^{**} \hat \tau^{**} - \tau^{**}) \\
+  &= \hat\tau^* - \E^*\hat\tau^*
+   + h_n^2 (\hat\mu_-^{*(2)}(b_n) - \mu_-^{*(2)}) \Bf_{-}(h_{n}) /2
+   - h_n^2 (\hat\mu_+^{*(2)}(b_n) - \mu_+^{*(2)}) \Bf_{+}(h_{n}) / 2.
+\end{align*}
+Consequently, the asymptotic behavior of
+$\hat\tau^* - \Delta^** - \tau^*$ is determined by the behavior of
+$\hat\tau^* - \E^*\hat\tau*$ and
+$\hat\mu_{\pm}^{*(2)} - \mu_\pm^{*(2)}$ and these random variables are
+weighted averages of the sums
+\begin{equation*}
+  \sum_{i \in I^{\pm}(b_n)} Z_i \varepsilon_i^*
+\end{equation*}
+with $Z_i = (1, X_i, X_i^2)'$. By construction,
+\begin{equation*}
+  \V^*\Big(\ssum{i}{b_n} Z_i \varepsilon_i^* \Big)
+  = \hat\sigma_\pm^2(b_n) \Gamma_\pm(b_n)
+\end{equation*}
+almost surely, making~\eqref{eq:4} a consequence of CCT's SA?.
+
+For~\eqref{eq:5}, since $\hat\tau - \Delta^*$ is itself asymptotically
+normal, it suffices to prove the pointwise result
+\begin{equation}
+  \label{eq:8}
+  \Big\rvert \Pr^*[(\hat\tau^{*} - \Delta^{**} - \tau^*)
+  / V^{1/2}(h_n,b_n) \leq x ] - \Phi(x)] \Big\lvert \to^p 0.
+\end{equation}
+for all $x$. Since the limiting distribution is continuous, an
+argument attributed to Poly\'a immediately extends the pointwise
+convergence result to the uniform result stated in~\eqref{eq:5}. (See
+van der vaart, p. for the details of the argument.) But~\eqref{eq:8}
+follows from Lemma~\ref{L1} as well, completing the proof.\qed
+
+\subsection{Supporting results}
+
+\begin{lemma}\label{L1}
+  Define $Z_i = (1, X_i, X_i^2)$.  Under Assumptions~\ref{A1} and~\ref{A2},
+  \begin{equation}
+    \label{eq:9}
+    \Big\rvert \Pr^*\Big[ \Gamma_\pm(b_n)^{-1/2}
+    \sum_{i \in I^{\pm}(b_n)} Z_i \varepsilon_i^* / \hat\sigma_\pm(b_n) < x \Big]
+    - \Phi(x) \Big\lvert \to^p 0.
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Let $z_i = \alpha' Z_i$ for an arbitrary nonzero $\alpha$ and define
+  $\gamma_\pm(b_n) = \alpha'\Gamma_\pm(b_n)\alpha$. We will
+  establsh asymptotic normality for the scalar $z_i \varepsilon_i^*$;
+  the multivariate case follows via the Cram\'er-Wold device. (cite
+  van der vaart.)
+
+  Define the filtration
+  \begin{equation}
+    \label{eq:10}
+    \Fc_j^{*\pm} = \sigma(Y_1,\dots,Y_n; X_1,\dots,X_n;
+    \varepsilon_{i_1}^{*\pm},\dots,\varepsilon_{i_j}^{*\pm})
+  \end{equation}
+  where the values $i_1, i_2,\dots, i_{M_h^{\pm}}$ form an ordering of
+  all of the elements of $I_n^\pm$. (The specific order is
+  unimportant.) Then
+  $\{z_{i_j} \varepsilon_{i_j}^{*\pm}, \Fc_j^{*\pm}\}$ is a martingale
+  difference sequence and~\eqref{eq:9} holds if
+  \begin{equation}
+    \label{eq:11}
+    \savg{i}{h} z_{i}^2 \varepsilon_{i}^{*\pm\,2} -
+    \gamma_{\pm}^*(b_n) \hat\sigma
+    \to^p 0
+  \end{equation}
+  and, for all
+  $\delta > 0$,
+  \begin{equation}
+    \label{eq:12}
+    \oavg{j}{h} z_{i_j}^2 \E^*( \varepsilon_{i_j}^{*\pm\,2}
+    \1\{z_{i_j}^2 \varepsilon_{i_j}^{*\pm\,2} / M_h^\pm > \delta \}
+    \mid \Fc_{j-1}^{\pm}) \to^p 0.
+  \end{equation}
+  (cite Hall and Heyde.)
+
+  For~\eqref{eq:11}, observe that
+  $\{z_{i_j}^2 (\varepsilon_{i_j}^{*2} - \hat\sigma^2_\pm(b_n)), \Fc_j^\pm\}$
+  is also a martingale difference sequence so convergence follows from
+  the LLN.
+
+  For~\eqref{eq:12}, we have
+  \begin{align*}
+    \oavg{j}{h} z_{i_j}^2 \E^*( \varepsilon_{i_j}^{*\pm\,2}
+    \1\{z_{i_j}^2 \varepsilon_{i_j}^{*\pm\,2} / M_h^\pm > \delta \}
+    \mid \Fc_{j-1}^{\pm})
+    &= \oavg{i}{h_n} z_i^2 \oavg{j}{b_n} \hat\varepsilon_{j}^{\pm 2}
+      \1\{\hat\varepsilon_{j}^{\pm 2} > \delta M_n^{\pm} / z_i^2 \} \\
+  \end{align*}
+  (Finish with: $\varepsilon_i^2$ is uniformly integrable,
+  $\hat\varepsilon_i^2$ gets arbitrarily close to $\varepsilon_i^2$)
+\end{proof}
 
 \clearpage
 \bibliographystyle{jpe}
