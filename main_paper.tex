@@ -400,50 +400,44 @@ Three different choices of functional forms for $\mu_{j}(x)$ are as follows:
 
 The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed by \cite{lee2008} and \cite{ludwig2007}, respectively, while $\mu_{3}(x)$ is a transformation of $\mu_{1}(x)$ designed to emphasize its curvature and therefore bias in the usual RD approach. For the simulation studies, we used 250 bootstraps for bias correction, 999 bootstraps to calculate confidence interval and a total 500 replications. All results presented are based on a 0.95 desired confidence level. Table1 presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$). Table 2 presents similar results for $p=2$ and $q=3$.
 
-\begin{table}[ht] \label{Tb1}
-	\caption{Summary of estimates ($p = 1, q = 2$)}
-	\centering
-	\begin{tabular}{ccccccc}
-		\hline
-		DGP & True & Bias & SD & MSE & CI coverage & CI length \\ 
-		\hline
-		\multicolumn{7}{c}{Panel A: Bootstrap Bias-Correction} \\
-		1 & 0.04 & -0.013 & 0.067 & 0.068 & 0.938 & 0.243 \\ 
-		2 & -3.45 & -0.014 & 0.083 & 0.084 & 0.954 & 0.319 \\ 
-		3 & 0.04 & -0.006 & 0.069 & 0.070 & 0.956 & 0.247 \\ 
-		&&&&&& \\
-		\multicolumn{7}{c}{Panel B: Analytical Bias Correction (CCT 2014)} \\
-		1 & 0.04 & -0.016 & 0.068 & 0.070 & 0.908 & 0.244 \\ 
-		2 & -3.45 & -0.014 & 0.092 & 0.093 & 0.928 & 0.350 \\ 
-		3 & 0.04 & -0.004 & 0.071 & 0.071 & 0.918 & 0.249 \\ 
-		\hline
-	\end{tabular}
+\begin{table}[t] \label{Tb1}
+\centering
+\begin{tabular}{rrrrrrrrr}
+  \toprule
+  DGP & Method    & Bias    & SD    & MSE   & CI coverage & CI length \\
+  \midrule
+  1   & bootstrap & --0.013 & 0.067 & 0.068 & 0.938       & 0.243     \\
+      & CCT       & --0.016 & 0.068 & 0.070 & 0.908       & 0.244     \\
+  2   & bootstrap & --0.014 & 0.083 & 0.084 & 0.954       & 0.319     \\
+      & CCT       & --0.014 & 0.092 & 0.093 & 0.928       & 0.350     \\
+  3   & bootstrap & --0.006 & 0.069 & 0.070 & 0.956       & 0.247     \\
+      & CCT       & --0.004 & 0.071 & 0.071 & 0.918       & 0.249     \\
+  \bottomrule
+\end{tabular}
+\caption{Summary of estimates ($p = 1, q = 2$)}
 \end{table}
 
-\begin{table}[ht]\label{Tb2}
-	\caption{Summary of estimates from bootstrap ($p = 2, q = 3$)}
-	\centering
-	\begin{tabular}{ccccccc}
-		\hline
-		DGP & True & Bias & SD & MSE & CI coverage & CI length \\ 
-		\hline
-		\multicolumn{7}{c}{Panel A: Uniform Kernel} \\
-		1 & 0.04 & -0.002 & 0.075 & 0.075 & 0.958 & 0.295 \\ 
-		2 & -3.45 & 0.002 & 0.087 & 0.086 & 0.934 & 0.302 \\ 
-		3 & 0.04 & -0.008 & 0.083 & 0.083 & 0.942 & 0.292 \\ 
-		&&&&&& \\
-		\multicolumn{7}{c}{Panel B: Analytical Bias Correction (CCT 2014)} \\
-		1 & 0.04 & -0.004 & 0.082 & 0.082 & 0.926 & 0.295 \\ 		
-		2 & -3.45 & -0.005 & 0.078 & 0.078 & 0.960 & 0.323 \\ 		
-		3 & 0.04 & -0.003 & 0.080 & 0.080 & 0.938 & 0.295 \\ 
-		\hline
-	\end{tabular}
-\end{table}
 As can be seen on the tables above, the bootstrap bias-correction procedure
 proposed in this paper provides a simple alternative to obtain valid robust
 confidence intervals in RD designs and performs well compared to the analytical 
 bias correction procedures proposed by CCT.
 
+\begin{table}[t]\label{Tb2}
+\centering
+\begin{tabular}{rrrrrrr}
+  \toprule
+  DGP & Method    & Bias    & SD    & MSE   & CI coverage & CI length \\
+  \midrule
+  1   & bootstrap & --0.002 & 0.075 & 0.075 & 0.958       & 0.295     \\
+      & CCT       & --0.004 & 0.082 & 0.082 & 0.926       & 0.295     \\
+  2   & bootstrap & 0.002   & 0.087 & 0.086 & 0.934       & 0.302     \\
+      & CCT       & --0.005 & 0.078 & 0.078 & 0.960       & 0.323     \\
+  3   & bootstrap & --0.008 & 0.083 & 0.083 & 0.942       & 0.292     \\
+      & CCT       & --0.003 & 0.080 & 0.080 & 0.938       & 0.295     \\
+  \bottomrule
+\end{tabular}
+\caption{Summary of estimates from bootstrap ($p = 2, q = 3$)}
+\end{table}
 
 \section{Conclusion}\label{conclusion}
 This paper proposes a novel bootstrap procedure to obtain robust bias-corrected
