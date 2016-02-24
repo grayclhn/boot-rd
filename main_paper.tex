@@ -24,13 +24,17 @@ He: yanghe@iastate.edu.} \\ PRELIMINARY AND INCOMPLETE \\PLEASE DO NOT CITE OR C
 \begin{document}
 \maketitle
 
-\begin{abstract}
-This paper proposes an novel bootstrap procedure to obtain robust bias-corrected
-confidence intervals in regression discontinuity designs. The approach proposed 
-is based on a first-order bias correction and provides an alternative
-to the plug-in analytical methods proposed by Calonico, Cattaneo and Titiunik (2014).
-The algorithm is simple to implement and generates robust confidence intervals
-with improved coverage relative to the analytical alternatives in simulations.
+\begin{abstract}\noindent%
+  This paper develops a novel bootstrap procedure to obtain robust
+  bias-corrected confidence intervals in regression discontinuity designs that
+  use the uniform kernel. The procedure uses a residual bootstrap to estimate
+  the bias of the RD estimator, which is then removed from the original RD
+  estimator. The bias-corrected estimator is then bootstrapped itself to
+  generate valid confidence intervals. This procedure is valid for empirically
+  relevant bandwidths when the residual bootstraps use a polynomial of higher
+  order than used to estimate the treatment effect and can be applied under the
+  same conditions as Calonico, Cattaneo and Titiunik's (2014,
+  \textit{Econometrica}) analytical correction.
 \end{abstract}
 
 \section{Introduction}
