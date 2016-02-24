@@ -56,15 +56,13 @@ estimator above and below the cutoff within bandwidths chosen to minimize the
 asymptotic mean squared error (AMSE) as proposed by \cite{IK}
 and extended by \cite{calonico2014} (CCT, henceforth).
 
-RD designs have been used as a strategy to estimate effects of interest in a large range of topics in several areas. For just a few examples, RD designs are common in education, evaluating the impact of investments in school facilities, class sizes, remedial education, early childhood education, and financial aid effects on student achievement and later outcomes \citep{cellini2010,urquiola2009,jacoblefgren2004,ludwig2007,vdk2002}; in health by analyzing the impact of healthcare provision through Medicare, and neo-natal care on low birth weight children mortality \citep{Card2009,barreca2011saving}; in political science providing evidence regarding incumbency advantage in elections, electoral enfranchising and policy changes associated with the introduction of electronic voting, strategic voting behavior, and local media effects and ad expenditure in presidential elections in the U.S. \citep{lee2008,Caughey2011,erikson2015,Fujiwara2015,Fujiwara2011,keele2014geographic}. Several more examples of the breadth of RD designs are listed by \cite{lee2010}.
+RD designs have been used as a strategy to estimate effects of interest in a large range of topics in several areas. For just a few examples, RD designs are common in education, evaluating the impact of investments in school facilities, class sizes, remedial education, early childhood education, and financial aid effects on student achievement and later outcomes \citep{cellini2010,urquiola2009,jacoblefgren2004,ludwig2007,vdk2002}; in health by analyzing the impact of healthcare provision through Medicare, and neo-natal care on low birth weight children mortality \citep{Card2009,barreca2011saving}; in political science, providing evidence regarding incumbency advantage in elections, electoral enfranchising and policy changes associated with the introduction of electronic voting, strategic voting behavior, and local media effects and ad expenditure in presidential elections in the U.S. \citep{lee2008,Caughey2011,erikson2015,Fujiwara2015,Fujiwara2011,keele2014geographic}. Several more examples of the breadth of RD designs are listed by \cite{lee2010}.
 
 
-Recently, CCT brought attention to the fact that the popular implementation of RD designs coupling optimal-AMSE bandwidths
-and local polynomial estimation provides confidence intervals (CIs) with
-incorrect coverage due to the presence of bias and propose an explicit analytical
-bias correction procedure that re-centers and re-scale the CI by estimating a higher 
-order approximation of the bias term and adjustment its lenght to account for 
-the variation introduced by the bias estimation.
+Recently, CCT brought attention to the fact that the popular implementation of RD designs coupling local polynomial estimation and optimal-AMSE bandwidths (as proposed by \cite{IK})
+provides confidence intervals (CIs) with incorrect coverage. They argue that the bandwidth selectors typically produce bandwidths that are too ``large,'' leading to a significant bias in the asymptotic distribution of the estimator. In that case the usual``naive'' confidence intervals for the RD treatment effects may be biased and will have provide coverage potentially well below their nominal level.
+
+Then, CCT proposes a bias-correction procedure based on estimating the leading term of the bias to account for the effect of the ``large'' bandwidth and then obtain a re-centered t-statistic.    This conventional bias-correction has poor finite-sample performance that arises from the estimation of the bias leading term, so they provide a new standard error formula for the standard error to  account for the additional variability introduced by the estimated bias. The resulting statistic that combines the higher-order($p+1$) leading term bias correction and rescaling the of the t-statistic remains asymptotically normal and supplies valid confidence intervals.
 
 As pointed out by \cite{ccf2016}, ``(...)valid inference
 requires the delicate balancing act of selecting a bandwidth small enough
@@ -75,14 +73,18 @@ rescaling of the CI's is a superior approach.
 
 This paper contributes to the bias-corrected RD literature by proposing a simple
 bootstrap procedure to correct the first order bias term and directly obtain 
-valid CIs that provide the correct coverage. The algorithm proposed is easy to
-implement and rely on the same conditions as the explicit bias correction
-proposed by CCT.
+valid CIs that provide the correct coverage.
+
+The algorithm proposed draws on the main intuition put forward by CCT, that is, that correcting for the leading bias term (of order $p+1$) addresses the recentering needed for the confidence intervals. Hence, we propose that, after obtaining the usual RD estimates using a local polynomial of order $p$, obtain a estimates for a polynomial of order $p+1$ and generate our bootstrap datasets by bootstrapping the residuals of that polynomial. Since in the bootstrap datasets the bias of the estimates obtained using a lower order polynomial is known, we can estimate the leading term of the bias by averaging across bootstraps and finally subtract it from the original RD estimator.
+
+Just as in CCT, this bias correction introduces additional variability due to the estimated bias, so we approximate the distribution of the bias-corrected estimator with a second residual bootstrap in which both the usual RD estimate and the full bias correction procedure are bootstrapped.
 
 The novel bootstrap procedure is easy to implement and extends to RD designs 
 using higher order polynomials, producing valid CIs which are robust to 
 bandwidth choice and have similar properties to the analytical procedure in 
 CCT while sidestepping the need to derive analytical formulas in each case of interest.
+
+Note that the procedure as presented here only works for the uniform kernel, sharp RD designs, and i.i.d. data. Extensions to other kernels, higher order discontinuities, cross-sectional dependence, and the fuzzy RD design is the subject of ongoing research.
 
 The paper is organized as follows. Section \ref{background} describes the basic
 RD approach, its usual implementation, and the explicit analytical bias 
