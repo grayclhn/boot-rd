@@ -406,45 +406,205 @@ The functional form for $\mu_{2}(x)$, in the second DGP follows the data observe
 \end{cases}
 \end{align}
 
+<<<<<<< HEAD
 The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed by  and \cite{ludwig2007}, respectively, while $\mu_{3}(x)$ is a transformation of $\mu_{1}(x)$ designed to emphasize its curvature and therefore bias in the usual RD approach. For the simulation studies, we used 250 bootstraps for bias correction, 999 bootstraps to calculate confidence interval and a total 500 replications. All results presented are based on a 0.95 desired confidence level. Table1 presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$). Table 2 presents similar results for $p=2$ and $q=3$.
+=======
+The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed by \cite{lee2008} and \cite{ludwig2007}, respectively, while $\mu_{3}(x)$ is a transformation of $\mu_{1}(x)$ designed to emphasize its curvature and therefore bias in the usual RD approach. For each DGP, we used four methods to obtain point estimate and 0.95 confidence interval. For each method, a total 1500 replications were performed. The first two methods follow CCT procedure with triangular and uniform kernel. The third and fourth methods follow the bootstrap procedure with uniform kernel. The only difference between the last two is that one is bias corrected and the other is not. In the bootstrap procedure, we used 500 bootstraps for bias correction, 999 bootstraps to calculate confidence interval. Table \ref{Tb: simulation 1} presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$). Table \ref{Tb: simulation 2} presents similar results for $p=2$ and $q=3$.
+>>>>>>> a17073c218217ab4d22798847aae95517f288359
 
-\begin{table}[t] \label{Tb1}
+\begin{table}[t]
 \centering
 \begin{tabular}{rrrrrrrrr}
   \toprule
-  DGP & Method    & Bias    & SD    & MSE   & CI coverage & CI length \\
+	DGP & Method    & Bias    & SD    & MSE   & CI coverage & CI length \\
   \midrule
-  1   & bootstrap & --0.013 & 0.067 & 0.068 & 0.938       & 0.243     \\
-      & CCT       & --0.016 & 0.068 & 0.070 & 0.908       & 0.244     \\
-  2   & bootstrap & --0.014 & 0.083 & 0.084 & 0.954       & 0.319     \\
-      & CCT       & --0.014 & 0.092 & 0.093 & 0.928       & 0.350     \\
-  3   & bootstrap & --0.006 & 0.069 & 0.070 & 0.956       & 0.247     \\
-      & CCT       & --0.004 & 0.071 & 0.071 & 0.918       & 0.249     \\
+	1 & $CCT_{tri}$ & -0.010 & 0.068 & 0.068 & 0.911 & 0.241 \\ 
+	  & $CCT_{uni}$ & -0.016 & 0.067 & 0.069 & 0.924 & 0.246 \\ 
+	  & $bootstrap_{uni}$       & -0.018 & 0.066 & 0.069 & 0.931 & 0.240 \\ 
+	  & $bootstrap_{uni}^{nbc}$ & -0.020 & 0.060 & 0.064 & 0.916 & 0.208 \\
+	\midrule
+	2 & $CCT_{tri}$ & -0.011 & 0.085 & 0.086 & 0.935 & 0.343 \\ 
+	  & $CCT_{uni}$ & -0.010 & 0.087 & 0.088 & 0.938 & 0.350 \\ 
+	  & $bootstrap_{uni}$       & -0.012 & 0.088 & 0.089 & 0.953 & 0.324 \\ 
+	  & $bootstrap_{uni}^{nbc}$ & -0.051 & 0.086 & 0.100 & 0.869 & 0.300 \\ 
+	\midrule
+	3 & $CCT_{tri}$ & -0.008 & 0.067 & 0.067 & 0.919 & 0.246 \\ 
+	  & $CCT_{uni}$ & -0.004 & 0.065 & 0.065 & 0.943 & 0.250 \\ 
+	  & $bootstrap_{uni}$       & -0.004 & 0.064 & 0.064 & 0.960 & 0.246 \\ 
+	  & $bootstrap_{uni}^{nbc}$ & 0.016 & 0.062 & 0.064 & 0.931 & 0.218 \\ 
   \bottomrule
 \end{tabular}
 \caption{Summary of estimates ($p = 1, q = 2$)}
+\label{Tb: simulation 1}
 \end{table}
 
-As can be seen on the tables above, the bootstrap bias-correction procedure
-proposed in this paper provides a simple alternative to obtain valid robust
-confidence intervals in RD designs and performs well compared to the analytical 
-bias correction procedures proposed by CCT.
+As can be seen on the tables, the bootstrap bias-correction procedure proposed in this paper provides a simple alternative to obtain 
+valid robust confidence intervals in RD designs and performs well compared to the analytical 
+bias correction procedures proposed by CCT. The results also demonstrate the importance of bias correction when huge kink 
+presents at the cutoff (such as in the second DGP). Failing to correct bias in this case leads to a confidence interval with incorrect coverage.
 
-\begin{table}[t]\label{Tb2}
+\begin{table}[t]
 \centering
 \begin{tabular}{rrrrrrr}
   \toprule
   DGP & Method    & Bias    & SD    & MSE   & CI coverage & CI length \\
   \midrule
-  1   & bootstrap & --0.002 & 0.075 & 0.075 & 0.958       & 0.295     \\
-      & CCT       & --0.004 & 0.082 & 0.082 & 0.926       & 0.295     \\
-  2   & bootstrap & 0.002   & 0.087 & 0.086 & 0.934       & 0.302     \\
-      & CCT       & --0.005 & 0.078 & 0.078 & 0.960       & 0.323     \\
-  3   & bootstrap & --0.008 & 0.083 & 0.083 & 0.942       & 0.292     \\
-      & CCT       & --0.003 & 0.080 & 0.080 & 0.938       & 0.295     \\
+    1 & $CCT_{tri}$ & -0.006 & 0.079 & 0.079 & 0.923 & 0.291 \\ 
+      & $CCT_{uni}$ & -0.003 & 0.081 & 0.081 & 0.932 & 0.299 \\ 
+      & $bootstrap_{uni}$       & -0.003 & 0.079 & 0.079 & 0.947 & 0.294 \\ 
+      & $bootstrap_{uni}^{nbc}$ & -0.008 & 0.073 & 0.074 & 0.941 & 0.261 \\ 
+     \midrule
+    2 & $CCT_{tri}$ & -0.007 & 0.080 & 0.080 & 0.941 & 0.319 \\ 
+      & $CCT_{uni}$ & -0.005 & 0.081 & 0.081 & 0.946 & 0.326 \\ 
+      & $bootstrap_{uni}$       & -0.008 & 0.080 & 0.080 & 0.955 & 0.300 \\ 
+      & $bootstrap_{uni}^{nbc}$ & -0.020 & 0.075 & 0.078 & 0.924 & 0.273 \\ 
+     \midrule
+    3 & $CCT_{tri}$ & 0.004 & 0.080 & 0.080 & 0.922 & 0.291 \\ 
+      & $CCT_{uni}$ & -0.004 & 0.082 & 0.082 & 0.931 & 0.296 \\ 
+      & $bootstrap_{uni}$       & 0.002 & 0.077 & 0.077 & 0.958 & 0.294 \\ 
+      & $bootstrap_{uni}^{nbc}$ & -0.001 & 0.073 & 0.073 & 0.948 & 0.260 \\ 
   \bottomrule
 \end{tabular}
 \caption{Summary of estimates from bootstrap ($p = 2, q = 3$)}
+\label{Tb: simulation 2}
+\end{table}
+
+\section{Application}\label{application}
+
+In this section, we apply the bootstrap procedure to the data\footnote{The data is publicly available from http://faculty.econ.ucdavis.edu/faculty/dlmiller/statafiles/.} used in \cite{ludwig2007}. In their paper, the effects of Head Start application assistance on federal spending, mortality and education attainment were investigated under standard RD design. They utilized the fact that grant-writing assistance were offered only to the poorest 300 counties to identify the average treatment effect (ATE) at the cutoff.
+
+We estimate the ATE with alternative procedures and compare the new estimates with results in \cite{ludwig2007}. Bias-corrected point estimates and robust confidence intervals are reported. For completeness, we also include results following the procedure proposed by CCT. In \cite{ludwig2007}, analytical standard error and percentile-T bootstrapped p-value were reported\footnote{However, we were unable to reproduce their point estimates for the ATE under the nonparametric setting using triangular kernel, which was documented in their paper. Instead, we used uniform kernel and obtained exactely the same results as theirs.}. The procedure proposed by CCT provides analytical standard error and confidence interval. Our bootstrap procedure provides standard error and confidence interval from the bootstrap distribution. In both CCT and bootstrap procedures, we set $p = 1$, $q = 2$ and used uniform kernel. In the bootstrap procedure, we used 500 bootstraps for bias correction and 999 for confidence interval.
+
+These results are shown in Table \ref{tab: head start spending}-\ref{tab: education 2000 ages 25-34}. We find that (1) the choice of bandwidth may significantly affect estimated ATE and its significance level; (2) the optimal bandwidths following CCT procedure are much smaller than actually being used in \cite{ludwig2007} and (3) our bootstrap procedure produces similar results to CCT.
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{cccccc}
+		\toprule
+		& \multicolumn{3}{c}{LM 2007} & CCT 2014 & Bootstrap \\
+		\midrule
+		& \multicolumn{5}{c}{Panel A: 1968 Head Start spending per child} \\ 
+		Bandwidth & 9 & 18 & 36 & 5.414, 10.175 & 5.414, 10.175 \\
+		Effect    & 137.251 & 114.711 & 134.491 & 143.811 & 148.990 \\
+		SE        & 128.968 & 91.267  & 62.593 & 113.404 & 182.729 \\
+		p-value   & 0.157   & 0.138   & 0.045  & & \\
+		95\% CI   & & & & (-78.457 366.078) & (-179.120  547.755) \\
+		
+		&&&&& \\
+		& \multicolumn{5}{c}{Panel B: 1972 Head Start spending per child} \\ 
+		Bandwidth & 9 & 18 & 36 & 5.034, 12.020 & 5.034, 12.020 \\
+		Effect    & 182.119 & 88.959 & 130.153 & 94.260 & 100.404 \\
+		SE        & 148.321 & 101.697 & 67.613 & 122.224 & 196.008 \\
+		p-value   & 0.085   & 0.352   & 0.090  & & \\
+		95\% CI   & & & & (-145.294 333.814) & (-165.816 622.976) \\
+		
+		&&&&& \\
+		& \multicolumn{5}{c}{Panel C: 1972 other social spending per capita} \\ 
+		Bandwidth & 9 & 18 & 36 & 4.612, 8.461 & 4.612, 8.461 \\
+		Effect    & 14.474 & 19.590 & 14.506 & 15.418 & 15.857 \\
+		SE        & 28.356 & 19.612 & 14.929 & 29.041 & 39.902 \\
+		p-value   & 0.459   & 0.222   & 0.478  & & \\
+		95\% CI   & & & & (-41.501 72.337) & (-64.153 91.999) \\
+		\bottomrule
+	\end{tabular}
+	\caption{The effect of Head Start assistance on Head Start spending. The first three columns come from Table 2 in \cite{ludwig2007}.}
+	\label{tab: head start spending}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{cccccc}
+		\toprule
+		& \multicolumn{3}{c}{LM 2007} & CCT 2014 & Bootstrap \\
+		\midrule
+		Bandwidth & 9 & 18 & 36 & 3.888, 6.807 & 3.888, 6.807 \\
+		Effect    & -1.895 & -1.198 & -1.114 & -3.795 & -3.852 \\
+		SE        & 0.980 & 0.796  & 0.544 & 1.654 & 1.526 \\
+		p-value   & 0.036   & 0.081   & 0.027  & & \\
+		95\% CI   & & & & (-7.037 -0.554) & (-6.565 -0.578) \\
+		\bottomrule
+	\end{tabular}
+	\caption{The effect of Head Start assistance on mortality. The first three columns come from Table 3 in \cite{ludwig2007}.}
+	\label{tab: mortality}
+\end{table}
+
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{cccc}
+		\toprule
+		& LM 2007 & CCT 2014 & Bootstrap \\
+		\midrule
+		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\
+		Bandwidth & 7 & 3.671, 8.618 & 3.671, 8.618 \\
+		Effect    & 0.030 & 0.055 & 0.054 \\
+		SE        & 0.016 & 0.021 & 0.021 \\
+		p-value   & 0.032 & & \\
+		95\% CI        & & (0.014 0.096) & (0.010 0.094) \\
+		
+		&&& \\
+		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
+		Bandwidth & 7 & 5.076, 10.251 & 5.076, 10.251 \\
+		Effect    & 0.037 & 0.051 & 0.051 \\
+		SE        & 0.020 & 0.024 & 0.024 \\
+		p-value   & 0.031 & & \\
+		95\% CI        & & (0.004 0.099) & (0.001 0.092) \\
+		\bottomrule
+	\end{tabular}
+	\caption{The effect of Head Start assistance on education (1990, ages 18-24). The first column is result for directly treated cohorts (1990, ages 18-24) in Table 4 in \cite{ludwig2007}.}
+	\label{tab: education 1990 ages 18-24}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{cccc}
+		\toprule
+		& LM 2007 & CCT 2014 & Bootstrap \\
+		\midrule
+		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\ 
+		Bandwidth & 7 & 4.837, 9.85 & 4.837, 9.85 \\
+		Effect    & 0.000 & 0.014 & 0.013 \\
+		SE        & 0.016 & 0.019 & 0.019 \\
+		p-value   & 0.974 & & \\
+		CI        & & (-0.024 0.051) & (-0.026 0.051) \\
+		
+		&&& \\
+		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
+		Bandwidth & 7 & 5.382, 10.621 & 5.382, 10.621 \\
+		Effect    & 0.028 & 0.033 & 0.032 \\
+		SE        & 0.019 & 0.023 & 0.022 \\
+		p-value   & 0.017 & & \\
+		CI        & & (-0.014 0.079) & (-0.009 0.077)\\
+		\bottomrule
+	\end{tabular}
+	\caption{The effect of Head Start assistance on education (2000, ages 18-24). The first column is result for directly treated cohorts (2000, ages 18-24) in Table 4 in \cite{ludwig2007}.}
+	\label{tab: education 2000 ages 18-24}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{cccc}
+		\toprule
+		& LM 2007 & CCT 2014 & Bootstrap \\
+		\midrule
+		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\ 
+		Bandwidth & 7 & 6.074, 11.477 & 6.074, 11.477 \\
+		Effect    & 0.006 & 0.014 & 0.014 \\
+		SE        & 0.014 & 0.015 & 0.015 \\
+		p-value   & 0.666 & & \\
+		CI        & & (-0.014 0.043) & (-0.023 0.036) \\
+		
+		&&& \\
+		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
+		Bandwidth & 7 & 5.509, 11.463 & 5.509, 11.463 \\
+		Effect    & 0.040 & 0.049 & 0.049 \\
+		SE        & 0.017 & 0.020 & 0.021 \\ 
+		p-value   & 0.009 & & \\
+		CI        & & (0.010 0.089) & (0.003 0.083) \\
+		\bottomrule
+	\end{tabular}
+	\caption{The effect of Head Start assistance on education (2000, ages 25-34). The first column is result for directly treated cohorts (2000, ages 25-34) in Table 4 in \cite{ludwig2007}.}
+	\label{tab: education 2000 ages 25-34}
 \end{table}
 
 \section{Conclusion}\label{conclusion}
