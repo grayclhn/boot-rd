@@ -9,6 +9,7 @@ VERSION.tex
 # ...Emacs
 *~
 auto/
+_region_.tex
 
 # ...R
 .Rhistory

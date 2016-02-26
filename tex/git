@@ -1,0 +1,3 @@
+#! /bin/bash
+
+echo "\newcommand\VERSION{`git log -1 --date=short --format=%cd`, `git describe --tag --dirty`}" > VERSION.tex
