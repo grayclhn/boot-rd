@@ -267,45 +267,43 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
     \end{equation}
   \end{enumerate}
 \end{algorithm}
-Obviously, the distribution of $\Delta^*$ depends on $B_1$ and we could
-incorporate that dependency into our notation by wrting
-$\Delta^*_{B_1}$. However, we will follow standard practice in the bootstrap
-literature and assume that $B_1$ is large enough that it can be ignored and
-define $\Delta^* = \plim_{B_1 \to \infty} \Delta^*_{B_1}$
+The distribution of $\Delta^{*}$ depends on $B_{1}$ and we could
+incorporate that dependency into our notation by writing $\Delta^*_{B_1}$. However, we will follow standard practice in the bootstrap
+literature and assume that $B_{1}$ is large enough that it can be ignored and define $\Delta^* = \plim_{B_{1} \to \infty} \Delta^*_{B_{1}}$
 
 Under Assumptions~\ref{A1} and~\ref{A2} the procedure described by
-Algorithm~\ref{Alg1} provides a consistent estimator of the bias component and
-this estimator converges to zero fast enough in probability that it can be be
-used as a correction. As is standard in the bootstrap literature, we will assume
-that the number of bootstrap replications, $B_1$, is large enough that the
-simulation error can be ignored.
+Algorithm~\ref{Alg1} provides a consistent estimator of the bias component that
+converges fast enough in probability that it can be be used as a correction. As is standard in the bootstrap literature, we will assume
+that the number of bootstrap replications, $B_{1}$, is large enough that the simulation error can be ignored.
 
 \begin{theorem}\label{T1}
   Under Assumptions~\ref{A1} and~\ref{A2},
-  $(\hat\tau(h_n,b_n) - \Delta^*(h_n,b_n) - \tau) / V^{1/2}(h_n, b_n) \to^d N(0,1)$.
+\begin{align}
+  \frac{(\hat\tau(h_{n},b_{n}) - \Delta^{*}(h_{n},b_{n}) - \tau)}{ V^{1/2}(h_n, b_n)} \to^{d} N(0,1)
+\end{align}
 \end{theorem}
 
-With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a fully bias corrected estimate using Algorithm~\ref{Alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h_{n},b_{n})$ in the asymptotic variance formula on Section \ref{background}.
+With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a bias corrected estimate using Algorithm~\ref{Alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h_{n},b_{n})$ in the asymptotic variance formula on Section \ref{background}.
 
 \begin{algorithm}[Confidence intervals]\label{Alg2}
-  Define $I^-$, $I^+$, $M^-$, and $M^+$ as in Algorithm~\ref{Alg1}.
+  Define $I^{-}$, $I^{+}$, $M^{-}$, and $M^{+}$ as in Algorithm~\ref{Alg1}.
   \begin{enumerate}
-  \item Estimate the local polynomials $g_{p+1}^+$ and $g_{p+1}^-$ as defined by
+  \item Estimate the local polynomials $g_{p+1}^{+}$ and $g_{p+1}^{-}$ as defined by
     Equation --- and define the residuals
     \begin{equation}
       \label{eq:3}
-      \hat\varepsilon_i =
+      \hat\varepsilon_{i} =
       \begin{cases}
-        Y_i - \hat g_{p+1}^-(X_i) & \textif\ X_i < 0 \\
-        Y_i - \hat g_{p+1}^+(X_i) & \otherwise
+        Y_i - \hat g_{p+1}^-(X_{i}) & \textif\ X_{i} < 0 \\
+        Y_i - \hat g_{p+1}^+(X_{i}) & \otherwise
       \end{cases}
     \end{equation}
-  \item Repeat the following steps $B_2$ times to produce a sequence of bootstrap
-    estimates $\hat\tau_1^{\prime*},\dots,\hat\tau_B^{\prime*}$. For the $k$th step:
+  \item Repeat the following steps $B_{2}$ times to produce a sequence of bootstrap
+    estimates $\hat\tau_1^{\prime*},\dots,\hat\tau_{B_{2}}^{\prime*}$. For the $k$th step:
     \begin{enumerate}
-    \item Draw an i.i.d. sample of size $M^-(b_n)$ from
-      $\{\hat\varepsilon_i : i \in I^-(b_n)\}$ and one of size $M^+(b_n)$ from
-      $\{\hat\varepsilon_i : i \in I^+(h_n)\}$. Let $\varepsilon_i^{*-}$ and
+    \item Draw an i.i.d. sample of size $M^{-}(b_{n})$ from
+      $\{\hat\varepsilon_{i} : i \in I^{-}(b_{n})\}$ and one of size $M^{+}(b_{n})$ from
+      $\{\hat\varepsilon_i : i \in I^{+}(h_{n})\}$. Let $\varepsilon_{i}^{*-}$ and
       $\varepsilon_i^{*+}$ denote the $i$th element of each sample and construct
       \begin{align}
         Y_i^{*-} &= \hat g_{p+1}^-(X_i^{*-}) + \varepsilon_i^{*-} &
@@ -372,25 +370,33 @@ Evidence of the usefulness of the procedures proposed above and their relative p
 
 This section presents evidence from Monte Carlo simulations that the bootstrap bias correction procedures proposed in Section \ref{boot} produces valid, robust confidence intervals similar to the ones obtained by the analytical procedures established in CCT. The bootstrap CIs obtained compare favorably to the analytical alternative, with coverage closer to the nominal size of the desired test and shorter length of the intervals in the specifications implemented.
 
-We selected three data generating processes (DGP) that are widely used in the RD literature to evaluate the performance of the proposed bootstrap procedure, those are the same chosen by CCT and \cite{IK} and provide a good testing ground for bias correction due to their exacerbated curvature. To be specific, the pseudo data are generated as 500 i.i.d. draws from:
+We adopt the same three data generating processes (DGP) used by CCT to make it easy to compare our results. Also, these DGPs are widely used in the RD literature to evaluate the performance of inference procedures and provide a good testing ground for bias correction due to their exacerbated curvature.
+
+For all Monte Carlo experiments, the pseudo data are generated as 500 i.i.d. draws from:
 \begin{align*}
 & Y_{i} = \mu_{j}(X_{i}) + \epsilon_{i}, \;\;\; X_{i} \sim  (2 B (2,4) - 1)), \\
 & \epsilon_{i} \sim N(0, \sigma^{2}), \;\;\; \sigma = 0.1295, \;\;\; j = 1,2,3.
 \end{align*}
-Three different choices of functional forms for $\mu_{j}(x)$ are as follows:
+Regarding the functional form for $\mu(x)$ in each DGP, the first one is based on a fifth order polynomial fitted on the data observed by \cite{lee2008rand} when estimating the incumbency advantage in electoral races to the U.S. House of Representatives. Hence, $\mu_{1}(x)$ is given by,
 \begin{align}
 \mu_{1}(x) & = 
 \begin{cases}
 0.48 + 1.27x + 7.18x^{2} + 20.21x^{3} + 21.54x^{4} + 7.33x^{5}, \;\;\;\; & \text{if} \;\; x < 0, \\
 0.52 + 0.84x - 3.00x^{2} + 7.99x^3 - 9.01x^4 + 3.56x^{5},  & \text{if} \;\; x \ge 0.
 \end{cases}
-\\
+\end{align}
+
+The functional form for $\mu_{2}(x)$, in the second DGP follows the data observed by \cite{ludwig2007}, which we examine in more detail on Section \ref{application}, and follows
+\begin{align}
 \mu_{2}(x) & = 
 \begin{cases}
 3.71 + 2.30x + 3.28x^2 + 1.45x^3 + 0.23x^4 + 0.03x^5, \;\; & \text{if} \;\; x < 0, \\
 0.26 + 18.49x - 54.81x^2 + 74.30x^3 - 45.02x^4 + 9.83x^5,  & \text{if} \;\; x \ge 0.
 \end{cases}
-\\
+\end{align}
+
+
+\begin{align}
 \mu_{3}(x) & =
 \begin{cases}
 0.48 + 1.27x + 0.5 \times 7.18x^{2}+ \\
@@ -400,7 +406,7 @@ Three different choices of functional forms for $\mu_{j}(x)$ are as follows:
 \end{cases}
 \end{align}
 
-The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed by \cite{lee2008} and \cite{ludwig2007}, respectively, while $\mu_{3}(x)$ is a transformation of $\mu_{1}(x)$ designed to emphasize its curvature and therefore bias in the usual RD approach. For the simulation studies, we used 250 bootstraps for bias correction, 999 bootstraps to calculate confidence interval and a total 500 replications. All results presented are based on a 0.95 desired confidence level. Table1 presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$). Table 2 presents similar results for $p=2$ and $q=3$.
+The functional form for $\mu_{1}(x)$ and $\mu_{2}(x)$ follow the data observed by  and \cite{ludwig2007}, respectively, while $\mu_{3}(x)$ is a transformation of $\mu_{1}(x)$ designed to emphasize its curvature and therefore bias in the usual RD approach. For the simulation studies, we used 250 bootstraps for bias correction, 999 bootstraps to calculate confidence interval and a total 500 replications. All results presented are based on a 0.95 desired confidence level. Table1 presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$). Table 2 presents similar results for $p=2$ and $q=3$.
 
 \begin{table}[t] \label{Tb1}
 \centering
