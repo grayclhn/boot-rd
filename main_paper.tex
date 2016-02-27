@@ -615,36 +615,42 @@ Simulation evidence is presented that the proposed bootstrap bias correction and
 \subsection{Proof of Theorem~\ref{T1}}
 We have
 \begin{equation*}
-  \hat\tau - \Delta^* - \tau = (\hat\tau - \E \hat \tau) +
-  (\E \hat \tau - \tau) - (\E^* \hat \tau^* - \tau^*)
+  \hat\tau_h - \Delta^*_h - \tau = (\hat\tau_h - \E \hat \tau_h) +
+  (\E \hat \tau_h - \tau) - (\E^* \hat \tau^*_h - \tau^*)
 \end{equation*}
 The design of the bootstrap ensures that
-\begin{equation*}
+\begin{align*}
   \label{eq:6}
-  \E^* \hat\mu_{\pm}^*(h_n) - \mu_{\pm}^{*} =
-  h_n^{2} \mu_\pm^{*(2)} \Bf_{\pm}(h_n)/2,
-\end{equation*}
+  \E^* \hat\mu_{+}^*(h_n) - \mu_{+}^{*}
+  &= h_n^{2} \mu_+^{*(2)} \Bf_{+}(h_n)/2,
+  &\E^* \hat\mu_{-}^*(h_n) - \mu_{-}^{*}
+  &= h_n^{2} \mu_-^{*(2)} \Bf_{-}(h_n)/2,
+\end{align*}
 almost surely, implying that
 \begin{equation*}
   \label{eq:7}
-    \E^* \hat\tau^{*} - \tau^{*} = h_n^2\, \mu_+^{*(2)} \Bf(h_n)/2
+    \E^* \hat\tau^{*}_h - \tau^{*} = h_n^2\, \mu_+^{*(2)} \Bf(h_n)/2
       - h_n^2\, \mu_{-}^{*(2)} \Bf_{-}(h_n)/2.
 \end{equation*}
 Combining this result with CCT's Lemma A1, gives
-\begin{align*}
-  \hat\tau &- \E \hat\tau + (\E \hat\tau - \tau) - (\E^* \hat\tau^* - \tau^*)\\
-  &= \hat\tau - \E\hat\tau
+\begin{align}
+  \hat\tau_h - & \E \hat\tau_h + (\E \hat\tau_h - \tau) - (\E^* \hat\tau^*_h - \tau^*)\notag \\
+  \label{eq:8}
+  &= \hat\tau_h - \E\hat\tau_h
    + h_n^2 \big((\mu_{-}^{*(2)} - \mu_{-}^{(2)}) \Bf_{-}(h_{n}) /2
    - (\mu_+^{*(2)}-\mu_+^{(2)}) \Bf_{+}(h_{n}) / 2 \big) + O_p(h_n^{3}) \\
-  &= \hat\tau - \E\hat\tau
-   + h_n^2 (\hat\mu_-^{(2)}(b_n) - \mu_-^{(2)}) \Bf_{-}(h_{n}) /2
-   - h_n^2 (\hat\mu_+^{(2)}(b_n) - \mu_+^{(2)}) \Bf_{+}(h_{n}) / 2 + O_p(h_n^{3})
-\end{align*}
+  &= \hat\tau_h - \E\hat\tau_h
+   + h_n^2 (\hat\mu_-^{(2)}(b_n) - \mu_-^{(2)}) \Bf_{-}(h_{n}) /2 \notag \\
+  \label{eq:9}
+  &\pushright{- h_n^2 (\hat\mu_+^{(2)}(b_n) - \mu_+^{(2)}) \Bf_{+}(h_{n}) / 2 + O_p(h_n^{3})}
+\end{align}
 The second equality holds because
-$\mu_\pm^{*(2)} = \hat\mu_{\pm}^{(2)}(b_n)$ a.s. Asymptotic normality then
-follows from normality of $\hat\tau - \E\hat\tau$ and
-$\hat\mu_\pm^{(2)}(b_n) - \mu_\pm^{(2)}$ using
-similar arguments to CCT's Lemma SA4.D.\qed
+$\mu_+^{*(2)} = \hat\mu_{+}^{(2)}(b_n)$ and
+$\mu_-^{*(2)} = \hat\mu_{-}^{(2)}(b_n)$ almost surely. Asymptotic
+normality then follows from normality of $\hat\tau_h - \E\hat\tau_h$,
+$\hat\mu_+^{(2)}(b_n) - \mu_+^{(2)}$, and
+$\hat\mu_-^{(2)}(b_n) - \mu_-^{(2)}$ using similar arguments to
+CCT's Lemma SA4.D.\qed
 
 \subsection{Proof of Theorem~\ref{T2}}
 We can repeat the steps from Theorem~\ref{T1}'s proof to show that
