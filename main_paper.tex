@@ -410,7 +410,7 @@ For each DGP, we used four methods to obtain point estimate and confidence inter
 
 The ``naive'' bootstrap estimator, which bootstraps the confidence intervals for the usual RD estimator without any bias-correction serves as a baseline comparison, making clear the need of the corrections proposed, especially for DGPs with higher (potential) bias.
 
-In the bootstrap procedure, we used 500 bootstraps for bias correction, 999 bootstraps to calculate confidence interval. Table \ref{Tb: simulation 1} presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$). Table \ref{Tb: simulation 2} presents similar results for $p=2$ and $q=3$.
+In the bootstrap procedure, we used 500 bootstraps for bias correction, 999 bootstraps to calculate confidence interval. Table \ref{Tb: simulation 1} presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$).
 
 \begin{table}[t]
 \centering
@@ -447,32 +447,6 @@ In the case of the modified \cite{lee2008rand} DGP that exacerbates the importan
 
  Overall, the bootstrap bias-correction procedure proposed in this paper provides a simple alternative to obtain valid robust confidence intervals in RD designs and performs well compared to the analytical
 bias correction procedures proposed by CCT. The results also corroborates CCT in the importance of bias correction when high curvature is present at the cutoff. 
-
-\begin{table}[t]
-\centering
-\begin{tabular}{rrrrrrr}
-  \toprule
-  DGP & Method    & Bias    & SD    & MSE   & CI Coverage & CI Length \\
-  \midrule
-    1 & $CCT_{tri}$ & -0.006 & 0.079 & 0.079 & 0.923 & 0.291 \\ 
-      & $CCT_{uni}$ & -0.003 & 0.081 & 0.081 & 0.932 & 0.299 \\ 
-      & $bootstrap_{uni}$       & -0.003 & 0.079 & 0.079 & 0.947 & 0.294 \\ 
-      & $bootstrap_{uni}^{naive}$ & -0.008 & 0.073 & 0.074 & 0.941 & 0.261 \\ 
-     \midrule
-    2 & $CCT_{tri}$ & -0.007 & 0.080 & 0.080 & 0.941 & 0.319 \\ 
-      & $CCT_{uni}$ & -0.005 & 0.081 & 0.081 & 0.946 & 0.326 \\ 
-      & $bootstrap_{uni}$       & -0.008 & 0.080 & 0.080 & 0.955 & 0.300 \\ 
-      & $bootstrap_{uni}^{naive}$ & -0.020 & 0.075 & 0.078 & 0.924 & 0.273 \\ 
-     \midrule
-    3 & $CCT_{tri}$ & 0.004 & 0.080 & 0.080 & 0.922 & 0.291 \\ 
-      & $CCT_{uni}$ & -0.004 & 0.082 & 0.082 & 0.931 & 0.296 \\ 
-      & $bootstrap_{uni}$       & 0.002 & 0.077 & 0.077 & 0.958 & 0.294 \\ 
-      & $bootstrap_{uni}^{naive}$ & -0.001 & 0.073 & 0.073 & 0.948 & 0.260 \\ 
-  \bottomrule
-\end{tabular}
-\caption{Summary of estimates from bootstrap ($p = 2, q = 3$)}
-\label{Tb: simulation 2}
-\end{table}
 
 \section{Application}\label{application}
 
