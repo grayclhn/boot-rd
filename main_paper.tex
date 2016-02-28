@@ -183,74 +183,116 @@ Finally, Section~\ref{conclusion} concludes.
 
 \section{Background}\label{background}
 
-In the typical sharp RD setting, a researcher wishes to estimate the local 
-causal effect of treatment at a given threshold. The running variable, $X_{i}$, 
-determines treatment assignment.  Given a known threshold, $\bar{x}$, set to 
-zero without loss of generality, a unit receives treatment if $X_{i} \geq 0$ or 
-does not receive treatment if $X_{i} < 0$. Let $Y_{i}(1)$ and $Y_{i}(0)$ denote 
-the potential outcomes for unit $i$ given it receives treatment and
- in the absence of treatment, respectively. Hence, the observed sample is 
- comprised of the running variable, $X_{i}$, and
- \begin{align}
-  Y_{i}=Y_{i}(0) \1\{X_{i}<0\}+Y_{i}(1) \1\{X_{i} \geq 0\}
- \end{align}
-where $\1\{ \cdot\}$ denotes the indicator function. For convenience,
-define
- \begin{align}
-  \mu(x)= \E[Y_{i} \mid X_{i}=x]
- \end{align}
-Also, let $\mu^{(\eta)}(x)=\frac{d^{\eta}\mu(x)}{dx^{\eta}}$ be the $\eta^{th}$ 
-derivative of the unknown regression function and define 
-$\mu^{(\eta)}_{+}=lim_{x \rightarrow 0^{+}}\mu^{(\eta)}(x)$ and 
-$\mu^{(\eta)}_{-}=lim_{x \rightarrow 0^{-}}\mu^{(\eta)}(x)$.
-In most cases the population parameter of interest is 
-$\tau=\E[Y(1)-Y(0) \mid X=\bar{x}]$ (i.e., the average treatment effect
-at the threshold). Under continuity and smoothness conditions on both the 
-conditional distribution of $X_i$ and the first moments of $Y(0)$ and $Y(1)$ at
-the cutoff, $\tau$ is nonparametrically identifiable by
-$\tau = \mu_{+}- \mu_{-}$
-where $\mu_{+}=lim_{x \rightarrow 0^{+}}\mu(x)$ and
-$\mu_{-}=lim_{x \rightarrow 0^{-}}\mu(x)$
-(Hahn, Todd and Van der Klaauw, 2001)
+This section provides additional details of RD estimators in general and of
+CCT's proposed bias correction. It also defines some of the notation and
+presents the assumptions that will be used for our theoretical anaysis in
+Section~\ref{boot}.
 
-Naturally, the estimation of $\tau$ in RD designs focuses on the 
-problem of approximating $\E[Y(1) \mid X=x]$ and $\E[Y(0) \mid X=x]$
-near the cutoff. Due to its desirable properties when estimating regression 
-functions at boundary points, we consider the popular approach of fitting 
-local linear regressions in neighborhoods on both
-sides of the threshold.\footnote{See \cite{HTV2001}, \cite{Porter03} or
-\cite{FanGijbels92} for discussions of the properties of local polynomial 
-regressions for boundary problems.The results presented here are valid for
-higher order polynomials and discontinuities at derivatives, like ``Kink RDD''. We focus on the linear case for ease in exposition.}
-For the local linear model,
+In the typical sharp RD setting, a researcher wishes to estimate the local
+causal effect of treatment at a given threshold. A running variable, $X_{i}$,
+determines treatment assignment.  Given a known threshold, $\bar{x}$, which can
+be set to zero without loss of generality, the $i$th subject receives the
+treatment of interest if $X_{i} \geq 0$ and does not receive treatment if
+$X_{i} < 0$.
+
+Subject $i$'s potential outcomes are denoted by the variable $Y_i(\cdot)$,
+$Y_i(1)$ indicates that the subject has received treatment and $Y_i(0)$
+indicates that the subject has not received treatment. Since only one of the two
+outcomes is observed, the sample is comprised of the running variable, $X_{i}$,
+and the observed outcome $Y_i$, where
+\begin{equation*}
+  Y_{i}=Y_{i}(0) \1\{X_{i}<0\}+Y_{i}(1) \1\{X_{i} \geq 0\}
+\end{equation*}
+and $\1\{ \cdot\}$ denotes the indicator function.
+
+In most cases the population parameter of interest is the Average Treatment
+Effect (ATE) at the cutoff, which we will denote $\tau$. This parameter is the
+difference in expected potential outcomes given $X_i = 0$; formally,
+\begin{equation*}
+  \tau=\E(Y(1)-Y(0) \mid X=0).
+\end{equation*}
+\cite{HTV2001} show that the effect $\tau$ is identified under continuity and
+smoothness conditions on the joint distribution of $X_i$, $Y_i(0)$, and $Y_i(1)$
+around the cutoff $X_i = 0$. When these conditions hold, which are made precise
+in Assumption~\ref{A1}, $\tau$ is equal to
+\begin{equation*}
+  \tau = \lim_{x \to 0+} \mu(x) - \lim_{x \to 0-}(x)
+\end{equation*}
+where
+\begin{equation*}
+  \mu(x)= \E(Y_{i} \mid X_{i}=x).
+\end{equation*}
+For convenience, also define
+\begin{equation*}
+  \mu^{(\eta)}(x)=\frac{d^{\eta}\mu(x)}{dx^{\eta}}
+\end{equation*}
+and let
 \begin{align*}
- \hat{\tau}(h_{n})&=\hat {\mu}_{+}(h_{n}) -\hat{\mu}_{-}(h_{n})\\
-(\hat {\mu}_{+}(h_{n}),\hat {\mu}^{(1)}_{+}(h_{n}))'&= \argmin_{b_{0},b_{1}}
-\sum_{i=1}^{N}\1\{h_n > X_{i} \geq 0\}(Y_{i}-b_{0}-X_{i}b_{1})^{2} \\
-(\hat {\mu}_{-}(h_{n}),\hat {\mu}^{(1)}_{-}(h_{n}))' &= \argmin_{b_{0},b_{1}}
-\sum_{i=1}^{N}\1\{0 > X_{i} > -h_n \}(Y_{i}-b_{0}-X_{i}b_{1})^{2}
+  \mu_{+}(x)
+  &= \E( Y_{i}(1) \mid X_{i}=x )
+  &\mu_{-}(x)
+  &= \E( Y_{i}(0) \mid X_{i}=x ) \\
+  \sigma^{2}_{+}(x) &= \V( Y_{i}(1) \mid X_{i}=x )
+  &\sigma^{2}_{-}(x)&=\V( Y_{i}(0) \mid X_{i}=x ) \\
+\intertext{and}
+  \mu^{(\eta)}_{+}
+  &= \lim_{x \rightarrow 0^{+}}\mu^{(\eta)}(x),
+  &\mu^{(\eta)}_{-}
+  &= \lim_{x \rightarrow 0^{-}}\mu^{(\eta)}(x),
+\end{align*}
+where the symbol $\V(\cdot)$ represents the variance.  The effect $\tau$ is
+nonparametrically identified because both $\mu_-$ and $\mu_+$ can be estimated
+consistently under the conditions spelled out in Assumption~\ref{A1}.
+
+\begin{assumption}[Behavior of the DGP near the cutoff]\label{A1}
+  The random variables $Y_i, X_i$ form a random sample of size $N$.
+  There exists a positive number $\kappa_0$ such that the following
+  conditions hold for all $x$ in the neighborhood $(-\kappa_{0},\kappa_{0})$
+  around zero:
+  \begin{enumerate}
+  \item The density of each $X_i$ is continuous and bounded away from zero.
+  \item $\E(Y_{i}^{4} \mid X_{i}=x)$ is bounded.
+  \item $\mu_+(x)$ and $\mu_-(x)$ are both 3 times continuously differentiable.
+  \item $\sigma_+^2(x)$ and $\sigma_-^2(x)$ are both continuous and bounded away
+    from zero.
+ \end{enumerate}
+\end{assumption}
+
+These conditions are the usual smoothness and existence conditions in which the
+RD literature relies. (See, in particular, \citealp{HTV2001},
+\citealp{Porter03}, and CCT). The third part of the assumption is especially
+important for the characterization of the leading bias term drives CCT's bias
+correction and our bootstrap procedure.
+
+Since the conditions for identification only need to hold in a neighborhood
+around the cutoff, $\mu_+$ and $\mu_-$ can be estimated by extrapolating from a
+local polynomial regression.  We will focus here on local linear
+regression.\footnote{%
+  See \cite{HTV2001}, \cite{Porter03} or \cite{FanGijbels92} for discussions of
+  the properties of local polynomial regressions for boundary problems. The
+  bootstrap algorithm proposed in this paper can be extended to accomodate
+  higher order polynomials discontinuities in the derivatives of the conditional
+  expectation, like ``Kink RD'' design. We focus on the linear case for ease in
+  exposition.} %
+For this model, if $h$ represents a bandwidth parameter, the estimator
+of $\tau$, $\hat\tau(h)$, is
+\begin{equation}
+  \label{eq:13}
+  \hat{\tau}(h) = \hat {\mu}_{+}(h) -\hat{\mu}_{-}(h)
+\end{equation}
+with
+\begin{align*}
+  (\hat {\mu}_{+}(h),\ \hat {\mu}^{(1)}_{+}(h))'
+  &= \argmin_{\beta} \sum_{i=1}^{N}
+  \1\{h > X_{i} \geq 0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2}
+\intertext{and}
+  (\hat {\mu}_{-}(h),\hat {\mu}^{(1)}_{-}(h))'
+  &= \argmin_{\beta} \sum_{i=1}^{N}
+  \1\{0 > X_{i} > -h_n \} (Y_{i} - \beta_{0} - X_{i} \beta_{1})^{2}.
 \end{align*}
 
 As shown by \cite{HTV2001}, \cite{Porter03} and expanded by CCT identification and inference procedures can be developed based on the following assumptions.\footnote{The assumptions below are the same as presented by CCT.}
 
-\begin{assumption}[Behavior of the DGP near the cutoff]\label{A1}
-  The random variables $Y_i, X_i$ are independent but not necessarily
-  identically distributed. There exists a positive number $\kappa_0$
-  such that the following conditions hold for all $x$ in the
-  neighborhood $(-\kappa_{0},\kappa_{0})$ around zero:
-  \begin{enumerate}
-  \item $\E[Y_{i}^{4} \mid X_{i}=x]$ is bounded and the density of $X$
-    is continuous and bounded away from zero.
-  \item $\mu_{+}(x) = \E[ Y_{i}(1) \mid X_{i}=x ]$ and
-    $\mu_{-}(x) = \E[ Y_{i}(0) \mid X_{i}=x ]$ are $p+2$ times
-    continuously differentiable.
-  \item $\sigma^{2}_{+}(x)=\V[ Y_{i}(1) \mid X_{i}=x ]$ and
-    $\sigma^{2}_{-}(x)=\V[ Y_{i}(0) \mid X_{i}=x ]$ are continuous and
-    bounded away from zero.
- \end{enumerate}
-\end{assumption}
-
-The conditions in Assumption \ref{A1} are the usual smoothness and existence conditions in which the RD literature relies. Its second part is important for the characterization of the leading bias term that will be the focus of the bias correction procedures described in CCT and in the novel  bootstrap procedure proposed in Section \ref{boot}.
 
 \begin{assumption}[Bandwidth]\label{A2}
   Let $h_{n}$ be the bandwidth used to estimate the local linear model and let
@@ -265,7 +307,7 @@ The conditions in Assumption \ref{A1} are the usual smoothness and existence con
 CCT point out that the conventional approaches to construct confidence intervals for $\tau$ using the local linear estimator rely on a large-sample approximation for the standardized $t$-statistic that is valid only if the bandwidth shrink fast enough to eliminate the leading bias term contribution to the approximation. Hence, if $nh_{n}^{5}\rightarrow0$ and $nh_{n}\rightarrow \infty$, then
  \begin{align}
   T(h_{n}) &=\frac{\hat{\tau}(h_{n})-\tau}{\sqrt{V(h_{n})}}\rightarrow_{d}N(0,1), &
-  V(h_{n}) &=\V[\tau(h_{n}) \mid X_{1},\dots,X_{n}]
+  V(h_{n}) &=\V(\tau(h_{n}) \mid X_{1},\dots,X_{n})
  \end{align}
  The conditional variance $V(h_{n})$ depends on the $\sigma^{2}_{+}=lim_{x \rightarrow 0^{+}}\sigma^{2}_{+}(x)$ and $\sigma^{2}_{-}=lim_{x \rightarrow 0^{-}}\sigma^{2}_{-}(x)$ as well as $h_{n}$ and known quantities that depend on the kernel and order of polynomial used in the estimation. Under these conditions we could use a conventional confidence interval for $\tau$ given by
  \begin{align}
