@@ -101,7 +101,7 @@ although it is AMSE-optimal for point estimation, it produces invalid
 \emph{confidence intervals} and hypothesis tests. The AMSE-optimal bandwidth
 converges to zero slowly, so the remaining bias term is large enough to affect
 the asymptotic distribution of the estimator. In that case the usual ``naive''
-confidence intervals for the RD treatment effects may be biased can have
+confidence intervals for the RD treatment effects may be biased and have
 coverage well below their nominal level. CCT then make two contributions: first,
 they propose an estimator of the bias resulting from undersmoothing and provide
 a treatment effect estimator that remains asymptotically unbiased even when the
@@ -120,7 +120,7 @@ second order polynomial with bandwidth of the same order.\footnote{%
   will restrict our analysis to the case with $p = 1$ in this paper because
   of its widespread use.} %
 They use a Taylor expansion around the cutoff to show that the bias associated
-with the second order polynomical converges to zero at a faster rate, fast
+with the second order polynomial converges to zero at a faster rate, fast
 enough that the bias of the local linear model can be estimated and removed
 using the second order polynomial. The second order polynomial also provides
 fast enough convergence that it can be used to estimate the correct variance
@@ -130,7 +130,7 @@ Our approach exploits CCT's theoretical insight through a new residual
 bootstrap. In particular, we propose, after estimating the local linear model as
 usual, estimating a local second order polynomial and generating bootstrap
 datasets by resampling the residuals of that polynomial. Since the second order
-polynomial is the true Data Generating Process (DGP), its estimate of the
+polynomial is the true Data Generating Process (DGP) in the bootstrapped data, its estimate of the
 treatment effect is the true value of the treatment effect under the
 distribution induced by this bootstrap. The bias of the linear model is known
 under this distribution and can be calculated by averaging the error of the
@@ -160,7 +160,8 @@ covariate-adjusted estimators \citep{calonico2015}, or for other local
 smoothers. \citep{loader2006} However, in this paper we focus on the baseline
 case of sharp RD with a local linear model and uniform kernel. Extensions to
 fuzzy RD and nonuniform kernels, which require nontrivial changes to the
-underlying bootstrap algorithm, are the subject of ongoing research.
+underlying bootstrap algorithm, as well as developments to address cross sectional dependence,
+ are the subject of ongoing research.
 
 The paper is organized as follows. Section~\ref{background} describes the basic
 RD approach, its usual implementation, and the explicit analytical bias
