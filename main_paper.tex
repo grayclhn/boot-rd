@@ -161,9 +161,15 @@ trivial to implement this procedure for higher order polynomials, for
 covariate-adjusted estimators \citep{calonico2015}, or for other local
 smoothers. \citep{loader2006} However, in this paper we focus on the baseline
 case of sharp RD with a local linear model and uniform kernel. Extensions to
-fuzzy RD and nonuniform kernels, which require nontrivial changes to the
-underlying bootstrap algorithm, as well as developments to address cross sectional dependence,
- are the subject of ongoing research.
+fuzzy RD designs\footnote{%
+  ``Fuzzy'' regression discontinuity design \citep{HTV2001}, as opposed to
+  ``sharp'' RD, describes situations where the probability of treatment changes
+  discontinuously at a known threshold, but by less than 100\%. Then there are
+  treated and untreated subjects above and below the discontinuity but the
+  treatment effect remains identified.} %
+and nonuniform kernels, which require nontrivial changes to the underlying
+bootstrap algorithm, as well as developments to address cross sectional
+dependence, are the subject of ongoing research.
 
 The paper is organized as follows. Section~\ref{background} describes the basic
 RD approach, its usual implementation, and the explicit analytical bias
