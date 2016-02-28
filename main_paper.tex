@@ -44,61 +44,133 @@ do not cite this paper or circulate it in its current form.
 
 \newpage
 \section{Introduction}
-Regression Discontinuity (RD) designs have emerged in the last decade as an 
-important and popular identification strategy to analyze the impact of policies
-and interventions in several fields of the social sciences, including economics,
-political science, public policy, sociology among others.
+Regression Discontinuity (RD) designs have emerged in the last decade as an
+important and popular research design strategy for analyzing the causal impact
+of policies and interventions in several fields of the social sciences,
+including economics, political science, public policy, and sociology, among
+others. This strategy exploits the fact that many programs use somewhat
+arbitrary threshoolds to determine whether or not to provide a ``treatment,''
+usually relying on some type of score, which this literature calls a ``running
+variable.'' In its basic version, individuals or groups with score above a
+certain threshold receive treatment while the ones below that cutoff are left
+untreated.
 
-The strategy exploits arbitrary rules used to assign treatment to units, usually
-relying on some type of ``score,'' the so called running variable. In its basic 
-version, units with score above a certain threshold receive treatment while the 
-ones below that cutoff are left untreated.
+The identification of the treatment effect at the threshold is then based on
+comparing treated and untreated units at the cutoff. Since the observed
+characteristics of these subjects are very similar, similarity of their
+unobserved characteristics is often credible as well, and differences in the
+outcomes between the treated and untreated can be plausibly attributed to the
+treatment alone. As a practical matter this involves comparing units within a
+bandwidth just above and just below the threshold.
 
-The identification of the treatment effect at the threshold is then based on 
-comparing treated and untreated units at the cutoff. As a practical matter this 
-involves comparing units within a bandwidth just above and just below the 
-threshold. That comparison is most commonly done by implementing a local linear
-estimator above and below the cutoff within bandwidths chosen to minimize the 
-asymptotic mean squared error (AMSE) as proposed by \cite{IK}
-and extended by \cite{calonico2014} (CCT, henceforth).
+The RD design strategy was introduced by \cite{thistlethwaite1960} to study
+educational outcomes, and many of its first recent applications in economics
+were to estimate the effects of other educational policies: evaluating the
+impact of investments in school facilities, class sizes, remedial education,
+early childhood education, and financial aid effects on student achievement and
+later outcomes, for example.\footnote{%
+  See, for example, \cite{vdk2002}, \cite{jacoblefgren2004}, \cite{ludwig2007},
+  \cite{urquiola2009}, \cite{cellini2010}} %
+But the underlying identification strategy has proven to apply much more widely,
+and RD has been used in health economics\footnote{%
+  \cite{Card2009,barreca2011saving}}; %
+political science, providing evidence regarding incumbency advantage in
+elections, electoral enfranchising and policy changes associated with the
+introduction of electronic voting, strategic voting behavior, and local media
+effects and ad expenditure in presidential elections in the U.S.\footnote{%
+  \cite{lee2008}, \cite{Caughey2011}, \cite{keele2014geographic},
+  \cite{erikson2015}, \cite{Fujiwara2011,Fujiwara2015}}, %
+among other fields. \cite{imbens2008} and \cite{lee2010} provide recent
+overviews of this literature with many more examples.
 
-RD designs have been used as a strategy to estimate effects of interest in a large range of topics in several areas. For just a few examples, RD designs are common in education, evaluating the impact of investments in school facilities, class sizes, remedial education, early childhood education, and financial aid effects on student achievement and later outcomes \citep{cellini2010,urquiola2009,jacoblefgren2004,ludwig2007,vdk2002}; in health by analyzing the impact of healthcare provision through Medicare, and neo-natal care on low birth weight children mortality \citep{Card2009,barreca2011saving}; in political science, providing evidence regarding incumbency advantage in elections, electoral enfranchising and policy changes associated with the introduction of electronic voting, strategic voting behavior, and local media effects and ad expenditure in presidential elections in the U.S. \citep{lee2008,Caughey2011,erikson2015,Fujiwara2015,Fujiwara2011,keele2014geographic}. Several more examples of the breadth of RD designs are listed by \cite{lee2010}.
+In these studies, identification typically occurs exactly at the cutoff, so the
+treatment effect is typically estimated by fitting separate local linear models
+above and below the cutoff, then extrapolating the model to the exact point of
+discontinuity. The difference between the estimated effects at that point is
+taken to be an estimate of the treatment effect. As a practical matter, the key
+econometric issue is determining the bandwidth for the local linear models.  One
+very popular choice is the bandwidth estimator proposed by \cite{IK} and
+extended by \cite{calonico2014}, which minimizes the Asymptotic Mean Squared
+Error of difference in the models' point estimators at the cutoff.
 
+But, as \cite{calonico2014}\footnote{%
+  We will refer to \cite{calonico2014} frequently, so we will reference it as
+  ``CCT'' for the rest of the paper.} %
+point out, the \cite{IK} bandwidth estimator has the serious drawback that,
+although it is AMSE-optimal for point estimation, it produces invalid
+\emph{confidence intervals} and hypothesis tests. The AMSE-optimal bandwidth
+converges to zero slowly, so the remaining bias term is large enough to affect
+the asymptotic distribution of the estimator. In that case the usual ``naive''
+confidence intervals for the RD treatment effects may be biased can have
+coverage well below their nominal level. CCT then make two contributions: first,
+they propose an estimator of the bias resulting from undersmoothing and provide
+a treatment effect estimator that remains asymptotically unbiased even when the
+bandwidth converges to zero slowly, at the AMSE-optimal rate.  Second, since
+this bias-correction term contributes to the asymptotic variance of the
+resulting treatment effect estimator, CCT also provide a new formula for its
+asymptotic variance. The resulting confidence intervals have accurate coverage
+even when the naive RD interval does not.
 
-Recently, CCT brought attention to the fact that the popular implementation of RD designs coupling local polynomial estimation and optimal-AMSE bandwidths (as proposed by \cite{IK})
-provides confidence intervals (CIs) with incorrect coverage. They argue that the bandwidth selectors typically produce bandwidths that are too ``large,'' leading to a significant bias in the asymptotic distribution of the estimator. In that case the usual``naive'' confidence intervals for the RD treatment effects may be biased and will have provide coverage potentially well below their nominal level.
+In this paper, we propose a bootstrap alternative to CCT's analytical
+corrections. CCT justify their estimator by showing that the bias and variance
+components for a local linear model can be accounted for by estimating a local
+second order polynomial with bandwidth of the same order.\footnote{%
+  More generally, they show that the bias and variance of a local polynomial of
+  order $p$ can be accounted for by estimating the $p+1$ local polynomial. We
+  will restrict our analysis to the case with $p = 1$ in this paper because
+  of its widespread use.} %
+They use a Taylor expansion around the cutoff to show that the bias associated
+with the second order polynomical converges to zero at a faster rate, fast
+enough that the bias of the local linear model can be estimated and removed
+using the second order polynomial. The second order polynomial also provides
+fast enough convergence that it can be used to estimate the correct variance
+correction as well.
 
-Then, CCT proposes a bias-correction procedure based on estimating the leading term of the bias to account for the effect of the ``large'' bandwidth and then obtain a re-centered t-statistic.    This conventional bias-correction has poor finite-sample performance that arises from the estimation of the bias leading term, so they provide a new standard error formula for the standard error to  account for the additional variability introduced by the estimated bias. The resulting statistic that combines the higher-order($p+1$) leading term bias correction and rescaling the of the t-statistic remains asymptotically normal and supplies valid confidence intervals.
+Our approach exploits CCT's theoretical insight through a new residual
+bootstrap. In particular, we propose, after estimating the local linear model as
+usual, estimating a local second order polynomial and generating bootstrap
+datasets by resampling the residuals of that polynomial. Since the second order
+polynomial is the true Data Generating Process (DGP), its estimate of the
+treatment effect is the true value of the treatment effect under the
+distribution induced by this bootstrap. The bias of the linear model is known
+under this distribution and can be calculated by averaging the error of the
+linear model's estimates across many bootstrap replications. This approach is
+described in detail by our Algorithm~\ref{Alg1} and the resulting bias corrected
+estimator is shown to be asymptotically normal with mean zero in our
+Theorem~\ref{T1} under AMSE-optimal bandwidth rates.
 
-As pointed out by \cite{ccf2016}, ``(...)valid inference
-requires the delicate balancing act of selecting a bandwidth small enough
-to remove smoothing bias, yet large enough to ensure adequate precision.''
-The authors compare the strategies of undersmoothing, and explicit bias 
-correction concluding that direct bias-correction with the corresponding 
-rescaling of the CI's is a superior approach.
+Just as in CCT, this bias correction introduces additional variability. However,
+the second order polynomial again adequately estimates the features of the true
+DGP that are necessary for estimating that additional variability. So we propose
+an iterated bootstrap procedure \citep{hall1988}: use the second order
+polynomial residual bootstrap to produce many bootstrap replications of the bias
+corrected estimator, and then use the resulting bootstrap distribution to
+produce confidence intervals. This procedure, which requires bootstrapping the
+datasets produced by an initial bootstrap procedure, is described in Algorithm~\ref{Alg2}, and the resulting confidence intervals are shown to be asymptotically valid in Theorem~\ref{T2}.
 
-This paper contributes to the bias-corrected RD literature by proposing a simple
-bootstrap procedure to correct the first order bias term and directly obtain 
-valid CIs that provide the correct coverage.
+This bootstrap procedure can offer some advantages over analytical methods in
+this setting. In particular, both this paper and CCT assume that the
+observations are generated independently of each other; extending these bias
+correction methods to other forms of dependence is relatively straightforward
+for the bootstrap but can be substantially more complicated for analytical
+corrections, which have to be explicitly derived by the researcher. Similarly,
+although we only provide results for the local linear model in this paper, it is
+trivial to implement this procedure for higher order polynomials, for
+covariate-adjusted estimators \citep{calonico2015}, or for other local
+smoothers. \citep{loader2006} However, in this paper we focus on the baseline
+case of sharp RD with a local linear model and uniform kernel. Extensions to
+fuzzy RD and nonuniform kernels, which require nontrivial changes to the
+underlying bootstrap algorithm, are the subject of ongoing research.
 
-The algorithm proposed draws on the main intuition put forward by CCT, that is, that correcting for the leading bias term (of order $p+1$) addresses the recentering needed for the confidence intervals. Hence, we propose that, after obtaining the usual RD estimates using a local polynomial of order $p$, obtain a estimates for a polynomial of order $p+1$ and generate our bootstrap datasets by bootstrapping the residuals of that polynomial. Since in the bootstrap datasets the bias of the estimates obtained using a lower order polynomial is known, we can estimate the leading term of the bias by averaging across bootstraps and finally subtract it from the original RD estimator.
-
-Just as in CCT, this bias correction introduces additional variability due to the estimated bias, so we approximate the distribution of the bias-corrected estimator with a second residual bootstrap in which both the usual RD estimate and the full bias correction procedure are bootstrapped.
-
-The novel bootstrap procedure is easy to implement and extends to RD designs 
-using higher order polynomials, producing valid CIs which are robust to 
-bandwidth choice and have similar properties to the analytical procedure in 
-CCT while sidestepping the need to derive analytical formulas in each case of interest.
-
-Note that the procedure as presented here only coversr the uniform kernel, sharp RD designs, and i.i.d. data. Extensions to other kernels, higher order discontinuities, cross-sectional dependence, and the fuzzy RD design are subject of ongoing research.
-
-The paper is organized as follows. Section \ref{background} describes the basic
-RD approach, its usual implementation, and the explicit analytical bias 
-correction approach in the literature. Section \ref{boot} presents the proposed 
-bootstrap bias corrected RD algorithm and discusses its properties. Simulation
-evidence that the bootstrap procedure provides valid CIs and its relative 
-performance to the analytical bias correction are presented in Section \ref{sim}.
-Finally, Section \ref{conclusion} concludes.
+The paper is organized as follows. Section~\ref{background} describes the basic
+RD approach, its usual implementation, and the explicit analytical bias
+correction approach in the literature. Section~\ref{boot} presents our proposed
+bootstrap bias corrected RD algorithm and discusses its asymptotic
+properties. Simulation evidence that the bootstrap procedure provides valid CIs
+and its relative performance to the analytical bias correction are presented in
+Section~\ref{sim}, and Section~\ref{application} demonstrates the estimator's
+usage by applying it to the Head Start dataset used by~\cite{ludwig2007}.
+Finally, Section~\ref{conclusion} concludes.
 
 \section{Background}\label{background}
 
