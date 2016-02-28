@@ -16,7 +16,7 @@
 \input{tex/macros}
 
 \title{Bootstrap Confidence Intervals for Sharp Regression Discontinuity Designs
-  with Uniform Kernels}
+  with the Uniform Kernel}
 
 \author{Ot\'avio Bartalotti \and Gray Calhoun \and Yang He\thanks{All authors: 
 Department of Economics, Iowa State University. 260 Heady Hall, Ames, IA  50011.
@@ -368,7 +368,7 @@ will also use in this paper.
   $n b^{5} h^{2} \to 0$ as $n \to \infty$.\footnote{%
     Unless otherwise stated, all limits in this paper are assumed to hold as
     $n \to \infty$.} %
-  The relationship $h_{n} \leq b_{n}$ also holds for all $n$.
+  The relationship $h \leq b$ also holds for all $n$.
 \end{assumption}
 
 In the next section, we build upon the insight provided by CCT bias-corrected
@@ -378,7 +378,9 @@ direct estimators for the bias, variance and covariance terms, while relying on
 the same first-order bias correction approximation. The requirement $h < b$ is
 new to this paper, because the bootstrap can not be implemented for the uniform
 kernel without it, but the other parts of Assumption~\ref{A2} are taken from
-CCT.
+CCT.\footnote{%
+  This assumption can be relaxed by considering other kernels, which is the
+  subject of current research by the authors.} %
 
 \section{Bootstrap Bias Correction}\label{boot}
 
