@@ -158,10 +158,10 @@ for the bootstrap but can be substantially more complicated for analytical
 corrections, which have to be explicitly derived by the researcher. Similarly,
 although we only provide results for the local linear model in this paper, it is
 trivial to implement this procedure for higher order polynomials, for
-covariate-adjusted estimators \citep{calonico2015}, or for other local
-smoothers. \citep{loader2006} However, in this paper we focus on the baseline
-case of sharp RD with a local linear model and uniform kernel. Extensions to
-fuzzy RD designs\footnote{%
+covariate-adjusted estimators (\citealp{frolich2007}, \citealp{calonico2015}),
+or for other local smoothers. \citep{loader2006} However, in this paper we focus
+on the baseline case of sharp RD with a local linear model and uniform
+kernel. Extensions to fuzzy RD designs\footnote{%
   ``Fuzzy'' regression discontinuity design \citep{HTV2001}, as opposed to
   ``sharp'' RD, describes situations where the probability of treatment changes
   discontinuously at a known threshold, but by less than 100\%. Then there are
@@ -272,10 +272,10 @@ regression.\footnote{%
   the properties of local polynomial regressions for boundary problems. The
   bootstrap algorithm proposed in this paper can be extended to accommodate
   higher order polynomials discontinuities in the derivatives of the conditional
-  expectation, like ``Kink RD'' design. We focus on the linear case for ease in
-  exposition.} %
-For this model, if $h$ represents a bandwidth parameter, the estimator
-of $\tau$, $\hat\tau(h)$, is
+  expectation, like ``Kink RD'' design \citep{card2009b}. We focus on the linear
+  case for ease in exposition.} %
+For this model, if $h$ represents a bandwidth parameter, the estimator of
+$\tau$, $\hat\tau(h)$, is
 \begin{equation}
   \label{eq:13}
   \hat{\tau}(h) = \hat {\mu}_{+}(h) -\hat{\mu}_{-}(h)
