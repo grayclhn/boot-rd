@@ -49,14 +49,13 @@ do not cite this paper or circulate it in its current form.
 Regression Discontinuity (RD) designs have emerged in the last decade as an
 important and popular research design strategy for analyzing the causal impact
 of policies and interventions in several fields of the social sciences,
-including economics, political science, public policy, and sociology, among
-others. This strategy exploits the fact that many programs use somewhat
+including economics, political science, public policy, and sociology.
+This research strategy exploits the fact that many programs use somewhat
 arbitrary thresholds to determine whether or not to provide a ``treatment,''
 usually relying on some type of score, which this literature calls a ``running
 variable.'' In its basic version, individuals or groups with score above a
 certain threshold receive treatment while the ones below that cutoff are left
 untreated.
-
 The identification of the treatment effect at the threshold is then based on
 comparing treated and untreated units at the cutoff. Since the observed
 characteristics of these subjects are very similar, similarity of their
@@ -73,9 +72,9 @@ early childhood education, and financial aid effects on student achievement and
 later outcomes, for example.\footnote{%
   See, for example, \cite{vdk2002}, \cite{jacoblefgren2004}, \cite{ludwig2007},
   \cite{urquiola2009}, \cite{cellini2010}} %
-But the underlying identification strategy has proven to apply much more widely,
-and RD has been used in health economics\footnote{%
-  \cite{Card2009,barreca2011saving}}; %
+But the underlying identification strategy has proven to apply much more widely
+and RD has been used in health economics;\footnote{%
+  \cite{Card2009,barreca2011saving}} %
 political science, providing evidence regarding incumbency advantage in
 elections, electoral enfranchising and policy changes associated with the
 introduction of electronic voting, strategic voting behavior, and local media
@@ -85,9 +84,9 @@ effects and ad expenditure in presidential elections in the U.S.\footnote{%
 among other fields. \cite{imbens2008} and \cite{lee2010} provide recent
 overviews of this literature with many more examples.
 
-In these studies, identification typically occurs exactly at the cutoff, so the
+In these studies, identification occurs exactly at the cutoff, so the
 treatment effect is typically estimated by fitting separate local linear models
-above and below the cutoff, then extrapolating the model to the exact point of
+above and below the cutoff, then extrapolating the models to the exact point of
 discontinuity. The difference between the estimated effects at that point is
 taken to be an estimate of the treatment effect. As a practical matter, the key
 econometric issue is determining the bandwidth for the local linear models.  One
@@ -95,23 +94,23 @@ very popular choice is the bandwidth estimator proposed by \cite{IK} and
 extended by \cite{calonico2014}, which minimizes the Asymptotic Mean Squared
 Error of difference in the models' point estimators at the cutoff.
 
-But, as \cite{calonico2014}\footnote{%
+As \cite{calonico2014}\footnote{%
   We will refer to \cite{calonico2014} frequently, so we will reference it as
   ``CCT'' for the rest of the paper.} %
-point out, the \cite{IK} bandwidth estimator has the serious drawback that,
-although it is AMSE-optimal for point estimation, it produces invalid
-\emph{confidence intervals} and hypothesis tests. The AMSE-optimal bandwidth
+point out, however, the \cite{IK} bandwidth estimator has the serious drawback
+that, although it is AMSE-optimal for point estimation, it produces invalid
+confidence intervals and hypothesis tests. The AMSE-optimal bandwidth
 converges to zero slowly, so the remaining bias term is large enough to affect
 the asymptotic distribution of the estimator. In that case the usual ``naive''
 confidence intervals for the RD treatment effects may be biased and have
-coverage well below their nominal level. CCT then make two contributions: first,
-they propose an estimator of the bias resulting from undersmoothing and provide
-a treatment effect estimator that remains asymptotically unbiased even when the
-bandwidth converges to zero slowly, at the AMSE-optimal rate.  Second, since
-this bias-correction term contributes to the asymptotic variance of the
-resulting treatment effect estimator, CCT also provide a new formula for its
-asymptotic variance. The resulting confidence intervals have accurate coverage
-even when the naive RD interval does not.
+coverage well below their nominal level.
+CCT propose an estimator of the bias resulting from undersmoothing and provide a
+treatment effect estimator that remains asymptotically unbiased even when the
+bandwidth converges to zero slowly, at the AMSE-optimal rate. They also show
+that this bias-correction term contributes to the asymptotic variance of the
+resulting treatment effect estimator and provide a new formula for the
+asymptotic variance of the bias-corrected estimator. The resulting confidence
+intervals have accurate coverage even when the naive RD interval does not.
 
 In this paper, we propose a bootstrap alternative to CCT's analytical
 corrections. CCT justify their estimator by showing that the bias and variance
@@ -129,32 +128,34 @@ fast enough convergence that it can be used to estimate the correct variance
 correction as well.
 
 Our approach exploits CCT's theoretical insight through a new residual
-bootstrap. In particular, we propose, after estimating the local linear model as
-usual, estimating a local second order polynomial and generating bootstrap
+bootstrap. In particular, we propose estimating the local linear model as usual,
+then estimating a local second order polynomial and generating bootstrap
 datasets by resampling the residuals of that polynomial. Since the second order
-polynomial is the true Data Generating Process (DGP) in the bootstrapped data, its estimate of the
-treatment effect is the true value of the treatment effect under the
-distribution induced by this bootstrap. The bias of the linear model is known
+polynomial is the true Data Generating Process (DGP) for the bootstrapped data,
+its estimate of the treatment effect is the true value of the treatment effect
+under the distribution induced by this bootstrap. The bias of the linear model
+is therefore known
 under this distribution and can be calculated by averaging the error of the
 linear model's estimates across many bootstrap replications. This approach is
 described in detail by our Algorithm~\ref{Alg1} and the resulting bias corrected
 estimator is shown to be asymptotically normal with mean zero in our
 Theorem~\ref{T1} under AMSE-optimal bandwidth rates.
 
-Just as in CCT, this bias correction introduces additional variability. However,
-the second order polynomial again adequately estimates the features of the true
-DGP that are necessary for estimating that additional variability. So we propose
+Just as in CCT, our bias correction step introduces additional
+variability. However, the second order polynomial again adequately estimates the
+features of the true DGP that are necessary for estimating and accomodating that
+additional variability. So we propose
 an iterated bootstrap procedure \citep{hall1988}: use the second order
 polynomial residual bootstrap to produce many bootstrap replications of the bias
 corrected estimator, and then use the resulting bootstrap distribution to
 produce confidence intervals. This procedure, which requires bootstrapping the
 datasets produced by an initial bootstrap procedure, is described in Algorithm~\ref{Alg2}, and the resulting confidence intervals are shown to be asymptotically valid in Theorem~\ref{T2}.
 
-This bootstrap procedure can offer some advantages over analytical methods in
-this setting. In particular, both this paper and CCT assume that the
-observations are generated independently of each other; extending these bias
-correction methods to other forms of dependence is relatively straightforward
-for the bootstrap but can be substantially more complicated for analytical
+This bootstrap procedure offers some advantages over analytical methods.  In
+particular, both this paper and CCT assume that the observations are generated
+independently of each other; however, extending these bias correction methods to
+other forms of dependence is relatively straightforward for the bootstrap but
+can be substantially more complicated for analytical
 corrections, which have to be explicitly derived by the researcher. Similarly,
 although we only provide results for the local linear model in this paper, it is
 trivial to implement this procedure for higher order polynomials, for
