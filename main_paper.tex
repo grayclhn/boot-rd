@@ -500,14 +500,14 @@ be ignored. Theorem~\ref{T1} presents the result formally.
 Note that the variance component of~\eqref{eq:4} is the same value used by CCT
 and introduced in~\eqref{eq:1}. Theorem~\ref{T1} implies that our bias-corrected
 estimator has the same asymptotic distribution as CCT's. This equivalence should
-be unsurprising; both estimators use a 2nd order polynomial to directly estimate
+be unsurprising; both estimators use a second order polynomial to directly estimate
 the bias of the local linear model, so they should behave very similarly.
 
 Since the second order polynomial captures the relevant aspects of the DGP for
 estimating the variance as well as the bias, the asymptotic distribution of the
 bias corrected estimator $\hat\tau(h) - \Delta^*(h,b)$ can also be approximated
 with a bootstrap. We propose bootstrapping $\hat\tau(h) - \Delta^*(h,b)$ using
-the same residual bootstrap method that was used in
+the same residual bootstrap method used in
 Algorithm~\ref{Alg1}. Algorithm~\ref{Alg2} provides the details of our procedure
 and Theorem~\ref{T2} establishes its theoretical properties.
 
@@ -529,7 +529,7 @@ and Theorem~\ref{T2} establishes its theoretical properties.
       construct
       \begin{align*}
         Y_{-,m_-(h,i)}^* &= \hat g_-(X_{m_-(h,i)}) + \varepsilon_{-,i}^{*} &
-        Y_{+,m_+(h,i)}^* &= \hat g_+(X_{m_-(h,i)}) + \varepsilon_{+,i}^{*}.
+        Y_{+,m_+(h,i)}^* &= \hat g_+(X_{m_{+}(h,i)}) + \varepsilon_{+,i}^{*}.
       \end{align*}
     \item Calculate $\hat\mu_+^*(h)$ and $\hat\mu_-^*(h)$ by estimating the
       local linear model on the bootstrap data set:
