@@ -579,45 +579,79 @@ Evidence of the usefulness of the procedures proposed above and their relative p
 
 \section{Simulation Evidence}\label{sim}
 
-This section presents evidence from Monte Carlo simulations that the bootstrap bias correction procedures proposed in Section \ref{boot} produces valid, robust confidence intervals similar to the ones obtained by the analytical procedures established in CCT. The bootstrap CIs obtained compare favorably to the analytical alternative, with coverage closer to the nominal size of the desired test and shorter length of the intervals in the specifications implemented.
+This section presents evidence from Monte Carlo simulations that the bootstrap
+procedures proposed in Section~\ref{boot} produce valid, robust confidence
+intervals similar to the ones obtained by the analytical procedures established
+in CCT. The bootstrap CIs obtained compare favorably to the analytical
+alternative, with coverage slightly closer to nominal coverage and shorter
+length of the intervals in the specifications implemented.
 
-We adopt the same three data generating processes (DGP) used by CCT to make it easy to compare our results. Also, these DGPs are widely used in the RD literature to evaluate the performance of inference procedures and provide a good testing ground for bias correction due to their exacerbated curvature.
-
-For all Monte Carlo experiments, the pseudo data are generated as 500 i.i.d. draws from:
+The Monte Calro experiments have a similar structure. For all of them, we
+generate 500 i.i.d.\ observations from the DGP
 \begin{align*}
-& Y_{i} = \mu_{j}(X_{i}) + \epsilon_{i}, \;\;\; X_{i} \sim  (2 B (2,4) - 1)), \\
-& \epsilon_{i} \sim N(0, \sigma^{2}), \;\;\; \sigma = 0.1295, \;\;\; j = 1,2,3.
+Y_{i}           &= \mu_{j}(X_{i}) + \varepsilon_{i} \\
+X_{i}           &\sim  2 \times \betarv(2,4) - 1 \\
+\varepsilon_{i} &\sim \normal(0, 0.1295^2),
 \end{align*}
-Regarding the functional form for $\mu(x)$ in each DGP, the first one is based on a fifth order polynomial fitted on the data observed by \cite{lee2008rand} when estimating the incumbency advantage in electoral races to the U.S. House of Representatives. Hence, $\mu_{1}(x)$ is given by,
-\begin{align*}
-\mu_{1}(x) & = 
-\begin{cases}
-0.48 + 1.27x + 7.18x^{2} + 20.21x^{3} + 21.54x^{4} + 7.33x^{5}, \;\;\;\; & \text{if} \;\; x < 0, \\
-0.52 + 0.84x - 3.00x^{2} + 7.99x^3 - 9.01x^4 + 3.56x^{5},  & \text{if} \;\; x \ge 0.
+where $j$ will index the specific DGP. This is the experimental design used by
+\citet{IK} CCT, which we adopt here to make our simulation results directly
+comparable with theirs and more comparable with the rest of the literature. We
+will use the same three functional forms for $\mu_j$ as CCT as well.
+
+\nocite{lee2008rand}%
+The first DGP is designed to match features of Lee's (2008) analysis of U.S.\
+congressional elections. Lee estimates the incumbency advantage in electoral
+races for the House of Representatives --- candidates who received the largest
+vote share in the previous election are the incumbants, which creates the
+discontinuity. The conditional expectation is a fifth order polynomial fit to
+that dataset, (after excluding a small number of extreme observations; see
+\citealp{IK}, or CCT for further details) giving
+\begin{equation*}
+  \mu_{1}(x) =
+  \begin{cases}
+    0.48 + 1.27x + 7.18x^{2} + 20.21x^{3} + 21.54x^{4} + 7.33x^{5}
+    & \textif\ x < 0 \\
+    0.52 + 0.84x - 3.00x^{2} + 7.99x^3 - 9.01x^4 + 3.56x^{5}
+    & \otherwise.
+  \end{cases}
+\end{equation*}
+The population ATE for this DGP is $0.04$ $(= 0.52 - 0.48)$.
+
+\nocite{ludwig2007}%
+The second DGP is based on Ludwig and Miller's (2007) analysis of the Head Start
+program. Funding eligability is determined at the county level using the
+county's historical poverty rate, with a sharp threshold that determines the
+provision of services. We use the fifth order polynomial estimated on Ludwig and
+Miller's dataset as the conditional expectation for the second DGP:
+\begin{equation*}
+  \mu_{2}(x) =
+  \begin{cases}
+    3.71 + 2.30x + 3.28x^2 + 1.45x^3 + 0.23x^4 + 0.03x^5
+    & \textif\ x < 0, \\
+    0.26 + 18.49x - 54.81x^2 + 74.30x^3 - 45.02x^4 + 9.83x^5
+    & \otherwise
+  \end{cases}
+\end{equation*}
+and the population ATE is $-3.45$ $(= 0.26 - 3.71)$.
+
+Finally, for the third DGP, we use CCT's modification of $\mu_1$, given by
+\begin{equation*}
+  \mu_{3}(x) =
+  \begin{cases}
+    0.48 + 1.27x + 3.59 x^{2} + 14.147 x^3 + 23.694 x^4 + 10.995 x^5
+    & \textif\ x < 0 \\
+    0.52 + 0.84x - 0.30 x^{2} + 2.397 x^3 - 0.901 x^4 + 3.56 x^5
+    & \otherwise
 \end{cases}
-\end{align*}
+\end{equation*}
+and the population ATE is again $0.04$. CCT introduce this DGP because it has
+high curvature and local linear models are likely to exhibit high bias, making
+it a natural test case for both their analytical corrections and our bootstrap.
 
-The functional form for $\mu_{2}(x)$, in the second DGP follows the data observed by \cite{ludwig2007}, which we examine in more detail on Section \ref{application}, and follows
-\begin{align*}
-\mu_{2}(x) & = 
-\begin{cases}
-3.71 + 2.30x + 3.28x^2 + 1.45x^3 + 0.23x^4 + 0.03x^5, \;\; & \text{if} \;\; x < 0, \\
-0.26 + 18.49x - 54.81x^2 + 74.30x^3 - 45.02x^4 + 9.83x^5,  & \text{if} \;\; x \ge 0.
-\end{cases}
-\end{align*}
 
-Finally, the third DGP used in the simulations is given by a modified version of  \cite{lee2008rand} designed to exhibit more curvature and, hence, be more sensitive to the choice of bandwidth in terms of bias. This functional form is the same as used in CCT and serves as an useful example of the effectiveness of the bias correction procedures implemented.
-\begin{align*}
-\mu_{3}(x) & =
-\begin{cases}
-0.48 + 1.27x + 0.5 \times 7.18x^{2}+ \\
-+ 0.7 \times 20.21x^3 + 1.1 \times 21.54x^4 + 1.5 \times 7.33x^5, \;\;\;\;\;\;\;\;\;\;\;\; & \text{if} \;\; x < 0, \\
-0.52 + 0.84x - 0.1 \times 3.00x^{2}+ \\
-+ 0.3 \times 7.99x^3 - 0.1 \times 9.01x^4 + 3.56x^5, & \text{if} \;\; x \ge 0.
-\end{cases}
-\end{align*}
 
-For each DGP, we used four methods to obtain point estimate and confidence intervals.\footnote{Note that the true value of $\tau$ is $0.04$ for DGPs 1 and 3 and $-3.45$ for DGP 2} For each method, a total 1500 replications were performed. The first two methods follow CCT analytical bias-correction procedure with triangular ($CCT_{tri}$) and uniform ($CCT_{uni}$) kernel, respectively. The third and fourth methods follow the bootstrap procedure proposed in Section \ref{boot} with uniform kernel with ($bootstrap_{uni}$) and without ($bootstrap_{uni}^{naive}$) bias-correction, respectively.
+
+For each DGP, we used four methods to obtain point estimate and confidence intervals. For each method, a total 1500 replications were performed. The first two methods follow CCT analytical bias-correction procedure with triangular ($CCT_{tri}$) and uniform ($CCT_{uni}$) kernel, respectively. The third and fourth methods follow the bootstrap procedure proposed in Section \ref{boot} with uniform kernel with ($bootstrap_{uni}$) and without ($bootstrap_{uni}^{naive}$) bias-correction, respectively.
 
 The ``naive'' bootstrap estimator, which bootstraps the confidence intervals for the usual RD estimator without any bias-correction serves as a baseline comparison, making clear the need of the corrections proposed, especially for DGPs with higher (potential) bias.
 
