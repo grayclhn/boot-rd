@@ -53,7 +53,7 @@ including economics, political science, public policy, and sociology.
 This research strategy exploits the fact that many programs use somewhat
 arbitrary thresholds to determine whether or not to provide a ``treatment,''
 usually relying on some type of score, which this literature calls a ``running
-variable.'' In its basic version, individuals or groups with score above a
+variable.'' In its basic version, the sharp RD,  individuals or groups with score above a
 certain threshold receive treatment while the ones below that cutoff are left
 untreated.
 The identification of the treatment effect at the threshold is then based on
@@ -962,7 +962,7 @@ $\Omega_{+,1i}(h,b) - \Omega_{+,2i}(h,b)$, which are defined as
     r_1(X_{m_+(b,i)} / h) \1\{h > X_{m_+(b,i)} \geq 0\}
 \intertext{and}
   \Omega_{+,2i}(h,b) &= (0\quad 0 \quad h^2)
-  \Big(\ssum[+]{i}{b} r_2(X_j / b) r_2(X_j / b)' \Big)^{-1}
+  \Big(\ssum[+]{j}{b} r_2(X_j / b) r_2(X_j / b)' \Big)^{-1}
     r_2(X_{m_+(b,i)} / b).
 \end{align*}
 The definitions of $\epb_{-}^{*}$ and $\Omega_-(h,b)$ have the same definitions as
