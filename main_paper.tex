@@ -861,55 +861,53 @@ CCT's Lemma SA4.D.\qed
 \subsection{Proof of Theorem~\ref{T2}}
 Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:7} to get
 \begin{align*}
-  \hat\tau(h)^* - &\Delta_h^{**} - \tau^*
+  \hat\tau(h)^* - &\Delta^{**}(h,b) - \tau^*
   = (\hat\tau^*(h) - \E^* \hat \tau^*(h)) +
-  (\E^* \hat \tau^*(h) - \tau^*) - (\E^{**} \hat \tau^{**}_h - \tau^{**}) \\
+  (\E^* \hat \tau^*(h) - \tau^*) - (\E^{**} \hat \tau^{**}(h) - \tau^{**}) \\
   &= \hat\tau^*(h) - \E^*\hat\tau^*(h)
    + h^2 (\hat\mu_-^{*(2)}(b) - \mu_-^{*(2)}) \Bf_{-}(h) /2
    - h^2 (\hat\mu_+^{*(2)}(b) - \mu_+^{*(2)}) \Bf_{+}(h) / 2 \\
-  &= \Omega^{+}(b)' \epb_{+}^{*} - \Omega^{-}(b)' \epb_{-}^{*},
+  &= \Omega_{+}(h,b)' \epb_{+}^{*} - \Omega_{-}(h,b)' \epb_{-}^{*},
 \end{align*}
 where
 $\epb_{+}^{*} =
-(\varepsilon_{+,1}^{*},\dots,\varepsilon_{+,M_b^{+}}^{*})'$ and
-$\Omega^{+}_b$ is an $M_b^{+}$-dimensional vector with $i$th element
-$\Omega_{1i}^{+}(b) - \Omega_{2i}^{+}(b)$, which are defined as
+(\varepsilon_{+,1}^{*},\dots,\varepsilon_{+,M_+(b)}^{*})'$ and
+$\Omega_+(h,b)$ is an $M_b^{+}$-dimensional vector with $i$th element
+$\Omega_{+,1i}(h,b) - \Omega_{+,2i}(h,b)$, which are defined as
 \begin{align*}
-  \Omega_{1i}^{+}(b) &=
+  \Omega_{+,1i}(h,b) &=
   (1\quad 0)
   \Big(\ssum{j}{h} r_1(X_j / h) r_1(X_j / h)' \Big)^{-1}
-    r_1(X_{m^+_i} / h) \1\{h > X_{m_i} \geq 0\}
+    r_1(X_{m_+(b,i)} / h) \1\{h > X_{m_+(b,i)} \geq 0\}
 \intertext{and}
-  \Omega_{2i}^{+}(b) &= (0\quad 0 \quad h^2)
+  \Omega_{2i}^{+}(h,b) &= (0\quad 0 \quad h^2)
   \Big(\ssum{i}{b} r_2(X_j / b) r_2(X_j / b)' \Big)^{-1}
-    r_2(X_{m^+_i} / b).
+    r_2(X_{m_+(b,i)} / b).
 \end{align*}
-Here $r_p(x) = (1, x, x^2,\dots,x^{p})'$ and $m^+_i$ is the subsequence of
-$1,2,\dots$ such that $0 \leq X_{m_i} < b$. The definitions of
-$\epb_{-}^{*}$ and $\Omega^-(b)$ have the same definitions as
-$\epb_{+}^{*}$ and $\Omega^+(b)$ after making the obvious
-substitutions of ``$-$'' for ``$+$.''
+The definitions of $\epb_{-}^{*}$ and $\Omega_-(h,b)$ have the same definitions as
+$\epb_{+}^{*}$ and $\Omega_+(h,b)$ after making the obvious substitutions of
+``$-$'' for ``$+$.''
 
 Given~\eqref{eq:7}, it suffices to prove that
 \begin{gather}
   \label{eq:8}
-  \rho(V^{-1/2}(h) \Omega^{+}(b)'\epb_{+}^{*},
-    V^{-1/2}(h)\Omega^{+}(b)'\epb_{+}) \to^p 0
+  \rho(V^{-1/2}(h,b) \Omega_+(h,b)'\epb_{+}^{*},
+    V^{-1/2}(h,b)\Omega_+(h,b)'\epb_{+}) \to^p 0
   \intertext{and}
   \label{eq:9}
-  \rho(V^{-1/2}(h)\Omega^{-}(b)'\epb_{-}^{*},
-    V^{-1/2}(h)\Omega^{-}(b)'\epb_{-}) \to^p 0
+  \rho(V^{-1/2}(h,b)\Omega^{-}(b)'\epb_{-}^{*},
+    V^{-1/2}(h,b)\Omega^{-}(b)'\epb_{-}) \to^p 0
 \end{gather}
-with $\epb_+$ an i.i.d. random vector of length $M_b^+$, the $i$th
-element of which is distributed as
+with $\epb_+$ an i.i.d. random vector of length $M_+(b)$, the $i$th element of
+which is distributed as
 \[
   \varepsilon_{i,+} =^d
   \begin{cases}
-    Y_{m_1^+} - \E(Y_{m_1^+} \mid X_{m_1^+})
-    & \text{with probability\ } 1/M_{b}^+ \\
+    Y_{m_+(1,b)} - \E(Y_{m_+(1,b)} \mid X_{m_+(1,b)})
+    & \text{with probability\ } 1/M_+(b) \\
     \vdots \\
-    Y_{m_{M_b^+}^+} - \E(Y_{m_{M_b^+}^+} \mid X_{m_{M_b^+}^+})
-    & \text{with probability\ } 1/M_{b}^+,
+    Y_{m_+(M_+(b),b)} - \E(Y_{m_+(M_+(b),b)} \mid X_{m_+(1,b)})
+    & \text{with probability\ } 1/M_+(b),
   \end{cases}
 \]
 $\epb_-$ the corresponding quantity after replacing ``+'' with ``--,'' and
@@ -924,22 +922,23 @@ $\rho$ the Mallows metric \citep{bickel1981}.\footnote{%
 We will only prove~\eqref{eq:8} since the proof of~\eqref{eq:9} is
 identical. By Theorem 2.1 of \cite{freedman1981}, we have
 \begin{align*}
-  \rho(V^{-1/2}(h) \Omega^{+}(b)'\epb_{+}^{*}, V^{-1/2}(h)&\Omega^{+}(b)'\epb_{+}) \\
+  \rho(V^{-1/2}(h,b) \Omega_+(h,b)'\epb_{+}^{*},\
+  &V^{-1/2}(h,b) \Omega_+(h,b)'\epb_{+}) \\
   &\leq \rho(\varepsilon_{+,1}^{*}, \varepsilon_{+,1}) \times
-    \tr(V^{-1/2}(h) \Omega^{+}(b)' \Omega^{+}(b)V^{-1/2}(h)) \\
+    \tr(V^{-1/2}(h,b) \Omega_+(h,b)' \Omega_+(h,b)V^{-1/2}(h,b)) \\
   &= \rho(\varepsilon_{+,1}^{*}, \varepsilon_{+,1}) \times O_{p^{*}}(1),
 \end{align*}
 the second line holding as a consequence of CCT's Lemma SA1. So it suffices
 to show that $\rho(\varepsilon_{+,1}^{*}, \varepsilon_{+,1}) \to^{p^{*}} 0$. Let
 $\dot{\varepsilon}_i$ be an i.i.d. sequence randomly drawn from $\epb_+$
 with replacement and let
-$\bar{\varepsilon} = (1/M_b^{+}) \osum{i}{b} \dot{\varepsilon}_i$. Then,
+$\bar{\varepsilon} = (1/M_+(b)) \osum[+]{i}{b} \dot{\varepsilon}_i$. Then,
 using the same arguments as \cite{freedman1981}, we have the upper bound
 \begin{equation*}
   \rho(\varepsilon_{+,1}^*, \varepsilon_{+,1})
   \leq
   \bar\varepsilon^2 +
-  (2/M_{b}^+) \osum[+]{i}{b} (\hat\varepsilon_i - \varepsilon_i)^2
+  (2/M_+(b)) \osum[+]{i}{b} (\hat\varepsilon_i - \varepsilon_i)^2
   + \rho(\dot\varepsilon_1, \varepsilon_{+,1}).
 \end{equation*}
 But $\bar\varepsilon^2 \to^p 0$ by the LLN,
