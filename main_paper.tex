@@ -214,8 +214,8 @@ difference in expected potential outcomes given $X_i = 0$; formally,
 \end{equation*}
 \cite{HTV2001} show that the effect $\tau$ is identified under continuity and
 smoothness conditions on the joint distribution of $X_i$, $Y_i(0)$, and $Y_i(1)$
-around the cutoff $X_i = 0$. When these conditions hold, which are made precise
-in Assumption~\ref{A1}, $\tau$ is equal to
+around the cutoff $X_i = 0$. Under these conditions, which are made precise
+in our Assumption~\ref{A1}, $\tau$ is equal to
 \begin{equation*}
   \tau = \lim_{x \to 0+} \mu(x) - \lim_{x \to 0-}(x)
 \end{equation*}
@@ -243,7 +243,9 @@ and let
 \end{align*}
 where the symbol $\V(\cdot)$ represents the variance.  The effect $\tau$ is
 nonparametrically identified because both $\mu_-$ and $\mu_+$ can be estimated
-consistently under the conditions spelled out in Assumption~\ref{A1}.
+consistently under Assumption~\ref{A1}, which lists standard conditions in the
+RD literature. (See, in particular, \citealp{HTV2001}, \citealp{Porter03}, and
+CCT.)
 
 \begin{assumption}[Behavior of the DGP near the cutoff]\label{A1}
   The random variables $Y_i, X_i$ form a random sample of size $n$.
@@ -259,11 +261,6 @@ consistently under the conditions spelled out in Assumption~\ref{A1}.
  \end{enumerate}
 \end{assumption}
 
-These conditions are standard in the RD literature. (See, in particular,
-\citealp{HTV2001}, \citealp{Porter03}, and CCT). The third part of the
-assumption is especially important for the characterization of the leading bias
-term drives CCT's bias correction and our bootstrap procedure.
-
 Since the conditions for identification only need to hold in a neighborhood
 around the cutoff, $\mu_+$ and $\mu_-$ can be estimated by extrapolating from a
 local polynomial regression.  We will focus here on local linear
@@ -272,10 +269,9 @@ regression.\footnote{%
   the properties of local polynomial regressions for boundary problems. The
   bootstrap algorithm proposed in this paper can be extended to accommodate
   higher order polynomials discontinuities in the derivatives of the conditional
-  expectation, like ``Kink RD'' design \citep{card2009b}. We focus on the linear
-  case for ease in exposition.} %
+  expectation, like ``Kink RD'' design \citep{card2009b}.} %
 For this model, if $h$ represents a bandwidth parameter, the estimator of
-$\tau$, $\hat\tau(h)$, is
+$\tau$, $\hat\tau(h)$, is defined as
 \begin{equation*}
   \hat{\tau}(h) = \hat {\mu}_{+}(h) -\hat{\mu}_{-}(h)
 \end{equation*}
@@ -293,7 +289,7 @@ Conventional (naive) confidence intervals can be calculated by using an
 asymptotic approximation for $\hat\tau(h)$. In particular, if
 \begin{gather}
   \label{eq:1}
-  T(h) =\frac{\hat{\tau}(h)-\tau}{\sqrt{V(h)}} \to^d N(0,1),
+  \frac{\hat{\tau}(h)-\tau}{\sqrt{V(h)}} \to^d N(0,1),
   \intertext{with}
   \notag
   V(h) \big/ \V(\hat\tau(h) \mid X_{1},\dots,X_{n}) \to^p 1
@@ -313,11 +309,11 @@ estimation. In particular, for~\eqref{eq:1} to hold, $h$ must satisfy
 $n h \to \infty$ and $n h^5 \to 0$. (\citealp{HTV2001}; \citealp{Porter03})
 Otherwise, the finite-sample bias of $\hat\tau(h)$ does not converge in
 probability to zero quickly enough and it contributes non-negligibly to the
-asymptotic distribution~\eqref{eq:1}. This result holds even though
+asymptotic distribution in~\eqref{eq:1}. This result holds even though
 $\hat\tau(h)$ can be consistent under those conditions.  These bandwidth issues
 are relevant in practice because many widely-used bandwidth selection
 procedures, most notably the AMSE-optimal bandwidth and cross-validation
-bandwidth \citep{IK} do not satisfy this condition.
+bandwidth \citep{IK} do not produce $o_{p}(n^{-1/5})$ bandwidths.
 
 CCT solve this problem by deriving the analytical form of the first-order bias
 and explicitly recentering $\hat\tau(h)$. Under weaker assumptions on the
@@ -325,7 +321,7 @@ asymptotic behavior of the bandwidth, which we will specify in
 Assumption~\ref{A2}, CCT show that the approximate bias of $\hat\tau(h)$ has the
 form
 \begin{equation*}
-  \E(\hat{\tau}(h) \mid \chi_{n}) - \tau =
+  \E(\hat{\tau}(h) \mid X_1,\dots,X_n) - \tau =
   h^{2}\Big[ \tfrac{\mu_{+}^{(2)}}{2}\Bf_{+}(h)
   - \tfrac{\mu_{-}^{(2)}}{2}\Bf_{-}(h) \Big]
   (1+o_{p}(1))
@@ -333,7 +329,10 @@ form
 where $\Bf_{+}(h)$ and $\Bf_{-}(h)$ are observed quantities that depend on the
 kernel, bandwidth, and running variables $X_1,\dots,X_n$; formal definitions of
 these terms are given in the Mathematical Appendix as Equations~\eqref{eq:5}
-and~\eqref{eq:6}. The plug-in bias-corrected estimator then requires estimates
+and~\eqref{eq:6}.\footnote{%
+  One subtle but important feature of $\Bf_{-}$ and $\Bf_{+}$ is that they only
+  depend on the running variables, not the outcomes $Y_1,\dots,Y_n$.} %
+The plug-in bias-corrected estimator then requires estimates
 for the second derivatives of the conditional mean from above and below the
 cutoff, $\mu_{+}^{(2)}$ and $\mu_{-}^{(2)}$, and CCT show that these derivatives
 can be estimated by fitting a second order local polynomial, i.e. one order
@@ -350,14 +349,13 @@ naive confidence interval needs not only to be re-centered to correct the bias,
 but also rescaled to allow for the additional variability introduced by the bias
 correction, resulting in the following asymptotic approximation:
 \begin{equation*}
-  T'(h, b) = \frac{\hat{\tau}'(h, b) - \tau}{V'(h, b)^{1/2}}
-  \to^d N(0,1)
+  \frac{\hat{\tau}'(h, b) - \tau}{V'(h, b)^{1/2}} \to^d N(0,1)
 \end{equation*}
 with $V'(h, b) = V(h) + C(h, b)$ and $C(h, b)$ an additional variance component
 generated by the bias-correction term. This new approximation can be used
 instead of~\eqref{eq:1} to construct ``bandwidth robust'' confidence intervals,
 and CCT provide simulation evidence that their intervals perform well in finite
-samples.
+samples even when the naive interval performs badly.
 
 Assumption~\ref{A2} specifies the bandwidth conditions assumed by CCT, which we
 will also use in this paper.
