@@ -331,8 +331,8 @@ form
 \end{equation*}
 where $\Bf_{+}(h)$ and $\Bf_{-}(h)$ are observed quantities that depend on the
 kernel, bandwidth, and running variables $X_1,\dots,X_n$; formal definitions of
-these terms are given in the Mathematical Appendix as Equations~\eqref{eq:3}
-and~\eqref{eq:4}. The plug-in bias-corrected estimator then requires estimates
+these terms are given in the Mathematical Appendix as Equations~\eqref{eq:5}
+and~\eqref{eq:6}. The plug-in bias-corrected estimator then requires estimates
 for the second derivatives of the conditional mean from above and below the
 cutoff, $\mu_{+}^{(2)}$ and $\mu_{-}^{(2)}$, and CCT show that these derivatives
 can be estimated by fitting a second order local polynomial, i.e. one order
@@ -383,12 +383,22 @@ Assumption~\ref{A2} are identical to CCT.\footnote{%
 
 \section{Bootstrap Bias Correction}\label{boot}
 
-Building upon the results and intuition developed by CCT we propose to implement a first-order bias correction and obtain valid CIs through a bootstrap procedure.
-Intuitively, for the local-linear RD estimator's case, we will rely on a local quadratic polynomial approximation for the conditional outcome around the cutoff to capture the potential bias present in the original RD estimate. This insight comes directly from CCT's results using the same local quadratic approximation to estimate bias term as presented in Section \ref{background}.
+This section presents our theoretical contributions. We propose two algorithms
+in this section. The first uses a residual bootstrap based on based on a second
+order local polynomial to estimate the bias of the local linear model. That
+estimate can be subtracted from the biased original estimator to provide an
+asymptotically unbiased estimator with the same asymptotic distribution as
+CCT's. As in CCT, this bias correction term introduces a new source of variance,
+invalidating standard (naive) critical values. Consequently, the second
+algorithm we propose uses an iterated bootstrap to estimate the correct
+critical values of the bias corrected estimator.
 
-The first algorithm describes how to obtain a point estimate and perform the bias correction. The second algorithm obtains its confidence interval with correct coverage. For simplicity, we adopt the same optimal-AMSE bandwidth selector proposed by CCT.\footnote{An interesting question is whether one could use a bootstrap based procedure to select a bandwidth that would achieve similar (or improved) results. This is beyond the scope of this particular paper but is part of ongoing research effort.} 
-
-Essentially, we apply CCT's insight that a polynomial one order higher can capture the first-order bias behavior and create a bootstrap procedure that can correctly mimic the behavior of the bias present in the original estimator. For such, for a chosen bandwidth, we estimate a local quadratic regression as suggested by CCT, but then bootstrap data by imposing the local quadratic functional form as the DGP. Then, in the bootstrap data the DGP is known. Let the ``true'' treatment effect under the bootstrap DGP be denoted by $\tau^{*}$. We then estimate the treatment effect using the (misspecified) local linear estimator, $\hat{\tau}^{*}$ to the generated data. Hence, the bias for a specific bootstrap data is given by $\tau^{*}-\hat{\tau}^{*}$. More importantly, by generating new bootstrapped data based on the same quadratic DGP and its residual's distribution, we can obtain an estimate of the first-order bias (the part that is captured by $\hat{\Bs}(h,b)$ in CCT's formulas on Section \ref{background}) in the original estimate by averaging across the bias in all $B$ bootstrapped data estimates, i.e., $\tau^{*} - \sum_{i = 1}^{B} \hat{\tau}_{ i}^{*}$. Algorithm~\ref{Alg1} describes this procedure step-by-step for clarity.
+The intuition behind both procedures is very straightforward. CCT show that a
+local second order polynomial captures all of the unmodeled aspects of the DGP
+necessary for constructing valid confidence intervals. Our proposed algorithms
+estimate and embed the second order behavior in the bootstrap DGP through
+a residual bootstap.
+Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
 
 \begin{algorithm}[Bias estimation]\label{Alg1}
   Assume $h$ and $b$ are bandwidths as defined by Assumption~\ref{A2} and define
@@ -403,12 +413,13 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
   \begin{enumerate}
   \item Estimate local second order polynomials $\hat g_-$ and $\hat g_+$ using
     the observations in $I_-(b)$ and $I_+(b)$:
-    \begin{align*}
+    \begin{align}
+      \label{eq:2}
       \hat g_-(x)
       &= \hat\beta_{-,0} + \hat\beta_{-,1} x + \hat\beta_{-,2} x^2,
       &\hat g_+(x)
       &= \hat\beta_{+,0} + \hat\beta_{+,1} x + \hat\beta_{+,2} x^2
-    \end{align*}
+    \end{align}
     with
     \begin{align*}
       \hat\beta_- &= \argmin_\beta \sum_{i \in I_-(b)}
@@ -417,13 +428,14 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
       (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^2.
     \end{align*}
     Calculate the residuals
-    \begin{equation*}
+    \begin{equation}
+      \label{eq:3}
       \hat\varepsilon_{i} =
       \begin{cases}
         Y_{i} - \hat g_-(X_{i}) & \textif\ X_{i} < 0 \\
-        Y_{i} - \hat g_+(X_{i}) & \otherwise
+        Y_{i} - \hat g_+(X_{i}) & \otherwise.
       \end{cases}
-    \end{equation*}
+    \end{equation}
   \item Repeat the following steps $B_1$ times to produce a sequence of
     bootstrap estimates $\hat\tau_1^*(h),\dots,\hat\tau_{B_1}^*(h)$. For the
     $k$th estimate:
@@ -449,7 +461,7 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
         &= \argmin_{\mu} \min_{\beta} \ssum[+]{i}{h}
           (Y_i^* - \mu - \beta X_i^*)^2.
       \end{align*}
-    \item Save $\hat\mu_+^*(h) - \hat\mu_-^*(h)$ as $\hat\tau^*_k$.
+    \item Save $\hat\tau^*_k(h) = \hat\mu_+^*(h) - \hat\mu_-^*(h)$.
     \end{enumerate}
   \item Estimate the bias as
     \begin{equation*}
@@ -458,105 +470,108 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
     \end{equation*}
   \end{enumerate}
 \end{algorithm}
+Note that $\hat g_+(0) - \hat g_-(0)$ is the true treatment effect under the
+distribution induced by this bootstrap. The bootstrap estimator works by
+constructing an approximate DGP with known properties. As the dataset gets
+larger, the approximate DGP mimics the unknown real DGP more closely, and the
+population parameter values in the bootstrap DGP can become accurate estimates
+of the true parameter values in the real DGP.
 
 Under Assumptions~\ref{A1} and~\ref{A2} the procedure described by
 Algorithm~\ref{Alg1} provides a consistent estimator of the bias component that
 converges fast enough in probability that it can be be used as a correction. As
 is standard in the bootstrap literature, we will assume that the number of
 bootstrap replications, $B_{1}$, is large enough that the simulation error can
-be ignored.
+be ignored. Theorem~\ref{T1} presents the result formally.
 
 \begin{theorem}\label{T1}
   Under Assumptions~\ref{A1} and~\ref{A2},
 \begin{equation}
-  \label{eq:2}
-  \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V(h, b)^{1/2}}
+  \label{eq:4}
+  \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V'(h, b)^{1/2}}
   \to^{d} N(0,1)
 \end{equation}
 \end{theorem}
 
-Note that the variance component of~\eqref{eq:2} is the same value used by CCT
-and introduced in~\eqref{eq:1}. Theorem~\ref{T1} implies that our
-bias-corrected estimator has the same asymptotic distribution as CCT's. This
-equivalence should be unsurprising; both estimators use a 2nd order polynomial
-to directly estimate the bias of the local linear model, so they should behave
-very similarly.
+Note that the variance component of~\eqref{eq:4} is the same value used by CCT
+and introduced in~\eqref{eq:1}. Theorem~\ref{T1} implies that our bias-corrected
+estimator has the same asymptotic distribution as CCT's. This equivalence should
+be unsurprising; both estimators use a 2nd order polynomial to directly estimate
+the bias of the local linear model, so they should behave very similarly.
 
-With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a bias corrected estimate using Algorithm~\ref{Alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h,b)$ in the asymptotic variance formula on Section \ref{background}.
+Since the second order polynomial captures the relevant aspects of the DGP for
+estimating the variance as well as the bias, the asymptotic distribution of the
+bias corrected estimator $\hat\tau(h) - \Delta^*(h,b)$ can also be approximated
+with a bootstrap. We propose bootstrapping $\hat\tau(h) - \Delta^*(h,b)$ using
+the same residual bootstrap method that was used in
+Algorithm~\ref{Alg1}. Algorithm~\ref{Alg2} provides the details of our procedure
+and Theorem~\ref{T2} establishes its theoretical properties.
 
 \begin{algorithm}[Confidence intervals]\label{Alg2}
-  Define $I_-$, $I_+$, $M_-$, and $M_+$ as in Algorithm~\ref{Alg1}.
+  Define the same notation as in Algorithm~\ref{Alg1}.
   \begin{enumerate}
-  \item Estimate the local polynomials $g_{p+1}^{+}$ and $g_{p+1}^{-}$ as defined by
-    Equation --- and define the residuals
-    \begin{equation*}
-      \hat\varepsilon_{i} =
-      \begin{cases}
-        Y_i - \hat g_{p+1}^-(X_{i}) & \textif\ X_{i} < 0 \\
-        Y_i - \hat g_{p+1}^+(X_{i}) & \otherwise
-      \end{cases}
-    \end{equation*}
-  \item Repeat the following steps $B_{2}$ times to produce a sequence of bootstrap
-    estimates $\hat\tau_1^{\prime*},\dots,\hat\tau_{B_{2}}^{\prime*}$. For the $k$th step:
+  \item Estimate $\hat g_+$ and $g_-$ and generate the residuals
+    $\hat\varepsilon_i$ just as in Algorithm~\ref{Alg1}; Equations~\eqref{eq:2}
+    and~\eqref{eq:3}.
+  \item Repeat the following steps $B_{2}$ times to produce a sequence of
+    bootstrap estimates
+    $\hat\tau_1^{\prime*}(h,b), \dots, \hat\tau_{B_{2}}^{\prime*}(h,b)$. For the
+    $k$th step:
     \begin{enumerate}
     \item Draw an i.i.d. sample of size $M_-(b)$ from
-      $\{\hat\varepsilon_{i} : i \in I_-(b)\}$ and one of size $M_+(b)$ from
-      $\{\hat\varepsilon_i : i \in I_+(h)\}$. Let $\varepsilon_{i}^{*-}$ and
-      $\varepsilon_i^{*+}$ denote the $i$th element of each sample and construct
+      $\{\hat\varepsilon_i : i \in I_-(b)\}$ and one of size $M_+(b)$ from
+      $\{\hat\varepsilon_i : i \in I_+(h)\}$. Let $\varepsilon_{-,i}^{*}$ and
+      $\varepsilon_{+,i}^{*}$ denote the $i$th element of each sample and
+      construct
       \begin{align*}
-        Y_{-,i}^* &= \hat g_{p+1}^-(X_i^{*-}) + \varepsilon_i^{*-} &
-        Y_{+,i}^* &= \hat g_{p+1}^+(X_i^{*+}) + \varepsilon_i^{*+}
+        Y_{-,m_-(h,i)}^* &= \hat g_-(X_{m_-(h,i)}) + \varepsilon_{-,i}^{*} &
+        Y_{+,m_+(h,i)}^* &= \hat g_+(X_{m_-(h,i)}) + \varepsilon_{+,i}^{*}.
       \end{align*}
-    \item Calculate $\hat\mu_+^*$ and $\hat\mu_-^*$ as
+    \item Calculate $\hat\mu_+^*(h)$ and $\hat\mu_-^*(h)$ by estimating the
+      local linear model on the bootstrap data set:
       \begin{align*}
-        \hat\mu_-^*
-        &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
-          \sum_{i = 1}^{M_-(h)} (Y_{-,i}^* -
-          (\beta_0 + \beta_1 X_i^{*-} + \cdots + \beta_p (X_i^{*-})^p))^2 \\
-        \hat\mu_+^*
-        &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
-          \sum_{i = 1}^{M_+(h)} (Y_{+,i}^* -
-          (\beta_0 + \beta_1 X_i^{*+} + \cdots + \beta_p (X_i^{*+})^p))^2
+        \hat\mu_-^*(h)
+        &= \argmin_{\mu} \min_{\beta} \ssum[-]{i}{h}
+          (Y_i^* - \mu - \beta X_i^*)^2 \\
+        \hat\mu_+^*(h)
+        &= \argmin_{\mu} \min_{\beta} \ssum[+]{i}{h}
+          (Y_i^* - \mu - \beta X_i^*)^2.
       \end{align*}
     \item Apply Algorithm~\ref{Alg1} to the bootstrapped data set,
-      \begin{equation*}
-        (Y_1^{*-}, X_1^{*-}),\dots,(Y_{M_-(b)}^{*-},X_{M_-(b)}^{*-}),
-        (Y_1^{*+}, X_1^{*+}),\dots,(Y_{M_+(b)}^{*+},X_{M_+(b)}^{*+}),
-      \end{equation*}
-      using the same bandwidths $h$ and $b$ that are used in the rest of
-      this algorithm but reestimating all of the local polynomials on the
-      bootstrap data. Let $\Delta^{**}$ represent the bias estimator returned
-      by Algorithm~\ref{Alg1}.
+      \begin{multline*}
+        (Y_{-,m_-(b,1)}^{*}, X_{-,m_-(b,1)}),\dots,
+        (Y_{-,m_-(b,M_-(b))}^{*},X_{-,m_-(b,M_-(b))}), \\
+        (Y_{+,m_+(b,1)}^{*}, X_{+,m_+(b,1)}),\dots,
+        (Y_{+,m_+(b,M_+(b))}^{*},X_{+,m_+(b,M_+(b))})
+      \end{multline*}
+      using the same bandwidths $h$ and $b$ that are used in the rest of this
+      algorithm but reestimating all of the local polynomials on the bootstrap
+      data. Generate $B_1$ new bootstrap samples and let $\Delta^{**}(h,b)$
+      represent the bias estimator returned by Algorithm~\ref{Alg1}.
     \item Save the bias-corrected estimator
-      $\hat\tau_k^{\prime*} = \hat\mu_+^* - \hat\mu_i^* - \Delta^{**}$.
+      $\hat\tau_k^{\prime*}(h,b) = \hat\mu_+^*(h) - \hat\mu_i^*(h)
+      - \Delta^{**}(h,b)$.
     \end{enumerate}
-  \item Define the confidence interval endpoints $\hat\ell(\alpha)$ and
-    $\hat u(\alpha)$ as the $\alpha/2$ and $1-\alpha/2$ quantiles of the
-    empirical CDF of $\hat\tau_1^{\prime*},\dots,\hat\tau_{B_2}^{\prime*}$.
+  \item Use the empirical CDF of
+    $\hat\tau_1^{\prime*}(h,b),\dots \hat\tau_{B_2}^{\prime*}(h,b)$ to
+    construct confidence intervals, etc.
   \end{enumerate}
 \end{algorithm}
 
-As earlier, we assume that $B_1$ and $B_2$ are large enough that simulation
-error can be ignored. Define the limiting values
-\begin{align*}
-\Delta^{**} &= \plim_{B_1,B_2 \to \infty} \Delta^{**}_{B_1,B_2} \\
-\hat\ell^*(\alpha) &= \plim_{B_1,B_2 \to \infty} \hat\ell^*_{B_1,B_2}(\alpha) \\
-\hat u^*(\alpha) &= \plim_{B_1,B_2 \to \infty} \hat u^*_{B_1,B_2}(\alpha).
-\end{align*}
 
-Theorem~\ref{T2} establishes that this ``bootstrap-within-bootstrap''
-approximates the asymptotic distribution of the bias-corrected
-statistic proposed by Algorithm~\ref{Alg1} and justifies this second
-algorithm.
+Theorem~\ref{T2} establishes that this iterated bootstrap approximates the
+asymptotic distribution of the bias-corrected statistic proposed by
+Algorithm~\ref{Alg1} and justifies this second algorithm.  As before, we assume
+that $B_1$ and $B_2$ are large enough that simulation error can be ignored.
 
 \begin{theorem}\label{T2}
   Under Assumptions~\ref{A1} and~\ref{A2},
   \begin{gather*}
-    \V^*(\hat\tau^{*} - \Delta^{**})/V(h,b) \to^p 1
+    \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V'(h,b) \to^p 1
   \intertext{and}
     \sup_{x}
-    \Big\rvert \Pr^*[\hat\tau^{*} - \Delta^{**} - \tau^* \leq x ]
-    - \Pr[\hat\tau - \Delta^* - \tau \leq x] \Big\lvert \to^p 0.
+    \Big\rvert \Pr^*[\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^* \leq x ]
+    - \Pr[\hat\tau(h) - \Delta^*(h,b) - \tau \leq x] \Big\lvert \to^p 0.
   \end{gather*}
 \end{theorem}
 
@@ -795,11 +810,11 @@ Simulation evidence is presented that the proposed bootstrap bias correction and
 Define the following additional notation:
 $r_p(x) = (1,\ x,\dots,\ x^p)'$,
 \begin{align}
-  \label{eq:3}
+  \label{eq:5}
   \Bf_+(h)
   & = (1\ \  0)\ \Big(\ssum[+]{i}{h} r_1(X_i/h) r_1(X_i/h)' \Big)^{-1}
     \ssum[+]{i}{h} r_1(X_i/h) \; X_i^2 / h^2, \\
-  \label{eq:4}
+  \label{eq:6}
   \Bf_-(h)
   & = (1\ \ 0)\ \Big(\ssum[-]{i}{h} r_1(X_i/h) r_1(X_i/h)' \Big)^{-1}
     \ssum[-]{i}{h} r_1(X_i/h) \; X_i^2 / h^2.
@@ -829,7 +844,7 @@ Combining this result with CCT's Lemma A1, gives
   &= \hat\tau(h) - \E\hat\tau(h)
    + h^2 \big((\mu_{-}^{*(2)} - \mu_{-}^{(2)}) \Bf_{-}(h) /2
    - (\mu_+^{*(2)}-\mu_+^{(2)}) \Bf_{+}(h) / 2 \big) + O_p(h^{3}) \notag \\
-  \label{eq:5}
+  \label{eq:7}
   &= \hat\tau(h) - \E\hat\tau(h)
    + h^2 (\hat\mu_-^{(2)}(b) - \mu_-^{(2)}) \Bf_{-}(h) /2 \\
   \notag
@@ -844,7 +859,7 @@ $\hat\mu_-^{(2)}(b) - \mu_-^{(2)}$ using similar arguments to
 CCT's Lemma SA4.D.\qed
 
 \subsection{Proof of Theorem~\ref{T2}}
-Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:5} to get
+Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:7} to get
 \begin{align*}
   \hat\tau(h)^* - &\Delta_h^{**} - \tau^*
   = (\hat\tau^*(h) - \E^* \hat \tau^*(h)) +
@@ -875,13 +890,13 @@ $\epb_{-}^{*}$ and $\Omega^-(b)$ have the same definitions as
 $\epb_{+}^{*}$ and $\Omega^+(b)$ after making the obvious
 substitutions of ``$-$'' for ``$+$.''
 
-Given~\eqref{eq:5}, it suffices to prove that
+Given~\eqref{eq:7}, it suffices to prove that
 \begin{gather}
-  \label{eq:6}
+  \label{eq:8}
   \rho(V^{-1/2}(h) \Omega^{+}(b)'\epb_{+}^{*},
     V^{-1/2}(h)\Omega^{+}(b)'\epb_{+}) \to^p 0
   \intertext{and}
-  \label{eq:7}
+  \label{eq:9}
   \rho(V^{-1/2}(h)\Omega^{-}(b)'\epb_{-}^{*},
     V^{-1/2}(h)\Omega^{-}(b)'\epb_{-}) \to^p 0
 \end{gather}
@@ -906,7 +921,7 @@ $\rho$ the Mallows metric \citep{bickel1981}.\footnote{%
     \big(\E \lVert U - V \rVert^2\big)^{1/2}.
   \end{equation*}}
 
-We will only prove~\eqref{eq:6} since the proof of~\eqref{eq:7} is
+We will only prove~\eqref{eq:8} since the proof of~\eqref{eq:9} is
 identical. By Theorem 2.1 of \cite{freedman1981}, we have
 \begin{align*}
   \rho(V^{-1/2}(h) \Omega^{+}(b)'\epb_{+}^{*}, V^{-1/2}(h)&\Omega^{+}(b)'\epb_{+}) \\
