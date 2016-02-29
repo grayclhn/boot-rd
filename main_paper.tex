@@ -395,8 +395,15 @@ critical values of the bias corrected estimator.
 The intuition behind both procedures is very straightforward. CCT show that a
 local second order polynomial captures all of the unmodeled aspects of the DGP
 necessary for constructing valid confidence intervals. Our proposed algorithms
-estimate and embed the second order behavior in the bootstrap DGP through
-a residual bootstrap.
+estimate and embed the second order behavior in the bootstrap DGP through a
+residual bootstrap. Throughout this section and the rest of the paper, we will
+let $\E^{*}$, $\Pr^{*}$, etc. denote expectations and probabilities taken with
+respect to the distribution induced by the bootstrap (which implicitly
+conditions on $X_1,\dots,X_n$ and $Y_1,\dots,Y_n$) and let parameters with
+$^{*}$ superscripts be the parameter values under the distribution induced by
+the bootstrap. Two $*$ superscripts indicate that the parameter or probability
+measure corresponds to a secondary bootstrap distribution.
+
 Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
 
 \begin{algorithm}[Bias estimation]\label{Alg1}
@@ -435,9 +442,9 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
         Y_{i} - \hat g_+(X_{i}) & \otherwise.
       \end{cases}
     \end{equation}
-  \item Repeat the following steps $B_1$ times to produce a sequence of
+  \item Repeat the following steps $B_1$ times to produce the
     bootstrap estimates $\hat\tau_1^*(h),\dots,\hat\tau_{B_1}^*(h)$. For the
-    $k$th estimate:
+    $k$th value:
     \begin{enumerate}
     \item Draw an i.i.d. sample of size $M_-(b)$ from
       $\{\hat\varepsilon_i : i \in I_-(b)\}$ and one of size $M_+(b)$ from
@@ -464,7 +471,7 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
     \end{enumerate}
   \item Estimate the bias as
     \begin{equation*}
-      \Delta^*(h,b) = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k -
+      \Delta^*(h,b) = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k(h) -
       \big[\hat g_+(0) - \hat g_-(0)\big].
     \end{equation*}
   \end{enumerate}
@@ -512,10 +519,10 @@ and Theorem~\ref{T2} establishes its theoretical properties.
   \item Estimate $\hat g_+$ and $g_-$ and generate the residuals
     $\hat\varepsilon_i$ just as in Algorithm~\ref{Alg1}; Equations~\eqref{eq:2}
     and~\eqref{eq:3}.
-  \item Repeat the following steps $B_{2}$ times to produce a sequence of
+  \item Repeat the following steps $B_{2}$ times to produce the
     bootstrap estimates
     $\hat\tau_1^{\prime*}(h,b), \dots, \hat\tau_{B_{2}}^{\prime*}(h,b)$. For the
-    $k$th step:
+    $k$th value:
     \begin{enumerate}
     \item Draw an i.i.d. sample of size $M_-(b)$ from
       $\{\hat\varepsilon_i : i \in I_-(b)\}$ and one of size $M_+(b)$ from
@@ -874,6 +881,14 @@ Simulation evidence is presented that the proposed bootstrap bias correction and
 
 Define the following additional notation:
 $r_p(x) = (1,\ x,\dots,\ x^p)'$,
+\begin{equation*}
+  (\hat{\mu}_{+}(h),\ \hat{\mu}_{+}^{(1)}(h),\ \hat\mu_{+}^{(2)}(h))' =
+  \argmin_{\mu_0, \mu_1, \mu_2} \ssum[+]{i}{h} (Y_i - \mu_0 - \mu_1 X_i/h - \mu_2 (X_i/h)^2),
+\end{equation*}
+\begin{equation*}
+(\hat{\mu}_{-}(h),\ \hat{\mu}_{-}^{(1)}(h),\ \hat\mu_{-}^{(2)}(h))' =
+  \argmin_{\mu_0, \mu_1, \mu_2} \ssum[-]{i}{h} (Y_i - \mu_0 - \mu_1 X_i/h - \mu_2 (X_i/h)^2) \\
+\end{equation*}
 \begin{align}
   \label{eq:5}
   \Bf_+(h)
@@ -899,17 +914,18 @@ The design of the bootstrap ensures that
   &= h^{2} \mu_-^{*(2)} \Bf_{-}(h)/2,
 \end{align*}
 almost surely, implying that
-\begin{equation*}
-    \E^* \hat\tau^*(h) - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf_+(h)/2
-      - h^2\, \mu_{-}^{*(2)} \Bf_{-}(h)/2.
-\end{equation*}
+\begin{equation}
+  \label{eq:7}
+  \E^* \hat\tau^*(h) - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf_+(h)/2
+  - h^2\, \mu_{-}^{*(2)} \Bf_{-}(h)/2.
+\end{equation}
 Combining this result with CCT's Lemma A1, gives
 \begin{align}
   \hat\tau(h) - & \E \hat\tau(h) + (\E \hat\tau(h) - \tau) - (\E^* \hat\tau^*(h) - \tau^*)\notag \\
   &= \hat\tau(h) - \E\hat\tau(h)
    + h^2 \big((\mu_{-}^{*(2)} - \mu_{-}^{(2)}) \Bf_{-}(h) /2
    - (\mu_+^{*(2)}-\mu_+^{(2)}) \Bf_{+}(h) / 2 \big) + O_p(h^{3}) \notag \\
-  \label{eq:7}
+  \label{eq:8}
   &= \hat\tau(h) - \E\hat\tau(h)
    + h^2 (\hat\mu_-^{(2)}(b) - \mu_-^{(2)}) \Bf_{-}(h) /2 \\
   \notag
@@ -924,7 +940,7 @@ $\hat\mu_-^{(2)}(b) - \mu_-^{(2)}$ using similar arguments to
 CCT's Lemma SA4.D.\qed
 
 \subsection{Proof of Theorem~\ref{T2}}
-Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:7} to get
+Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:8} to get
 \begin{align*}
   \hat\tau(h)^* - &\Delta^{**}(h,b) - \tau^*
   = (\hat\tau^*(h) - \E^* \hat \tau^*(h)) +
@@ -937,31 +953,31 @@ Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:7} to get
 where
 $\epb_{+}^{*} =
 (\varepsilon_{+,1}^{*},\dots,\varepsilon_{+,M_+(b)}^{*})'$ and
-$\Omega_+(h,b)$ is an $M_b^{+}$-dimensional vector with $i$th element
+$\Omega_+(h,b)$ is an $M_+(b)$-dimensional vector with $i$th element
 $\Omega_{+,1i}(h,b) - \Omega_{+,2i}(h,b)$, which are defined as
 \begin{align*}
   \Omega_{+,1i}(h,b) &=
   (1\quad 0)
-  \Big(\ssum{j}{h} r_1(X_j / h) r_1(X_j / h)' \Big)^{-1}
+  \Big(\ssum[+]{j}{h} r_1(X_j / h) r_1(X_j / h)' \Big)^{-1}
     r_1(X_{m_+(b,i)} / h) \1\{h > X_{m_+(b,i)} \geq 0\}
 \intertext{and}
-  \Omega_{2i}^{+}(h,b) &= (0\quad 0 \quad h^2)
-  \Big(\ssum{i}{b} r_2(X_j / b) r_2(X_j / b)' \Big)^{-1}
+  \Omega_{+,2i}(h,b) &= (0\quad 0 \quad h^2)
+  \Big(\ssum[+]{i}{b} r_2(X_j / b) r_2(X_j / b)' \Big)^{-1}
     r_2(X_{m_+(b,i)} / b).
 \end{align*}
 The definitions of $\epb_{-}^{*}$ and $\Omega_-(h,b)$ have the same definitions as
 $\epb_{+}^{*}$ and $\Omega_+(h,b)$ after making the obvious substitutions of
 ``$-$'' for ``$+$.''
 
-Given~\eqref{eq:7}, it suffices to prove that
+Given~\eqref{eq:8}, it suffices to prove that
 \begin{gather}
-  \label{eq:8}
-  \rho(V^{-1/2}(h,b) \Omega_+(h,b)'\epb_{+}^{*},
+  \label{eq:9}
+  \rho(V^{-1/2}(h,b) \Omega_+(h,b)'\epb_{+}^{*},\
     V^{-1/2}(h,b)\Omega_+(h,b)'\epb_{+}) \to^p 0
   \intertext{and}
-  \label{eq:9}
-  \rho(V^{-1/2}(h,b)\Omega^{-}(b)'\epb_{-}^{*},
-    V^{-1/2}(h,b)\Omega^{-}(b)'\epb_{-}) \to^p 0
+  \label{eq:10}
+  \rho(V^{-1/2}(h,b)\Omega_-(b)'\epb_{-}^{*},\
+    V^{-1/2}(h,b)\Omega_-(b)'\epb_{-}) \to^p 0
 \end{gather}
 with $\epb_+$ an i.i.d. random vector of length $M_+(b)$, the $i$th element of
 which is distributed as
@@ -984,7 +1000,7 @@ $\rho$ the Mallows metric \citep{bickel1981}.\footnote{%
     \big(\E \lVert U - V \rVert^2\big)^{1/2}.
   \end{equation*}}
 
-We will only prove~\eqref{eq:8} since the proof of~\eqref{eq:9} is
+We will only prove~\eqref{eq:9} since the proof of~\eqref{eq:10} is
 identical. By Theorem 2.1 of \cite{freedman1981}, we have
 \begin{align*}
   \rho(V^{-1/2}(h,b) \Omega_+(h,b)'\epb_{+}^{*},\
@@ -1008,7 +1024,7 @@ using the same arguments as \cite{freedman1981}, we have the upper bound
 \end{equation*}
 But $\bar\varepsilon^2 \to^p 0$ by the LLN,
 \[
-  (1/M_{b}^+) \osum[+]{i}{b}
+  (1/M_+(b)) \osum[+]{i}{b}
   \E((\hat\varepsilon_i - \varepsilon_i)^2 \mid X_i) \to 0
 \]
 by CCT's Lemma SA1, and
