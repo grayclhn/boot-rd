@@ -195,7 +195,7 @@ be set to zero without loss of generality, the $i$th subject receives the
 treatment of interest if $X_{i} \geq 0$ and does not receive treatment if
 $X_{i} < 0$.
 
-Subject $i$'s potential outcomes are denoted by the variable $Y_i(\cdot)$,
+Subject $i$'s potential outcomes are denoted by the variable $Y_i(\cdot)$;
 $Y_i(1)$ indicates that the subject has received treatment and $Y_i(0)$
 indicates that the subject has not received treatment. Since only one of the two
 outcomes is observed, the sample is comprised of the running variable, $X_{i}$,
@@ -258,11 +258,10 @@ consistently under the conditions spelled out in Assumption~\ref{A1}.
  \end{enumerate}
 \end{assumption}
 
-These conditions are the usual smoothness and existence conditions in which the
-RD literature relies. (See, in particular, \citealp{HTV2001},
-\citealp{Porter03}, and CCT). The third part of the assumption is especially
-important for the characterization of the leading bias term drives CCT's bias
-correction and our bootstrap procedure.
+These conditions are standard in the RD literature. (See, in particular,
+\citealp{HTV2001}, \citealp{Porter03}, and CCT). The third part of the
+assumption is especially important for the characterization of the leading bias
+term drives CCT's bias correction and our bootstrap procedure.
 
 Since the conditions for identification only need to hold in a neighborhood
 around the cutoff, $\mu_+$ and $\mu_-$ can be estimated by extrapolating from a
@@ -288,16 +287,16 @@ with
 \intertext{and}
   (\hat {\mu}_{-}(h),\hat {\mu}^{(1)}_{-}(h))'
   &= \argmin_{\mu,\beta} \sum_{i=1}^{N}
-  \1\{0 > X_{i} > -h_n \} (Y_{i} - \mu - X_{i} \beta)^{2}.
+  \1\{0 > X_{i} > -h \} (Y_{i} - \mu - X_{i} \beta)^{2}.
 \end{align*}
 Conventional (naive) confidence intervals can be calculated by using an
-asymptotic approximation for $\hat\tau$. In particular, if
+asymptotic approximation for $\hat\tau(h)$. In particular, if
 \begin{gather}
   \label{eq:14}
   T(h) =\frac{\hat{\tau}(h)-\tau}{\sqrt{V(h)}} \to^d N(0,1),
   \intertext{with}
   \notag
-  V(h) \to^p \plim \V(\tau(h) \mid X_{1},\dots,X_{n}),
+  V(h) \big/ \V(\hat\tau(h) \mid X_{1},\dots,X_{n}) \to^p 1
 \end{gather}
 then valid confidence intervals can be constructed through the usual method of
 inverting the $t$-test. This procedure gives the widely-used interval estimator
@@ -307,7 +306,7 @@ inverting the $t$-test. This procedure gives the widely-used interval estimator
 where $q_{1 - \alpha/2}$ is the $1 - \alpha/2$ quantile of the standard normal
 distribution.
 
-However, the statistical properties of these estimators clearly depend on the
+The statistical properties of these estimators, however, clearly depend on the
 bandwidth parameter $h$, and bandwidths that have desirable properties for point
 estimation may not have desirable properties for hypothesis testing or interval
 estimation. In particular, for~\eqref{eq:14} to hold, $h$ must satisfy
@@ -331,7 +330,7 @@ form
   \Bs(h)=\tfrac{\mu_{+}^{(2)}}{2}\Bf_{+}(h)
   - \tfrac{\mu_{-}^{(2)}}{2}\Bf_{-}(h)
 \end{gather*}
-where $\Bf_{+}(h_{n})$ and $\Bf_{-}(h_{n})$ are observed quantities that depend
+where $\Bf_{+}(h)$ and $\Bf_{-}(h)$ are observed quantities that depend
 on the data, kernel, and bandwidth. The plug-in bias-corrected estimator then
 requires estimates for the second derivatives of the conditional mean from above
 and below the cutoff, $\mu_{+}^{(2)}$ and $\mu_{-}^{(2)}$, and CCT show that
@@ -342,7 +341,7 @@ bias-corrected estimator
 \begin{gather*}
   \hat{\tau}'(h, b) = \hat{\tau}(h) - h^{2} \hat{\Bs}(h,b)
   \intertext{with}
-  \hat{\Bs}(h) = \tfrac{\hat{\mu}_{+}^{(2)}(b)}{2} \Bf_{+}(h)
+  \hat{\Bs}(h,b) = \tfrac{\hat{\mu}_{+}^{(2)}(b)}{2} \Bf_{+}(h)
   - \tfrac{\hat{\mu}_{-}^{(2)}(b)}{2}\Bf_{-}(h).
 \end{gather*}
 The variance introduced by the bias-correction term does not vanish, so the
@@ -350,7 +349,7 @@ naive confidence interval needs not only to be re-centered to correct the bias,
 but also rescaled to allow for the additional variability introduced by the bias
 correction, resulting in the following asymptotic approximation:
 \begin{equation}
-  T'(h, b) = \frac{\hat{\tau}'(h, b) - \tau}{V'(h_{n}, b_{n})^{1/2}}
+  T'(h, b) = \frac{\hat{\tau}'(h, b) - \tau}{V'(h, b)^{1/2}}
   \to^d N(0,1)
 \end{equation}
 with $V'(h, b) = V(h) + C(h, b)$ and $C(h, b)$ an additional variance component
@@ -376,9 +375,9 @@ estimator and propose a simple bootstrap procedure that can directly construct
 the robust CIs without requiring the derivation of analytical formulas and
 direct estimators for the bias, variance and covariance terms, while relying on
 the same first-order bias correction approximation. The requirement $h < b$ is
-new to this paper, because the bootstrap can not be implemented for the uniform
-kernel without it, but the other parts of Assumption~\ref{A2} are taken from
-CCT.\footnote{%
+one additional restriction that we impose in this paper because the bootstrap
+can not be implemented for the uniform kernel without it, but the other parts of
+Assumption~\ref{A2} are identical to CCT.\footnote{%
   This assumption can be relaxed by considering other kernels, which is the
   subject of current research by the authors.} %
 
