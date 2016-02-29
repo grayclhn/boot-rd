@@ -18,7 +18,7 @@
 \title{Bootstrap Confidence Intervals for Sharp Regression Discontinuity Designs
   with the Uniform Kernel}
 
-\author{Ot\'avio Bartalotti \and Gray Calhoun \and Yang He\thanks{All authors: 
+\author{Ot\'avio Bartalotti \and Gray Calhoun \and Yang He\thanks{All authors:
 Department of Economics, Iowa State University. 260 Heady Hall, Ames, IA  50011.
 Bartalotti: Email: bartalot@iastate.edu. Calhoun: gcalhoun@iastate.edu.
 He: yanghe@iastate.edu.}}
@@ -397,7 +397,7 @@ The intuition behind both procedures is very straightforward. CCT show that a
 local second order polynomial captures all of the unmodeled aspects of the DGP
 necessary for constructing valid confidence intervals. Our proposed algorithms
 estimate and embed the second order behavior in the bootstrap DGP through
-a residual bootstap.
+a residual bootstrap.
 Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
 
 \begin{algorithm}[Bias estimation]\label{Alg1}
@@ -590,7 +590,7 @@ length of the intervals in the specifications implemented.\footnote{%
   \citep{foreach}, \textit{doParallel} \citep{doparallel}, and \textit{doRNG}
   \citep{dorng} packages.} %
 
-The Monte Calro experiments have a similar structure. For all of them, we
+The Monte Carlo experiments have a similar structure. For all of them, we
 generate 500 i.i.d.\ observations from the DGP
 \begin{align*}
 Y_{i}           &= \mu_{j}(X_{i}) + \varepsilon_{i} \\
@@ -606,7 +606,7 @@ will use the same three functional forms for $\mu_j$ as CCT as well.
 The first DGP is designed to match features of Lee's (2008) analysis of U.S.\
 congressional elections. Lee estimates the incumbency advantage in electoral
 races for the House of Representatives --- candidates who received the largest
-vote share in the previous election are the incumbants, which creates the
+vote share in the previous election are the incumbents, which creates the
 discontinuity. The conditional expectation is a fifth order polynomial fit to
 that dataset, (after excluding a small number of extreme observations; see
 \citealp{IK}, or CCT for further details) giving
@@ -623,7 +623,7 @@ The population ATE for this DGP is $0.04$ $(= 0.52 - 0.48)$.
 
 \nocite{ludwig2007}%
 The second DGP is based on Ludwig and Miller's (2007) analysis of the Head Start
-program. Funding eligability is determined at the county level using the
+program. Funding eligibility is determined at the county level using the
 county's historical poverty rate, with a sharp threshold that determines the
 provision of services. We use the fifth order polynomial estimated on Ludwig and
 Miller's dataset as the conditional expectation for the second DGP:
@@ -655,7 +655,7 @@ it a natural test case for both their analytical corrections and our bootstrap.
 To estimate the finite-sample coverage of our new bootstrap interval, we
 simulate 1500 samples from each of the three DGPs and calculate nominal 95\%
 two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
-cacluate the asymptotic distribution of the bias corrected estimator, and each
+calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
 the bias. We use the $0.025$ and $0.975$ quantiles of the bootstrap distribution
 as the lower and upper bound of the interval, and the bandwidths, $h$ and $b$,
@@ -719,7 +719,7 @@ in the simulations is likely a factor in their precise rankings.\footnote{%
   simulations and will update this paper when they are complete.} %
 These are DGPs where the naive confidence intervals are known to perform poorly,
 and this set of simulation results indicates that our proposed bootstrap approach
-is quite competetive with analytical methods for producing valid intervals.
+is quite competitive with analytical methods for producing valid intervals.
 Overall, the bootstrap bias-correction procedure proposed in this paper provides
 a simple alternative to obtain valid robust confidence intervals in RD designs
 and performs well compared to the analytical bias correction procedures proposed
@@ -739,23 +739,23 @@ These results are shown in Table \ref{tab: head start spending}-\ref{tab: educat
 		\toprule
 		& \multicolumn{3}{c}{LM 2007} & CCT 2014 & Bootstrap \\
 		\midrule
-		& \multicolumn{5}{c}{Panel A: 1968 Head Start spending per child} \\ 
+		& \multicolumn{5}{c}{Panel A: 1968 Head Start spending per child} \\
 		Bandwidth & 9 & 18 & 36 & 5.414, 10.175 & 5.414, 10.175 \\
 		Effect    & 137.251 & 114.711 & 134.491 & 143.811 & 148.990 \\
 		SE        & 128.968 & 91.267  & 62.593 & 113.404 & 182.729 \\
 		p-value   & 0.157   & 0.138   & 0.045  & & \\
 		95\% CI   & & & & (-78.457 366.078) & (-179.120  547.755) \\
-		
+
 		&&&&& \\
-		& \multicolumn{5}{c}{Panel B: 1972 Head Start spending per child} \\ 
+		& \multicolumn{5}{c}{Panel B: 1972 Head Start spending per child} \\
 		Bandwidth & 9 & 18 & 36 & 5.034, 12.020 & 5.034, 12.020 \\
 		Effect    & 182.119 & 88.959 & 130.153 & 94.260 & 100.404 \\
 		SE        & 148.321 & 101.697 & 67.613 & 122.224 & 196.008 \\
 		p-value   & 0.085   & 0.352   & 0.090  & & \\
 		95\% CI   & & & & (-145.294 333.814) & (-165.816 622.976) \\
-		
+
 		&&&&& \\
-		& \multicolumn{5}{c}{Panel C: 1972 other social spending per capita} \\ 
+		& \multicolumn{5}{c}{Panel C: 1972 other social spending per capita} \\
 		Bandwidth & 9 & 18 & 36 & 4.612, 8.461 & 4.612, 8.461 \\
 		Effect    & 14.474 & 19.590 & 14.506 & 15.418 & 15.857 \\
 		SE        & 28.356 & 19.612 & 14.929 & 29.041 & 39.902 \\
@@ -797,7 +797,7 @@ These results are shown in Table \ref{tab: head start spending}-\ref{tab: educat
 		SE        & 0.016 & 0.021 & 0.021 \\
 		p-value   & 0.032 & & \\
 		95\% CI        & & (0.014 0.096) & (0.010 0.094) \\
-		
+
 		&&& \\
 		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
 		Bandwidth & 7 & 5.076, 10.251 & 5.076, 10.251 \\
@@ -817,13 +817,13 @@ These results are shown in Table \ref{tab: head start spending}-\ref{tab: educat
 		\toprule
 		& LM 2007 & CCT 2014 & Bootstrap \\
 		\midrule
-		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\ 
+		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\
 		Bandwidth & 7 & 4.837, 9.85 & 4.837, 9.85 \\
 		Effect    & 0.000 & 0.014 & 0.013 \\
 		SE        & 0.016 & 0.019 & 0.019 \\
 		p-value   & 0.974 & & \\
 		CI        & & (-0.024 0.051) & (-0.026 0.051) \\
-		
+
 		&&& \\
 		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
 		Bandwidth & 7 & 5.382, 10.621 & 5.382, 10.621 \\
@@ -843,18 +843,18 @@ These results are shown in Table \ref{tab: head start spending}-\ref{tab: educat
 		\toprule
 		& LM 2007 & CCT 2014 & Bootstrap \\
 		\midrule
-		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\ 
+		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\
 		Bandwidth & 7 & 6.074, 11.477 & 6.074, 11.477 \\
 		Effect    & 0.006 & 0.014 & 0.014 \\
 		SE        & 0.014 & 0.015 & 0.015 \\
 		p-value   & 0.666 & & \\
 		CI        & & (-0.014 0.043) & (-0.023 0.036) \\
-		
+
 		&&& \\
 		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
 		Bandwidth & 7 & 5.509, 11.463 & 5.509, 11.463 \\
 		Effect    & 0.040 & 0.049 & 0.049 \\
-		SE        & 0.017 & 0.020 & 0.021 \\ 
+		SE        & 0.017 & 0.020 & 0.021 \\
 		p-value   & 0.009 & & \\
 		CI        & & (0.010 0.089) & (0.003 0.083) \\
 		\bottomrule
@@ -865,7 +865,7 @@ These results are shown in Table \ref{tab: head start spending}-\ref{tab: educat
 
 \section{Conclusion}\label{conclusion}
 This paper proposes a novel bootstrap procedure to obtain robust bias-corrected
-confidence intervals in regression discontinuity designs. 
+confidence intervals in regression discontinuity designs.
 The approach proposed builds upon the developments and intuition advanced by CCT and is based on a first-order bias correction.
 Our procedure provides an alternative to the plug-in analytical methods in the literature and is simple to implement generating robust confidence intervals.
 Simulation evidence is presented that the proposed bootstrap bias correction and confidence intervals have improved coverage and shorter length relative to the analytical alternatives proposed by CCT.
