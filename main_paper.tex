@@ -602,9 +602,9 @@ X_{i}           &\sim  2 \times \betarv(2,4) - 1 \\
 \varepsilon_{i} &\sim \normal(0, 0.1295^2),
 \end{align*}
 where $j$ will index the specific DGP. This is the experimental design used by
-\citet{IK} CCT, which we adopt here to make our simulation results directly
-comparable with theirs and more comparable with the rest of the literature. We
-will use the same three functional forms for $\mu_j$ as CCT as well.
+\citet{IK} and CCT, which we adopt here to make our simulation results directly
+comparable with theirs and the rest of the literature. We
+will use the same three functional forms for $\mu_{j}$ as CCT as well.
 
 \nocite{lee2008rand}%
 The first DGP is designed to match features of Lee's (2008) analysis of U.S.\
@@ -656,7 +656,7 @@ and the population ATE is again $0.04$. CCT introduce this DGP because it has
 high curvature and local linear models are likely to exhibit high bias, making
 it a natural test case for both their analytical corrections and our bootstrap.
 
-To estimate the finite-sample coverage of our new bootstrap interval, we
+To estimate the finite-sample coverage of our new bootstrap based confidence interval, we
 simulate 1500 samples from each of the three DGPs and calculate nominal 95\%
 two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
 calculate the asymptotic distribution of the bias corrected estimator, and each
@@ -701,7 +701,7 @@ report results for that estimator.
 Table~\ref{tbl:1} presents the results of these simulations. The rows labeled
 ``\bootuni'' show results for our proposed bootstrap interval; ``\cctuni'' and
 ``\ccttri'' show results for the analytically-corrected intervals. The first
-three columns give the bias, SD, and RMSE of the \emph{bias corrected} point
+three columns give the bias, standard deviation, and Root-MSE of the \emph{bias corrected} point
 estimators corresponding to each confidence interval.  As expected, these
 estimators are close to unbiased, with their standard deviation largely
 determining the estimators' RMSE. Moreover, as Theorem~\ref{T1} suggests, the
