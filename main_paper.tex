@@ -390,14 +390,14 @@ invalidating standard (naive) critical values. Consequently, the second
 algorithm we propose an iterated bootstrap to estimate the correct
 critical values of the bias corrected estimator.
 
-The intuition behind both procedures is very straightforward. CCT show that a
-local second order polynomial captures all of the unmodeled aspects of the DGP
+The intuition behind both procedures is straightforward. CCT show that a
+local second order polynomial captures the aspects of the DGP
 necessary for constructing valid confidence intervals. Our proposed algorithms
 estimate and embed the second order behavior in the bootstrap DGP through a
 residual bootstrap. Throughout this section and the rest of the paper, we will
 let $\E^{*}$, $\Pr^{*}$, etc. denote expectations and probabilities taken with
 respect to the distribution induced by the bootstrap (which implicitly
-conditions on $X_1,\dots,X_n$ and $Y_1,\dots,Y_n$) and let parameters with
+conditions on $X_{1},\dots,X_{n}$ and $Y_{1},\dots,Y_{n}$) and let parameters with
 $^{*}$ superscripts be the parameter values under the distribution induced by
 the bootstrap. Two $*$ superscripts indicate that the parameter or probability
 measure corresponds to a secondary bootstrap distribution.
@@ -407,28 +407,28 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
 \begin{algorithm}[Bias estimation]\label{Alg1}
   Assume $h$ and $b$ are bandwidths as defined by Assumption~\ref{A2} and define
   \begin{align*}
-    I_-(h) &= \{i : -h < X_{i} < 0\}, &
-    I_+(h) &= \{i : 0 \leq X_{i} < h\}.
+    I_{-}(h) &= \{i : -h < X_{i} < 0\}, &
+    I_{+}(h) &= \{i : 0 \leq X_{i} < h\}.
   \end{align*}
-  Also define $M_-(h)$ and $M_+(h)$ to be the number of elements in $I_-(h)$ and
-  $I_+(h)$ respectively and $m_-(h,1),\dots,m_-(h,M_-(h))$ and
-  $m_+(h,1),\dots,m_+(h,M_+(h))$ to be subsequences of $1,\dots,n$ that index
-  $I_-(h)$ and $I_+(h)$ respectively.
+  Also define $M_{-}(h)$ and $M_{+}(h)$ to be the number of elements in $I_{-}(h)$ and
+  $I_{+}(h)$ respectively, and $m_{-}(h,1),\dots,m_{-}(h,M_{-}(h))$ and
+  $m_{+}(h,1),\dots,m_{+}(h,M_+(h))$ to be subsequences of $1,\dots,n$ that index
+  $I_{-}(h)$ and $I_{+}(h)$, respectively.
   \begin{enumerate}
-  \item Estimate local second order polynomials $\hat g_-$ and $\hat g_+$ using
-    the observations in $I_-(b)$ and $I_+(b)$:
+  \item Estimate local second order polynomials $\hat g_{-}$ and $\hat g_{+}$ using
+    the observations in $I_{-}(b)$ and $I_{+}(b)$:
     \begin{align}
       \label{eq:2}
-      \hat g_-(x)
-      &= \hat\beta_{-,0} + \hat\beta_{-,1} x + \hat\beta_{-,2} x^2,
-      &\hat g_+(x)
-      &= \hat\beta_{+,0} + \hat\beta_{+,1} x + \hat\beta_{+,2} x^2
+      \hat g_{-}(x)
+      &= \hat\beta_{-,0} + \hat\beta_{-,1} x + \hat\beta_{-,2} x^{2},
+      &\hat g_{+}(x)
+      &= \hat\beta_{+,0} + \hat\beta_{+,1} x + \hat\beta_{+,2} x^{2}
     \end{align}
     with
     \begin{align*}
-      \hat\beta_- &= \argmin_\beta \sum_{i \in I_-(b)}
+      \hat\beta_{-} &= \argmin_\beta \sum_{i \in I_-(b)}
       (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^2 \\
-      \hat\beta_+ &= \argmin_\beta \sum_{i \in I_+(b)}
+      \hat\beta_{+} &= \argmin_\beta \sum_{i \in I_+(b)}
       (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^2.
     \end{align*}
     Calculate the residuals
@@ -440,8 +440,8 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
         Y_{i} - \hat g_+(X_{i}) & \otherwise.
       \end{cases}
     \end{equation}
-  \item Repeat the following steps $B_1$ times to produce the
-    bootstrap estimates $\hat\tau_1^*(h),\dots,\hat\tau_{B_1}^*(h)$. For the
+  \item Repeat the following steps $B_{1}$ times to produce the
+    bootstrap estimates $\hat{\tau}_{1}^{*}(h),\dots,\hat\tau_{B_{1}}^{*}(h)$. For the
     $k$th value:
     \begin{enumerate}
     \item Draw an i.i.d. sample of size $M_-(b)$ from
