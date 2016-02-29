@@ -584,7 +584,11 @@ procedures proposed in Section~\ref{boot} produce valid, robust confidence
 intervals similar to the ones obtained by the analytical procedures established
 in CCT. The bootstrap CIs obtained compare favorably to the analytical
 alternative, with coverage slightly closer to nominal coverage and shorter
-length of the intervals in the specifications implemented.
+length of the intervals in the specifications implemented.\footnote{%
+  All of the simulations were carried out in the R programming language
+  \citep{R} and rely on the \textit{rdrobust} \citep{rdrobust}, \textit{foreach}
+  \citep{foreach}, \textit{doParallel} \citep{doparallel}, and \textit{doRNG}
+  \citep{dorng} packages.} %
 
 The Monte Calro experiments have a similar structure. For all of them, we
 generate 500 i.i.d.\ observations from the DGP
@@ -648,50 +652,78 @@ and the population ATE is again $0.04$. CCT introduce this DGP because it has
 high curvature and local linear models are likely to exhibit high bias, making
 it a natural test case for both their analytical corrections and our bootstrap.
 
+To estimate the finite-sample coverage of our new bootstrap interval, we
+simulate 1500 samples from each of the three DGPs and calculate nominal 95\%
+two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
+cacluate the asymptotic distribution of the bias corrected estimator, and each
+of those replications uses an additional 500 replications ($B_1$) to estimate
+the bias. We use the $0.025$ and $0.975$ quantiles of the bootstrap distribution
+as the lower and upper bound of the interval, and the bandwidths, $h$ and $b$,
+are chosen using the AMSE-optimal rule proposed by CCT.
 
-
-
-For each DGP, we used four methods to obtain point estimate and confidence intervals. For each method, a total 1500 replications were performed. The first two methods follow CCT analytical bias-correction procedure with triangular ($CCT_{tri}$) and uniform ($CCT_{uni}$) kernel, respectively. The third and fourth methods follow the bootstrap procedure proposed in Section \ref{boot} with uniform kernel with ($bootstrap_{uni}$) and without ($bootstrap_{uni}^{naive}$) bias-correction, respectively.
-
-The ``naive'' bootstrap estimator, which bootstraps the confidence intervals for the usual RD estimator without any bias-correction serves as a baseline comparison, making clear the need of the corrections proposed, especially for DGPs with higher (potential) bias.
-
-In the bootstrap procedure, we used 500 bootstraps for bias correction, 999 bootstraps to calculate confidence interval. Table \ref{Tb: simulation 1} presents the main results in which a local-linear RD estimator ($p=1$) is employed with the bias-correction based on a local-quadratic approximation ($q=2$).
+We also show the coverage of two of CCT's interval estimators for comparison.
+We estimate their bias corrected procedure with AMSE-optimal bandwidths for both
+the uniform kernel and the triangular kernel. The uniform kernel provides a
+direct comparison with our bootstrap, while the triangular kernel may be more
+appealing to practitioners. Since CCT establish conclusively that the ``naive''
+uncorrected interval estimator has poor coverage in these settings we do not
+report results for that estimator.
 
 \begin{table}[t]
-\centering
-\begin{tabular}{rrrrrrrrr}
-  \toprule
-	DGP & Method    & Bias    & SD    & MSE   & CI Coverage & CI Length \\
-  \midrule
-	1 & $CCT_{tri}$ & -0.010 & 0.068 & 0.068 & 0.911 & 0.241 \\ 
-	  & $CCT_{uni}$ & -0.016 & 0.067 & 0.069 & 0.924 & 0.246 \\ 
-	  & $bootstrap_{uni}$ & -0.018 & 0.066 & 0.069 & 0.931 & 0.240 \\ 
-	  & $bootstrap_{uni}^{naive}$ & -0.020 & 0.060 & 0.064 & 0.916 & 0.208 \\
-	\midrule
-	2 & $CCT_{tri}$ & -0.011 & 0.085 & 0.086 & 0.935 & 0.343 \\ 
-	  & $CCT_{uni}$ & -0.010 & 0.087 & 0.088 & 0.938 & 0.350 \\ 
-	  & $bootstrap_{uni}$       & -0.012 & 0.088 & 0.089 & 0.953 & 0.324 \\ 
-	  & $bootstrap_{uni}^{naive}$ & -0.051 & 0.086 & 0.100 & 0.869 & 0.300 \\ 
-	\midrule
-	3 & $CCT_{tri}$ & -0.008 & 0.067 & 0.067 & 0.919 & 0.246 \\ 
-	  & $CCT_{uni}$ & -0.004 & 0.065 & 0.065 & 0.943 & 0.250 \\ 
-	  & $bootstrap_{uni}$       & -0.004 & 0.064 & 0.064 & 0.960 & 0.246 \\ 
-	  & $bootstrap_{uni}^{naive}$ & 0.016 & 0.062 & 0.064 & 0.931 & 0.218 \\ 
-  \bottomrule
-\end{tabular}
-\caption{Summary of estimates ($p = 1, q = 2$)}
-\label{Tb: simulation 1}
+  \centering
+  \begin{tabular}{rlrrrrrrr}
+    \toprule
+    DGP & Method     & Bias   & SD    & RMSE   & CI Coverage (\%) & CI Length \\
+    \midrule
+    1   & \bootuni   & --0.018 & 0.066 & 0.069 & 93.1       & 0.240     \\
+        & \cctuni    & --0.016 & 0.067 & 0.069 & 92.4       & 0.246     \\
+        & \ccttri    & --0.010 & 0.068 & 0.068 & 91.1       & 0.241     \\\\
+    2   & \bootuni   & --0.012 & 0.088 & 0.089 & 95.3       & 0.324     \\
+        & \cctuni    & --0.010 & 0.087 & 0.088 & 93.8       & 0.350     \\
+        & \ccttri    & --0.011 & 0.085 & 0.086 & 93.5       & 0.343     \\\\
+    3   & \bootuni   & --0.004 & 0.064 & 0.064 & 96.0       & 0.246     \\
+        & \cctuni    & --0.004 & 0.065 & 0.065 & 94.3       & 0.250     \\
+        & \ccttri    & --0.008 & 0.067 & 0.067 & 91.9       & 0.246     \\
+    \bottomrule
+  \end{tabular}
+  \caption{%
+    Experimental coverage probabilities for each interval estimator based on 1500
+    simulations; nominal coverage probabilities are 95\% for each estimator. The column
+    ``CI Coverage'' lists the coverage frequency in these simulations and ``CI Length''
+    lists the average length of the confidence interval across simulations.}
+  \label{tbl:1}
 \end{table}
 
-Table \ref{Tb: simulation 1} presents the results for the local linear model, with three panels reporting on each DGP described above. For each panel, we report bias, standard deviation, MSE, confidence interval empirical coverage and length for the four methods. For the three DGPs coverage for
-    both analytical and bootstrap based bias correction methods is near nominal size but with slight undercoverage for CCT's analytical correction. For DGP 1, our robust bootstrap method improves coverage slightly, obtaining 93.1\% coverage against 92.4\% from CCT's analytical correction using the uniform kernel. Also, the CI length is slightly shortened on average. Both robust approaches improve over the naive estimator, even in this case for which bias is relatively small.
+Table~\ref{tbl:1} presents the results of these simulations. The first three
+columns give the bias, SD, and RMSE of the \emph{bias corrected} point
+estimators corresponding to each confidence interval.  As expected, these
+estimators are close to unbiased, with their standard deviation largely
+determining the estimators' RMSE. Moreover, as Theorem~\ref{T1} suggests, the
+bootstrap and analytically-corrected estimators have essentially the same
+standard deviation across all of the DGPs.
 
-For the second DGP, based on \cite{ludwig2007}, the importance of correcting for the leading bias term presence becomes clear, with the naive bootstrap CI displaying an empirical coverage of only 86.9\%. Once again, the CIs based on both analytical and bootstrap robust methods improves the coverage meaningfully, with moderate gains in terms of coverage and length from $0.324$ to $0.350$ when using the bootstrap estimator relative to CCT's with uniform kernel.
+The column ``CI Coverage'' lists the experimental coverage of each interval.
+All of the intervals are reasonably close to their nominal coverage, although
+the analytically corrected estimator using the triangular kernel seems to
+persistently under-cover by a few percentage points. Our proposed bootstrap
+procedure consistently performs well, as it is about a percentage point closer
+to nominal coverage than the other interval estimators in DGPs 1 and 2, and is
+slightly conservative (96\% coverage) in DGP 3. The final column, ``CI Length,''
+indicates that all three of these procedures generate intervals that are
+approximately the same length on average.
 
-In the case of the modified \cite{lee2008rand} DGP that exacerbates the importance of bias, $\mu_{3}(x)$, once more the robust bootstrap procedure provides similar empirical coverage and interval length relative to its analytical alternatives. The naive method once again suffers in terms of coverage due to the presence of uncorrected first order bias.
-
- Overall, the bootstrap bias-correction procedure proposed in this paper provides a simple alternative to obtain valid robust confidence intervals in RD designs and performs well compared to the analytical
-bias correction procedures proposed by CCT. The results also corroborates CCT in the importance of bias correction when high curvature is present at the cutoff. 
+It is important not to read too much into these simulation results. Where there
+are differences between these procedures, they are small enough that randomness
+in the simulations is likely a factor in their precise rankings.\footnote{%
+  To help address this concern, we are currently running a more extensive set of
+  simulations and will update this paper when they are complete.} %
+These are DGPs where the naive confidence intervals are known to perform poorly,
+and this set of simulation results indicates that our proposed bootstrap approach
+is quite competetive with analytical methods for producing valid intervals.
+Overall, the bootstrap bias-correction procedure proposed in this paper provides
+a simple alternative to obtain valid robust confidence intervals in RD designs
+and performs well compared to the analytical bias correction procedures proposed
+by CCT.
 
 \section{Application}\label{application}
 
