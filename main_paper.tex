@@ -323,25 +323,26 @@ and explicitly recentering $\hat\tau(h)$. Under weaker assumptions on the
 asymptotic behavior of the bandwidth, which we will specify in
 Assumption~\ref{A2}, CCT show that the approximate bias of $\hat\tau(h)$ has the
 form
+\begin{equation*}
+  \E(\hat{\tau}(h) \mid \chi_{n}) - \tau =
+  h^{2}\Big[ \tfrac{\mu_{+}^{(2)}}{2}\Bf_{+}(h)
+  - \tfrac{\mu_{-}^{(2)}}{2}\Bf_{-}(h) \Big]
+  (1+o_{p}(1))
+\end{equation*}
+where $\Bf_{+}(h)$ and $\Bf_{-}(h)$ are observed quantities that depend on the
+kernel, bandwidth, and running variables $X_1,\dots,X_n$; formal definitions of
+these terms are given in the Mathematical Appendix as Equations~\eqref{eq:3}
+and~\eqref{eq:4}. The plug-in bias-corrected estimator then requires estimates
+for the second derivatives of the conditional mean from above and below the
+cutoff, $\mu_{+}^{(2)}$ and $\mu_{-}^{(2)}$, and CCT show that these derivatives
+can be estimated by fitting a second order local polynomial, i.e. one order
+higher than the polynomial used to obtain $\hat{\tau}$, using a (potentially)
+different pilot bandwidth $b$. Their procedure gives the bias-corrected
+estimator
 \begin{gather*}
-  \E(\hat{\tau}(h) \mid \chi_{n}) - \tau = h^{2}\Bs(h)\{1+o_{p}(1)\}
-  \intertext{with}
-  \Bs(h)=\tfrac{\mu_{+}^{(2)}}{2}\Bf_{+}(h)
-  - \tfrac{\mu_{-}^{(2)}}{2}\Bf_{-}(h)
-\end{gather*}
-where $\Bf_{+}(h)$ and $\Bf_{-}(h)$ are observed quantities that depend
-on the data, kernel, and bandwidth. The plug-in bias-corrected estimator then
-requires estimates for the second derivatives of the conditional mean from above
-and below the cutoff, $\mu_{+}^{(2)}$ and $\mu_{-}^{(2)}$, and CCT show that
-these derivatives can be estimated by fitting a second order local polynomial,
-i.e. one order higher than the polynomial used to obtain $\hat{\tau}$, using a
-(potentially) different pilot bandwidth $b$. Their procedure gives the
-bias-corrected estimator
-\begin{gather*}
-  \hat{\tau}'(h, b) = \hat{\tau}(h) - h^{2} \hat{\Bs}(h,b)
-  \intertext{with}
-  \hat{\Bs}(h,b) = \tfrac{\hat{\mu}_{+}^{(2)}(b)}{2} \Bf_{+}(h)
-  - \tfrac{\hat{\mu}_{-}^{(2)}(b)}{2}\Bf_{-}(h).
+  \hat{\tau}'(h, b) = \hat{\tau}(h) - h^{2}
+  \Big[\tfrac{\hat{\mu}_{+}^{(2)}(b)}{2} \Bf_{+}(h)
+  - \tfrac{\hat{\mu}_{-}^{(2)}(b)}{2}\Bf_{-}(h) \Big]
 \end{gather*}
 The variance introduced by the bias-correction term does not vanish, so the
 naive confidence interval needs not only to be re-centered to correct the bias,
@@ -395,7 +396,9 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
     I_-(h) &= \{i : -h < X_{i} < 0\}, &
     I_+(h) &= \{i : 0 \leq X_{i} < h\}.
   \end{align*}
-  Also define $M_-(h)$ and $M_+(h)$ to be the number of elements in
+  Also define $M_-(h)$ and $M_+(h)$ to be the number of elements in $I_-(h)$ and
+  $I_+(h)$ respectively and $m_-(h,1),\dots,m_-(h,M_-(h))$ and
+  $m_+(h,1),\dots,m_+(h,M_+(h))$ to be subsequences of $1,\dots,n$ that index
   $I_-(h)$ and $I_+(h)$ respectively.
   \begin{enumerate}
   \item Estimate local second order polynomials $\hat g_-$ and $\hat g_+$ using
@@ -422,52 +425,62 @@ Essentially, we apply CCT's insight that a polynomial one order higher can captu
       \end{cases}
     \end{equation*}
   \item Repeat the following steps $B_1$ times to produce a sequence of
-    bootstrap estimates $\hat\tau_1^*(h),\dots,\hat\tau_{B_1}(h)^*$. For the
-    $k$th step:
+    bootstrap estimates $\hat\tau_1^*(h),\dots,\hat\tau_{B_1}^*(h)$. For the
+    $k$th estimate:
     \begin{enumerate}
-    \item Draw an i.i.d. sample of size $M^-(b)$ from
+    \item Draw an i.i.d. sample of size $M_-(b)$ from
       $\{\hat\varepsilon_i : i \in I_-(b)\}$ and one of size $M_+(b)$ from
-      $\{\hat\varepsilon_i : i \in I_+(h)\}$. Let $\varepsilon_i^{*-}$ and
-      $\varepsilon_i^{*+}$ denote the $i$th element of each sample and construct
+      $\{\hat\varepsilon_i : i \in I_+(h)\}$. Let $\varepsilon_{-,i}^{*}$ and
+      $\varepsilon_{+,i}^{*}$ denote the $i$th element of each sample and
+      construct
       \begin{align*}
-        Y_i^{*-} &= \hat g_{p+1}^-(X_i^{*-}) + \varepsilon_i^{*-} &
-        Y_i^{*+} &= \hat g_{p+1}^+(X_i^{*+}) + \varepsilon_i^{*+}
+        Y_{-,m_-(h,i)}^* &= \hat g_-(X_{m_-(h,i)}) + \varepsilon_{-,i}^{*} &
+        Y_{+,m_+(h,i)}^* &= \hat g_+(X_{m_-(h,i)}) + \varepsilon_{+,i}^{*}.
       \end{align*}
-    \item Calculate $\hat\mu_+^*$ and $\hat\mu_-^*$ as
+    \item Calculate $\hat\mu_+^*(h)$ and $\hat\mu_-^*(h)$ by estimating the
+      local linear model on the bootstrap data set:\footnote{%
+        Note that the indices of summation are chosen to correspond to the
+        indices of the variables generated in the previous step.} %
       \begin{align*}
-        \hat\mu_-^*
-        &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
-          \sum_{i = 1}^{M_-(h)} (Y_i^{*-} -
-          (\beta_0 + \beta_1 X_i^{*-} + \cdots + \beta_p (X_i^{*-})^p))^2 \\
-        \hat\mu_+^*
-        &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
-          \sum_{i = 1}^{M_+(h)} (Y_i^{*+} -
-          (\beta_0 + \beta_1 X_i^{*+} + \cdots + \beta_p (X_i^{*+})^p))^2
+        \hat\mu_-^*(h)
+        &= \argmin_{\mu} \min_{\beta} \ssum[-]{i}{h}
+          (Y_i^* - \mu - \beta X_i^*)^2 \\
+        \hat\mu_+^*(h)
+        &= \argmin_{\mu} \min_{\beta} \ssum[+]{i}{h}
+          (Y_i^* - \mu - \beta X_i^*)^2.
       \end{align*}
-    \item Save $\hat\mu_+^* - \hat\mu_-^*$ as $\hat\tau^*_k$.
+    \item Save $\hat\mu_+^*(h) - \hat\mu_-^*(h)$ as $\hat\tau^*_k$.
     \end{enumerate}
   \item Estimate the bias as
     \begin{equation*}
-      \Delta^* = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k -
-      \big[\hat g_{p+1}^+(0) - \hat g_{p+1}^-(0)\big]
+      \Delta^*(h,b) = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k -
+      \big[\hat g_+(0) - \hat g_-(0)\big].
     \end{equation*}
   \end{enumerate}
 \end{algorithm}
-The distribution of $\Delta^{*}$ depends on $B_{1}$ and we could
-incorporate that dependency into our notation by writing $\Delta^*_{B_1}$. However, we will follow standard practice in the bootstrap
-literature and assume that $B_{1}$ is large enough that it can be ignored and define $\Delta^* = \plim_{B_{1} \to \infty} \Delta^*_{B_{1}}$
 
 Under Assumptions~\ref{A1} and~\ref{A2} the procedure described by
 Algorithm~\ref{Alg1} provides a consistent estimator of the bias component that
-converges fast enough in probability that it can be be used as a correction. As is standard in the bootstrap literature, we will assume
-that the number of bootstrap replications, $B_{1}$, is large enough that the simulation error can be ignored.
+converges fast enough in probability that it can be be used as a correction. As
+is standard in the bootstrap literature, we will assume that the number of
+bootstrap replications, $B_{1}$, is large enough that the simulation error can
+be ignored.
 
 \begin{theorem}\label{T1}
   Under Assumptions~\ref{A1} and~\ref{A2},
-\begin{align*}
-  \frac{(\hat\tau(h,b) - \Delta^{*}(h,b) - \tau)}{ V^{1/2}(h, b)} \to^{d} N(0,1)
-\end{align*}
+\begin{equation}
+  \label{eq:2}
+  \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V(h, b)^{1/2}}
+  \to^{d} N(0,1)
+\end{equation}
 \end{theorem}
+
+Note that the variance component of~\eqref{eq:2} is the same value used by CCT
+and introduced in~\eqref{eq:1}. Theorem~\ref{T1} implies that our
+bias-corrected estimator has the same asymptotic distribution as CCT's. This
+equivalence should be unsurprising; both estimators use a 2nd order polynomial
+to directly estimate the bias of the local linear model, so they should behave
+very similarly.
 
 With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected confidence intervals to perform inference about $\tau$. Here the idea is similar, but now we actually calculate a bias corrected estimate using Algorithm~\ref{Alg1} for every bootstrapped dataset generated, a bootstrap within the bootstrap. Each one of the bias corrected estimates for the generated data is denoted $\hat{\tau}^{bc*}$. These estimator's empirical distribution capture the variability induced by the first order bias correction that lead CCT to propose the rescaling of their confidence intervals by introducing $C^{bc}(h,b)$ in the asymptotic variance formula on Section \ref{background}.
 
@@ -491,18 +504,18 @@ With Algorithm~\ref{Alg1} at hand, we can move to generate the bias-corrected co
       $\{\hat\varepsilon_i : i \in I_+(h)\}$. Let $\varepsilon_{i}^{*-}$ and
       $\varepsilon_i^{*+}$ denote the $i$th element of each sample and construct
       \begin{align*}
-        Y_i^{*-} &= \hat g_{p+1}^-(X_i^{*-}) + \varepsilon_i^{*-} &
-        Y_i^{*+} &= \hat g_{p+1}^+(X_i^{*+}) + \varepsilon_i^{*+}
+        Y_{-,i}^* &= \hat g_{p+1}^-(X_i^{*-}) + \varepsilon_i^{*-} &
+        Y_{+,i}^* &= \hat g_{p+1}^+(X_i^{*+}) + \varepsilon_i^{*+}
       \end{align*}
     \item Calculate $\hat\mu_+^*$ and $\hat\mu_-^*$ as
       \begin{align*}
         \hat\mu_-^*
         &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
-          \sum_{i = 1}^{M_-(h)} (Y_i^{*-} -
+          \sum_{i = 1}^{M_-(h)} (Y_{-,i}^* -
           (\beta_0 + \beta_1 X_i^{*-} + \cdots + \beta_p (X_i^{*-})^p))^2 \\
         \hat\mu_+^*
         &= \argmin_{\beta_0} \min_{\beta_1,\dots,\beta_p}
-          \sum_{i = 1}^{M_+(h)} (Y_i^{*+} -
+          \sum_{i = 1}^{M_+(h)} (Y_{+,i}^* -
           (\beta_0 + \beta_1 X_i^{*+} + \cdots + \beta_p (X_i^{*+})^p))^2
       \end{align*}
     \item Apply Algorithm~\ref{Alg1} to the bootstrapped data set,
@@ -778,11 +791,25 @@ Simulation evidence is presented that the proposed bootstrap bias correction and
 
 \appendix
 \section{Mathematical appendix}
+
+Define the following additional notation:
+$r_p(x) = (1,\ x,\dots,\ x^p)'$,
+\begin{align}
+  \label{eq:3}
+  \Bf_+(h)
+  & = (1\ \  0)\ \Big(\ssum[+]{i}{h} r_1(X_i/h) r_1(X_i/h)' \Big)^{-1}
+    \ssum[+]{i}{h} r_1(X_i/h) \; X_i^2 / h^2, \\
+  \label{eq:4}
+  \Bf_-(h)
+  & = (1\ \ 0)\ \Big(\ssum[-]{i}{h} r_1(X_i/h) r_1(X_i/h)' \Big)^{-1}
+    \ssum[-]{i}{h} r_1(X_i/h) \; X_i^2 / h^2.
+\end{align}
+
 \subsection{Proof of Theorem~\ref{T1}}
 We have
 \begin{equation*}
-  \hat\tau_h - \Delta^*_h - \tau = (\hat\tau_h - \E \hat \tau_h) +
-  (\E \hat \tau_h - \tau) - (\E^* \hat \tau^*_h - \tau^*)
+  \hat\tau(h) - \Delta^*(h,b) - \tau = (\hat\tau(h) - \E \hat \tau(h)) +
+  (\E \hat \tau(h) - \tau) - (\E^* \hat \tau^*(h) - \tau^*).
 \end{equation*}
 The design of the bootstrap ensures that
 \begin{align*}
@@ -793,35 +820,36 @@ The design of the bootstrap ensures that
 \end{align*}
 almost surely, implying that
 \begin{equation*}
-    \E^* \hat\tau^{*}_h - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf(h)/2
+    \E^* \hat\tau^*(h) - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf_+(h)/2
       - h^2\, \mu_{-}^{*(2)} \Bf_{-}(h)/2.
 \end{equation*}
 Combining this result with CCT's Lemma A1, gives
 \begin{align}
-  \hat\tau_h - & \E \hat\tau_h + (\E \hat\tau_h - \tau) - (\E^* \hat\tau^*_h - \tau^*)\notag \\
-  &= \hat\tau_h - \E\hat\tau_h
+  \hat\tau(h) - & \E \hat\tau(h) + (\E \hat\tau(h) - \tau) - (\E^* \hat\tau^*(h) - \tau^*)\notag \\
+  &= \hat\tau(h) - \E\hat\tau(h)
    + h^2 \big((\mu_{-}^{*(2)} - \mu_{-}^{(2)}) \Bf_{-}(h) /2
    - (\mu_+^{*(2)}-\mu_+^{(2)}) \Bf_{+}(h) / 2 \big) + O_p(h^{3}) \notag \\
-  &= \hat\tau_h - \E\hat\tau_h
-   + h^2 (\hat\mu_-^{(2)}(b) - \mu_-^{(2)}) \Bf_{-}(h) /2 \notag \\
-  \label{eq:2}
+  \label{eq:5}
+  &= \hat\tau(h) - \E\hat\tau(h)
+   + h^2 (\hat\mu_-^{(2)}(b) - \mu_-^{(2)}) \Bf_{-}(h) /2 \\
+  \notag
   &\pushright{- h^2 (\hat\mu_+^{(2)}(b) - \mu_+^{(2)}) \Bf_{+}(h) / 2 + O_p(h^{3})}
 \end{align}
 The second equality holds because
 $\mu_+^{*(2)} = \hat\mu_{+}^{(2)}(b)$ and
 $\mu_-^{*(2)} = \hat\mu_{-}^{(2)}(b)$ almost surely. Asymptotic
-normality then follows from normality of $\hat\tau_h - \E\hat\tau_h$,
+normality then follows from normality of $\hat\tau(h) - \E\hat\tau(h)$,
 $\hat\mu_+^{(2)}(b) - \mu_+^{(2)}$, and
 $\hat\mu_-^{(2)}(b) - \mu_-^{(2)}$ using similar arguments to
 CCT's Lemma SA4.D.\qed
 
 \subsection{Proof of Theorem~\ref{T2}}
-Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:2} to get
+Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:5} to get
 \begin{align*}
-  \hat\tau_h^* - &\Delta_h^{**} - \tau^*
-  = (\hat\tau^*_h - \E^* \hat \tau^*_h) +
-  (\E^* \hat \tau^*_h - \tau^*) - (\E^{**} \hat \tau^{**}_h - \tau^{**}) \\
-  &= \hat\tau^*_h - \E^*\hat\tau^*_h
+  \hat\tau(h)^* - &\Delta_h^{**} - \tau^*
+  = (\hat\tau^*(h) - \E^* \hat \tau^*(h)) +
+  (\E^* \hat \tau^*(h) - \tau^*) - (\E^{**} \hat \tau^{**}_h - \tau^{**}) \\
+  &= \hat\tau^*(h) - \E^*\hat\tau^*(h)
    + h^2 (\hat\mu_-^{*(2)}(b) - \mu_-^{*(2)}) \Bf_{-}(h) /2
    - h^2 (\hat\mu_+^{*(2)}(b) - \mu_+^{*(2)}) \Bf_{+}(h) / 2 \\
   &= \Omega^{+}(b)' \epb_{+}^{*} - \Omega^{-}(b)' \epb_{-}^{*},
@@ -847,13 +875,13 @@ $\epb_{-}^{*}$ and $\Omega^-(b)$ have the same definitions as
 $\epb_{+}^{*}$ and $\Omega^+(b)$ after making the obvious
 substitutions of ``$-$'' for ``$+$.''
 
-Given~\eqref{eq:2}, it suffices to prove that
+Given~\eqref{eq:5}, it suffices to prove that
 \begin{gather}
-  \label{eq:3}
+  \label{eq:6}
   \rho(V^{-1/2}(h) \Omega^{+}(b)'\epb_{+}^{*},
     V^{-1/2}(h)\Omega^{+}(b)'\epb_{+}) \to^p 0
   \intertext{and}
-  \label{eq:4}
+  \label{eq:7}
   \rho(V^{-1/2}(h)\Omega^{-}(b)'\epb_{-}^{*},
     V^{-1/2}(h)\Omega^{-}(b)'\epb_{-}) \to^p 0
 \end{gather}
@@ -878,7 +906,7 @@ $\rho$ the Mallows metric \citep{bickel1981}.\footnote{%
     \big(\E \lVert U - V \rVert^2\big)^{1/2}.
   \end{equation*}}
 
-We will only prove~\eqref{eq:3} since the proof of~\eqref{eq:4} is
+We will only prove~\eqref{eq:6} since the proof of~\eqref{eq:7} is
 identical. By Theorem 2.1 of \cite{freedman1981}, we have
 \begin{align*}
   \rho(V^{-1/2}(h) \Omega^{+}(b)'\epb_{+}^{*}, V^{-1/2}(h)&\Omega^{+}(b)'\epb_{+}) \\

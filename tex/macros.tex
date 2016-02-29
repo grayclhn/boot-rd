@@ -27,11 +27,11 @@
 % Local sum, average, and scaled average macros.
 % - 's' stands for 'set index'
 % - 'o' stands for 'ordered index'
-\newcommand\ssum[3][\pm]{\sum_{#2 \in I_{#3}^{#1}}}
-\newcommand\savg[3][\pm]{\tfrac{1}{M_{#3}^{#1}} \ssum[#1]{#2}{#3}}
-\newcommand\sclt[3][\pm]{\tfrac{1}{\sqrt{M_{#3}^{#1}}} \ssum[#1]{#2}{#3}}
+\newcommand\ssum[3][\pm]{\sum_{#2 \in I_{#1}({#3})}}
+\newcommand\savg[3][\pm]{\tfrac{1}{M_{#1}({#3})} \ssum[#1]{#2}{#3}}
+\newcommand\sclt[3][\pm]{\tfrac{1}{\sqrt{M_{#1}({#3})}} \ssum[#1]{#2}{#3}}
 
-\newcommand\osum[3][\pm]{\sum_{#2 = 1}^{M_{#3}^{#1}}}
-\newcommand\oavg[3][\pm]{\tfrac{1}{M_{#3}^{#1}} \osum[#1]{#2}{#3}}
-\newcommand\oclt[3][\pm]{\tfrac{1}{\sqrt{M_{#3}^{#1}}} \osum[#1]{#2}{#3}}
+\newcommand\osum[3][\pm]{\sum_{#2 = 1}^{M_{#1}({#3})}}
+\newcommand\oavg[3][\pm]{\tfrac{1}{M_{#1}({#1})} \osum[#1]{#2}{#3}}
+\newcommand\oclt[3][\pm]{\tfrac{1}{\sqrt{M_{#1}({#1})}} \osum[#1]{#2}{#3}}
 
