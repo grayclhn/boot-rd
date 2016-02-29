@@ -57,10 +57,10 @@ variable.'' In its basic version, the sharp RD,  individuals or groups with scor
 certain threshold receive treatment while the ones below that cutoff are left
 untreated.
 The identification of the treatment effect at the threshold is then based on
-comparing treated and untreated units at the cutoff. Since the observed
-characteristics of these subjects are very similar, similarity of their
-unobserved characteristics is often credible as well, and differences in the
-outcomes between the treated and untreated can be plausibly attributed to the
+comparing treated and untreated units at the cutoff. Since being just above
+or below the arbitrary cutoff is credibly not related to other factors impacting
+outcomes, including their unobserved characteristics,  differences between 
+treated and untreated individuals at the cutoff can be plausibly attributed to the
 treatment alone. As a practical matter this involves comparing units within a
 bandwidth just above and just below the threshold.
 
@@ -87,12 +87,12 @@ overviews of this literature with many more examples.
 In these studies, identification occurs exactly at the cutoff, so the
 treatment effect is typically estimated by fitting separate local linear models
 above and below the cutoff, then extrapolating the models to the exact point of
-discontinuity. The difference between the estimated effects at that point is
-taken to be an estimate of the treatment effect. As a practical matter, the key
+discontinuity. The difference between the estimated outcomes at that point is
+taken to be an estimate of the treatment effect. As a practical matter, a key
 econometric issue is determining the bandwidth for the local linear models.  One
 very popular choice is the bandwidth estimator proposed by \cite{IK} and
 extended by \cite{calonico2014}, which minimizes the Asymptotic Mean Squared
-Error of difference in the models' point estimators at the cutoff.
+Error (AMSE) of difference in the models' point estimators at the cutoff.
 
 As \cite{calonico2014}\footnote{%
   We will refer to \cite{calonico2014} frequently, so we will reference it as
