@@ -870,11 +870,23 @@ These results are shown in Table \ref{tab: head start spending}-\ref{tab: educat
 \end{table}
 
 \section{Conclusion}\label{conclusion}
-This paper proposes a novel bootstrap procedure to obtain robust bias-corrected
-confidence intervals in regression discontinuity designs.
+This paper proposes a novel bootstrap procedure to obtain robust bias-corrected confidence intervals in regression discontinuity designs.
 The approach proposed builds upon the developments and intuition advanced by CCT and is based on a first-order bias correction.
-Our procedure provides an alternative to the plug-in analytical methods in the literature and is simple to implement generating robust confidence intervals.
-Simulation evidence is presented that the proposed bootstrap bias correction and confidence intervals have improved coverage and shorter length relative to the analytical alternatives proposed by CCT.
+ We exploit CCT's theoretical insight through a new residual bootstrap. In particular, we propose estimating the local linear model as usual,
+then estimating a local second order polynomial and generating bootstrap datasets by resampling the residuals of that polynomial.
+
+The bootstrap sample is used to estimate the bias of the RD estimator, which is then removed from the original estimator.
+ This approach is described in detail by our Algorithm~\ref{Alg1} and the resulting bias corrected estimator is shown to be asymptotically normal with mean zero in our
+Theorem~\ref{T1} under AMSE-optimal bandwidth rates.
+
+Just as in CCT, our bias correction step introduces additional variability.  So we propose then bootstrap the bias-corrected estimator itself to
+ generate valid confidence intervals. This procedure, which requires bootstrapping the datasets produced by an initial bootstrap procedure, is described in Algorithm~\ref{Alg2},
+ and the resulting confidence intervals are shown to be asymptotically valid in Theorem~\ref{T2}.
+
+ Hence, our procedure provides an alternative to the plug-in analytical methods in the literature and is simple to implement generating robust confidence intervals.
+
+Simulation evidence is presented that the proposed bootstrap bias correction and confidence intervals have similar empirical coverage and average interval length relative to
+ the analytical alternatives proposed by CCT, making it a suitable option to practitioners.
 
 \appendix
 \section{Mathematical appendix}
