@@ -789,23 +789,29 @@ Table \ref{tb:3} gives the results on schooling for the cohort aged 18-24 in 199
 To briefly summarize, the bootstrap procedure performs similarly to the robust estimator proposed by CCT in above applications. In Table \ref{tbl:2} and \ref{tb:3}, these two approaches give almost identical point estimates and interval estimates.
 
 \section{Conclusion}\label{conclusion}
-This paper proposes a novel bootstrap procedure to obtain robust bias-corrected confidence intervals in regression discontinuity designs.
-The approach proposed builds upon the developments and intuition advanced by CCT and is based on a first-order bias correction.
- We exploit CCT's theoretical insight through a new residual bootstrap. In particular, we propose estimating the local linear model as usual,
-then estimating a local second order polynomial and generating bootstrap datasets by resampling the residuals of that polynomial.
 
-The bootstrap sample is used to estimate the bias of the RD estimator, which is then removed from the original estimator.
- This approach is described in detail by our Algorithm~\ref{Alg1} and the resulting bias corrected estimator is shown to be asymptotically normal with mean zero in our
-Theorem~\ref{T1} under AMSE-optimal bandwidth rates.
+This paper proposes a novel bootstrap procedure to obtain robust bias-corrected
+confidence intervals in sharp regression discontinuity designs using a uniform
+kernel. The approach proposed builds upon the developments and intuition
+advanced by CCT and is based on a first-order bias correction. We exploit CCT's
+theoretical insight through a new residual bootstrap. In particular, we propose
+estimating the local linear model as usual, then estimating a local second order
+polynomial and generating bootstrap datasets by resampling the residuals of that
+polynomial. This bootstrap allows the bias of the linear model to be estimated
+and removed, and the bootstrap can be repeated to accurately estimate the
+sampling distribution of the bias-corrected estimator.
 
-Just as in CCT, our bias correction step introduces additional variability.  So we propose then bootstrap the bias-corrected estimator itself to
- generate valid confidence intervals. This procedure, which requires bootstrapping the datasets produced by an initial bootstrap procedure, is described in Algorithm~\ref{Alg2},
- and the resulting confidence intervals are shown to be asymptotically valid in Theorem~\ref{T2}.
-
- Hence, our procedure provides an alternative to the plug-in analytical methods in the literature and is simple to implement generating robust confidence intervals.
-
-Simulation evidence is presented that the proposed bootstrap bias correction and confidence intervals have similar empirical coverage and average interval length relative to
- the analytical alternatives proposed by CCT, making it a suitable option to practitioners.
+Bootstrap procedures are appealing in this setting because they are relatively
+easy for applied researchers to modify to account for new and unusual dependence
+structures or functional forms. The variance adjustment was proven to be correct
+under the assumption of i.i.d.\ data, but could easily be extended to handle
+cross-sectional or time series dependence by using the appropriate resampling
+strategy on the second order polynomial's residuals. For the analytical methods,
+however, new formulas need to be derived to accomodate new features of the
+DGP. To fully take advantage of the bootstrap's flexibility, though, these
+results need to be extended to other kernels, design strategies (e.g. fuzzy and
+kink RD designs) and other more realistic dependence structures. All of these
+are the subject of ongoing research.
 
 \newpage
 \appendix
