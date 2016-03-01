@@ -39,7 +39,10 @@
   relevant bandwidths when the treatment effect is estimated with a local linear
   model and the residual bootstraps use a second order polynomial; validity
   holds under similar conditions to Calonico, Cattaneo and Titiunik's (2014,
-  \textit{Econometrica}) analytical correction.
+  \textit{Econometrica}) analytical correction. This paper also provides
+  simulation evidence that our method is as accurate as the analytical
+  corrections and we demonstrate its use through a reanalysis of Ludwig and
+  Miller's (2008) Head Start dataset.
 \end{abstract}
 
 \section{Introduction}
@@ -176,7 +179,13 @@ correction approach in the literature. Section~\ref{boot} presents our proposed
 bootstrap bias corrected RD algorithm and discusses its asymptotic
 properties. Simulation evidence that the bootstrap procedure provides valid CIs
 and its relative performance to the analytical bias correction are presented in
-Section~\ref{sim}.
+Section~\ref{sim} and Section~\ref{application} demonstrates the estimator's
+usage by applying it to the Head Start dataset used
+by~\cite{ludwig2007}.\footnote{%
+  The simulations and empirical analysis were carried out in the R programming
+  language \citep{R} and rely on the \textit{rdrobust} \citep{rdrobust},
+  \textit{doParallel} \citep{doparallel}, \textit{foreach} \citep{foreach}, and
+  \textit{doRNG} \citep{dorng} packages.} %
 Finally, Section~\ref{conclusion} concludes.
 
 \section{Background}\label{background}
@@ -589,11 +598,7 @@ procedures proposed in Section~\ref{boot} produce valid, robust confidence
 intervals similar to the ones obtained by the analytical procedures established
 in CCT. The bootstrap CIs obtained compare favorably to the analytical
 alternative, with coverage slightly closer to nominal coverage and shorter
-length of the intervals in the specifications implemented.\footnote{%
-  All of the simulations were carried out in the R programming language
-  \citep{R} and rely on the \textit{rdrobust} \citep{rdrobust}, \textit{foreach}
-  \citep{foreach}, \textit{doParallel} \citep{doparallel}, and \textit{doRNG}
-  \citep{dorng} packages.} %
+length of the intervals in the specifications implemented.
 
 The Monte Carlo experiments have a similar structure. For all of them, we
 generate 500 i.i.d.\ observations from the DGP
@@ -734,59 +739,149 @@ by CCT.
 
 \section{Application}\label{application}
 
-In this section, we apply the bootstrap procedure to the data used in \cite{ludwig2007}.\footnote{The data is publicly available from http://faculty.econ.ucdavis.edu/faculty/dlmiller/statafiles/.} In their paper, the effects of Head Start application assistance on health and schooling were investigated under standard RD design. 
+In this section, we apply the bootstrap procedure to the data used in
+\cite{ludwig2007}.\footnote{%
+  The data is publicly available from
+  \url{http://faculty.econ.ucdavis.edu/faculty/dlmiller/statafiles}.} %
+In their paper, the effects of Head Start application assistance on health and
+schooling were investigated under a sharp RD design.
 
-In 1965, the Head Start program was established to help poor children age three to five and their families. The program elements include parent involvement, nutrition, social services, mental health services and health services. To promote this program in the most needing area, the Office of Economic Opportunity provided grant-writing assistance to the poorest 300 counties in the United States based on the 1960 poverty rate. So the poverty rate of the 300th poorest county serves as a sharp cutoff of treatment. It is shown in \cite{ludwig2007} that the 228 ``treatment" counties with poverty rates 10 percentage points above this cutoff have average Head Start spending per four-year-old as twice as that for 349 ``control" counties with poverty rates 10 percentage points below this cutoff.
+In 1965, the Head Start program was established to help poor children age three
+to five and their families. The program elements include parent involvement,
+nutrition, social services, mental health services and health services. To
+promote this program in the most needing area, the Office of Economic
+Opportunity provided grant-writing assistance to the poorest 300 counties in the
+United States based on the 1960 poverty rate. So the poverty rate of the 300th
+poorest county serves as a sharp cutoff of treatment. It is shown in
+\cite{ludwig2007} that the 228 ``treatment'' counties with poverty rates 10
+percentage points above this cutoff have average Head Start spending per
+four-year-old as twice of that for 349 ``control'' counties with poverty rates
+10 percentage points below this cutoff.
 
-\cite{ludwig2007} utilized this fact and estimated the ``intent-to-treat" effect: the effect of proposal developing assistance on health and schooling. The mortality data come from Vital statistics, which provide information on cause of death and age at death. They limited the causes of death to those which could be affected by Head Start health services and found a large drop in mortality rates of children five to nine years of age over the period of 1973-1983. They also found some evidence for a positive effect on schooling from decennial census data.
+\cite{ludwig2007} utilize this fact to estimate the ``intent-to-treat'' effect:
+the effect of proposal developing assistance on health and schooling. They use
+mortality as their health measure and use data from the National Vital
+Statistics System of the National Center for Health Statistics, which provide
+information on cause of death and age at death. \cite{ludwig2007} limited the
+causes of death to those which could be affected by Head Start health services
+and found a large drop in mortality rates of children five to nine years of age
+over the period of 1973--1983. They also found some evidence for a positive
+effect on schooling from decennial census data.
 
-We reestimate the ATE on health and schooling with robust procedures. To be specific, we apply both robust procedure proposed by CCT and bootstrap procedure introduced in this paper. For completeness, we also reproduce the original results in \cite{ludwig2007}.\footnote{However, we were unable to reproduce their point estimates for the ATE under the nonparametric setting using triangular kernel, which was documented in their paper. Instead, we used uniform kernel and obtained exactly the same results as theirs.} However, there are two issues which make direct comparison difficult. First, \cite{ludwig2007} reported percentile-T bootstrapped p-value while both robust procedures do not. Second, both robust procedures provide confidence interval, which is not available in \cite{ludwig2007}. To complete this comparison, we calculate the conventional confidence interval for estimates in \cite{ludwig2007} and include their percentile-T bootstrapped p-value as well.\footnote{Since these are two different ways for statistical interence, they may disagree with each other.} We use the AMSE-optimal bandwidth proposed by CCT and uniform kernel. In the bootstrap procedure, we use 500 bootstraps for bias correction and 999 for confidence interval.
+We reestimate the ATE on health and schooling with robust procedures. To be
+specific, we apply both the robust procedure proposed by CCT and the bootstrap
+procedure introduced in this paper.  Our bootstrap estimator uses the
+AMSE-optimal bandwidths proposed by CCT and the uniform kernel. In the bootstrap
+procedure, we use 500 bootstraps for bias correction and 999 to calculate the
+confidence intervals.\footnote{%
+  These are the same design choices made for the Monte Carlo study.} %
+The analytical estimator using CCT's bias correction and variance estimator use
+their AMSE-optimal bandwidths as well.
 
-Table \ref{tbl:2} gives the results on the Head Start targeted mortality of children five to nine years of age over the period of 1973-1983. Instead of choosing an optimal bandwidth, \cite{ludwig2007} adopted three candidate bandwidths 9, 18, and 36. Their estimates indicate that Head Start assistance lowers the targeted mortality rate by -1.895, -1.198 and -1.114 respectively, which are not very sensitive to the choice of bandwidths in this range. These ATEs are also significant different from zero (with p-value 0.036, 0.081 and 0.027) based on percentile-T bootstrapped p-value. The statistic inference changes when conventional analytical confidence interval is used, which includes zero for bandwidth 9 and 18. Results from the two robust procedures are similar to each other but greatly differ from the original estimates. The estimated ATEs are as high as -3.795 from CCT and -3.792 from bootstrap. Both are significantly different from zero, though the confidence intervals are also  very wide. This is mostly due to much smaller bandwidths ($h=3.888, b=6.807$), which are believed to reduce the bias at the cost of larger variance.
-
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{lccccc}
-		\toprule
-		          & ATE    & 95\% CI          &P-value& h     & b     \\ 
-		\midrule
-		LM(2007)  & -1.895 & (-3.930, 0.139)  & 0.036 & 9     &       \\ 
-		LM(2007)  & -1.198 & (-2.561, 0.165)  & 0.081 & 18    &       \\ 
-		LM(2007)  & -1.114 & (-2.138, -0.090) & 0.027 & 36    &       \\ 
-		CCT       & -3.795 & (-7.037, -0.554) &       & 3.888 & 6.807 \\ 
-		Bootstrap & -3.792 & (-6.512, -0.262) &       & 3.888 & 6.807 \\ 
-		\bottomrule
-	\end{tabular}
-	\caption{The effect of Head Start assistance on mortality. The first three rows come from Table 3 in \cite{ludwig2007} except ``95\% CI", which is calculated using conventional approach. The last two rows list results from two robust procedures.}
-	\label{tbl:2}
+\begin{table}[t]
+  \centering
+  \begin{tabular}{lrr@{, }rr@{}rlr}
+    \toprule
+                      & ATE     & \multicolumn{2}{r}{95\% CI}           & $h$&      & $b$   & p-value \\
+    \midrule
+    LM (2007)         & --1.895 & (--3.930                    & 0.139)   &  9&     &       & 0.036   \\
+    LM (2007)         & --1.198 & (--2.561                    & 0.165)   & 18&     &       & 0.081   \\
+    LM (2007)         & --1.114 & (--2.138                    & --0.090) & 36&     &       & 0.027   \\
+    CCT               & --3.795 & (--7.037                    & --0.554) &  3&.888 & 6.807 &         \\
+    Resid.\ bootstrap & --3.792 & (--6.512                    & --0.262) &  3&.888 & 6.807 &         \\
+    \bottomrule
+  \end{tabular}
+  \caption{The effect of Head Start assistance on mortality. The first three
+    rows come from Table 3 in \cite{ludwig2007} except ``95\% CI,'' which is
+    calculated using the conventional asymptotic interval estimator.
+    The last two rows list results from two robust procedures.}
+  \label{tbl:2}
 \end{table}
 
-Table \ref{tb:3} gives the results on schooling for the cohort aged 18-24 in 1990. The measurement of schooling is the fraction of people with high school or more in Panel A and the fraction of people with some college or more in Panel B. A bandwidth of 7 is used in \cite{ludwig2007}. Their estimates suggest that Head Start assistance increases the fraction of people with high school or more by 3\% and the fraction of people with some college or more by 3.7\%. Both are significantly different from zero based on percentile-T bootstrapped p-value and conventional analytical confidence interval. The two robust procedures are again very similar to each other and give slightly larger point estimates in both panels. In Panel A, the ATE increases from 0.030 to 0.055(CCT) and 0.054(bootstrap). In Panel B, the ATE increases from 0.037 to 0.051(CCT) and 0.052(bootstrap). In contrast to the striking differences between estimates in \cite{ludwig2007} and estimates from robust procedures for mortality, the differences in Table \ref{tb:3} are much smaller.
+For completeness, we also report the
+original results in \cite{ludwig2007}.\footnote{%
+  One minor issue arose in reproducing Ludwig and Miller's results: their paper
+  presents results for the \emph{triangular} kernel, but we were only able to
+  recover their ATE estimate using the \emph{uniform} kernel. Results for the
+  triangular and uniform kernel were essentially the same, and this discrepency
+  does not affect Ludwig and Miller's conclusions.} %
+Since our research focuses on confidence intervals, we calculate and report
+the conventional unadjusted RD confidence interval for each of the bandwidths
+used by \cite{ludwig2007}. (Ludwig and Miller use a range of bandwidths
+for their analysis.) They also use a paired bootstrap algorithm to generate
+p-values, and we report those p-values for completeness.
 
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{lccccc}
-		\toprule
-		& ATE   & 95\% CI        &P-value& h     & b                \\ 
-		\midrule
-		&\multicolumn{5}{c}{Panel A: Fraction high school or more}  \\
-		
-		LM(2007)  & 0.030 & (0.003, 0.057) & 0.032 & 7     &                  \\ 
-		CCT       & 0.055 & (0.014, 0.096) &       & 3.671 & 8.618            \\ 
-		Bootstrap & 0.054 & (0.013, 0.096) &       & 3.671 & 8.618            \\ 
-		
-		&&&&& \\
-		&\multicolumn{5}{c}{Panel B: Fraction some college or more} \\		
-		LM(2007)  & 0.037 & (0.002, 0.073) & 0.031 & 7     &                  \\ 
-		CCT       & 0.051 & (0.004, 0.099) &       & 5.076 & 10.251           \\ 
-		Bootstrap & 0.052 & (0.001, 0.094) &       & 5.076 & 10.251           \\ 
-		\bottomrule
-	\end{tabular}
-	\caption{The effect of Head Start assistance on education for cohort 18-24 in 1990. Panel A uses the fraction of people with high school or more as dependent variable. Panel B uses the fraction of people with some college or more as dependent variable. The first row in each panel comes from Table 4 in \cite{ludwig2007} except ``95\% CI", which is calculated using conventional approach. The last two rows in each panel list results from two robust procedures.}
-	\label{tb:3}
+Table \ref{tbl:2} shows the results of the Head Start program on mortality of
+children five to nine years of age.\footnote{%
+  We, like Ludwig and Miller, focus on the 1973--1983 period.} %
+Instead of choosing an optimal bandwidth, \cite{ludwig2007} adopted three
+candidate bandwidths 9, 18, and 36. Their estimates indicate that Head Start
+assistance lowers the targeted mortality rate by --1.895, --1.198 and --1.114
+respectively, which are not very sensitive to the choice of bandwidths in this
+range. These ATEs are also significantly different from zero (with p-value
+0.036, 0.081 and 0.027) based on Ludwig and Miller's percentile-$T$ bootstrapped
+p-value. The statistical inference changes when conventional analytical
+confidence interval is used, which includes zero for bandwidth 9 and 18.
+
+Results from the two robust procedures are similar to each other but greatly
+differ from the original estimates. The estimated ATEs are as high as -3.795
+from CCT and -3.792 from the bootstrap. Both are significantly different from
+zero, though the confidence intervals are also very wide, which is likely to be
+due to the much smaller bandwidths used relative to the other estimators
+($h=3.888, b=6.807$).
+
+Table \ref{tbl:3} presents the effect of the program on schooling for the cohort
+aged 18-24 in 1990. The measurement of schooling is the fraction of people with
+high school or more in Panel A and the fraction of people with some college or
+more in Panel B. A bandwidth of 7 is used in \cite{ludwig2007}. Their estimates
+suggest that Head Start assistance increases the fraction of people with high
+school or more by 3\% and the fraction of people with some college or more by
+3.7\%. Both are significantly different from zero based on both their p-value
+and the conventional analytical confidence interval.
+
+The two robust procedures are again very similar to each other and give slightly
+larger point estimates in both panels. In Panel A, the ATE increases from 0.030
+to 0.055 (CCT) and 0.054 (bootstrap). In Panel B, the ATE increases from 0.037
+to 0.051 (CCT) and 0.052 (bootstrap). The confidence intervals tend to shift up
+as well.  In contrast to the striking differences between the conventional
+estimates bias-corrected procedures for the mortality estimates, the differences
+in Table~\ref{tbl:3} are much smaller.
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}{lrr@{, }rr@{}rlr}
+    \toprule
+              & ATE   & \multicolumn{2}{r}{95\% CI} & $h$    &   & $b$  & p-value     \\
+    \midrule                                                                          \\
+    \multicolumn{5}{l}{Fraction ``high school or more'' (Panel A)}                    \\
+    \midrule
+    LM (2007) & 0.030 & (0.003                      & 0.057) & 7&     &  & 0.032    \\
+    CCT       & 0.055 & (0.014                      & 0.096) & 3&.671 & 8.618       \\
+    Bootstrap & 0.054 & (0.013                      & 0.096) & 3&.671 & 8.618       \\\\
+    \multicolumn{5}{l}{Fraction ``some college or more'' (Panel B)}                   \\
+    \midrule
+    LM (2007) & 0.037 & (0.002                      & 0.073) & 7&     &  & 0.032 \T \\
+    CCT       & 0.051 & (0.004                      & 0.099) & 5&.076 & 10.251      \\
+    Bootstrap & 0.052 & (0.001                      & 0.094) & 5&.076 & 10.251      \\
+    \bottomrule
+  \end{tabular}
+  \caption{The effect of Head Start assistance on education for cohort
+    18-24 in 1990. Panel A uses the fraction of people with high school
+    or more as dependent variable. Panel B uses the fraction of people
+    with some college or more as dependent variable. The first row in
+    each panel comes from Table 4 in \cite{ludwig2007} except ``95\% CI,''
+    which is calculated using the conventional asymptotic interval estimator.
+    The last two rows in
+    each panel list results from two robust procedures.}
+  \label{tbl:3}
 \end{table}
 
-To briefly summarize, the bootstrap procedure performs similarly to the robust estimator proposed by CCT in above applications. In Table \ref{tbl:2} and \ref{tb:3}, these two approaches give almost identical point estimates and interval estimates.
+To briefly summarize, the bootstrap procedure performs similarly to the robust
+estimator proposed by CCT in the above applications. Both provide somewhat
+dissimilar answers from the classical point and interval estimators that do
+not account for the estimator's bias, but our estimates largely support the
+direction and the statistical significance of Ludwig and Miller's (2007)
+empirical findings.
 
 \section{Conclusion}\label{conclusion}
 
