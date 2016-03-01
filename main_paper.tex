@@ -179,8 +179,8 @@ correction approach in the literature. Section~\ref{boot} presents our proposed
 bootstrap bias corrected RD algorithm and discusses its asymptotic
 properties. Simulation evidence that the bootstrap procedure provides valid CIs
 and its relative performance to the analytical bias correction are presented in
-Section~\ref{sim}, and Section~\ref{application} demonstrates the estimator's
-usage by applying it to the Head Start dataset used by~\cite{ludwig2007}.
+Section~\ref{sim}.
+% and Section~\ref{application} demonstrates the estimator's usage by applying it to the Head Start dataset used by~\cite{ludwig2007}.
 Finally, Section~\ref{conclusion} concludes.
 
 \section{Background}\label{background}
@@ -731,144 +731,144 @@ a simple alternative to obtain valid robust confidence intervals in RD designs
 and performs well compared to the analytical bias correction procedures proposed
 by CCT.
 
-\section{Application}\label{application}
-
-In this section, we apply the bootstrap procedure to the data\footnote{The data is publicly available from http://faculty.econ.ucdavis.edu/faculty/dlmiller/statafiles/.} used in \cite{ludwig2007}. In their paper, the effects of Head Start application assistance on federal spending, mortality and education attainment were investigated under standard RD design. They utilized the fact that grant-writing assistance were offered only to the poorest 300 counties to identify the average treatment effect (ATE) at the cutoff.
-
-We estimate the ATE with alternative procedures and compare the new estimates with results in \cite{ludwig2007}. Bias-corrected point estimates and robust confidence intervals are reported. For completeness, we also include results following the procedure proposed by CCT. In \cite{ludwig2007}, analytical standard error and percentile-T bootstrapped p-value were reported\footnote{However, we were unable to reproduce their point estimates for the ATE under the nonparametric setting using triangular kernel, which was documented in their paper. Instead, we used uniform kernel and obtained exactly the same results as theirs.}. The procedure proposed by CCT provides analytical standard error and confidence interval. Our bootstrap procedure provides standard error and confidence interval from the bootstrap distribution. In both CCT and bootstrap procedures, we set $p = 1$, $q = 2$ and used uniform kernel. In the bootstrap procedure, we used 500 bootstraps for bias correction and 999 for confidence interval.
-
-These results are shown in Table \ref{tab: head start spending}-\ref{tab: education 2000 ages 25-34}. We find that (1) the choice of bandwidth may significantly affect estimated ATE and its significance level; (2) the optimal bandwidths following CCT procedure are much smaller than actually being used in \cite{ludwig2007} and (3) our bootstrap procedure produces similar results to CCT.
-
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{cccccc}
-		\toprule
-		& \multicolumn{3}{c}{LM 2007} & CCT 2014 & Bootstrap \\
-		\midrule
-		& \multicolumn{5}{c}{Panel A: 1968 Head Start spending per child} \\
-		Bandwidth & 9 & 18 & 36 & 5.414, 10.175 & 5.414, 10.175 \\
-		Effect    & 137.251 & 114.711 & 134.491 & 143.811 & 148.990 \\
-		SE        & 128.968 & 91.267  & 62.593 & 113.404 & 182.729 \\
-		p-value   & 0.157   & 0.138   & 0.045  & & \\
-		95\% CI   & & & & (-78.457 366.078) & (-179.120  547.755) \\
-
-		&&&&& \\
-		& \multicolumn{5}{c}{Panel B: 1972 Head Start spending per child} \\
-		Bandwidth & 9 & 18 & 36 & 5.034, 12.020 & 5.034, 12.020 \\
-		Effect    & 182.119 & 88.959 & 130.153 & 94.260 & 100.404 \\
-		SE        & 148.321 & 101.697 & 67.613 & 122.224 & 196.008 \\
-		p-value   & 0.085   & 0.352   & 0.090  & & \\
-		95\% CI   & & & & (-145.294 333.814) & (-165.816 622.976) \\
-
-		&&&&& \\
-		& \multicolumn{5}{c}{Panel C: 1972 other social spending per capita} \\
-		Bandwidth & 9 & 18 & 36 & 4.612, 8.461 & 4.612, 8.461 \\
-		Effect    & 14.474 & 19.590 & 14.506 & 15.418 & 15.857 \\
-		SE        & 28.356 & 19.612 & 14.929 & 29.041 & 39.902 \\
-		p-value   & 0.459   & 0.222   & 0.478  & & \\
-		95\% CI   & & & & (-41.501 72.337) & (-64.153 91.999) \\
-		\bottomrule
-	\end{tabular}
-	\caption{The effect of Head Start assistance on Head Start spending. The first three columns come from Table 2 in \cite{ludwig2007}.}
-	\label{tab: head start spending}
-\end{table}
-
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{cccccc}
-		\toprule
-		& \multicolumn{3}{c}{LM 2007} & CCT 2014 & Bootstrap \\
-		\midrule
-		Bandwidth & 9 & 18 & 36 & 3.888, 6.807 & 3.888, 6.807 \\
-		Effect    & -1.895 & -1.198 & -1.114 & -3.795 & -3.852 \\
-		SE        & 0.980 & 0.796  & 0.544 & 1.654 & 1.526 \\
-		p-value   & 0.036   & 0.081   & 0.027  & & \\
-		95\% CI   & & & & (-7.037 -0.554) & (-6.565 -0.578) \\
-		\bottomrule
-	\end{tabular}
-	\caption{The effect of Head Start assistance on mortality. The first three columns come from Table 3 in \cite{ludwig2007}.}
-	\label{tab: mortality}
-\end{table}
-
-
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{cccc}
-		\toprule
-		& LM 2007 & CCT 2014 & Bootstrap \\
-		\midrule
-		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\
-		Bandwidth & 7 & 3.671, 8.618 & 3.671, 8.618 \\
-		Effect    & 0.030 & 0.055 & 0.054 \\
-		SE        & 0.016 & 0.021 & 0.021 \\
-		p-value   & 0.032 & & \\
-		95\% CI        & & (0.014 0.096) & (0.010 0.094) \\
-
-		&&& \\
-		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
-		Bandwidth & 7 & 5.076, 10.251 & 5.076, 10.251 \\
-		Effect    & 0.037 & 0.051 & 0.051 \\
-		SE        & 0.020 & 0.024 & 0.024 \\
-		p-value   & 0.031 & & \\
-		95\% CI        & & (0.004 0.099) & (0.001 0.092) \\
-		\bottomrule
-	\end{tabular}
-	\caption{The effect of Head Start assistance on education (1990, ages 18-24). The first column is result for directly treated cohorts (1990, ages 18-24) in Table 4 in \cite{ludwig2007}.}
-	\label{tab: education 1990 ages 18-24}
-\end{table}
-
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{cccc}
-		\toprule
-		& LM 2007 & CCT 2014 & Bootstrap \\
-		\midrule
-		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\
-		Bandwidth & 7 & 4.837, 9.85 & 4.837, 9.85 \\
-		Effect    & 0.000 & 0.014 & 0.013 \\
-		SE        & 0.016 & 0.019 & 0.019 \\
-		p-value   & 0.974 & & \\
-		CI        & & (-0.024 0.051) & (-0.026 0.051) \\
-
-		&&& \\
-		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
-		Bandwidth & 7 & 5.382, 10.621 & 5.382, 10.621 \\
-		Effect    & 0.028 & 0.033 & 0.032 \\
-		SE        & 0.019 & 0.023 & 0.022 \\
-		p-value   & 0.017 & & \\
-		CI        & & (-0.014 0.079) & (-0.009 0.077)\\
-		\bottomrule
-	\end{tabular}
-	\caption{The effect of Head Start assistance on education (2000, ages 18-24). The first column is result for directly treated cohorts (2000, ages 18-24) in Table 4 in \cite{ludwig2007}.}
-	\label{tab: education 2000 ages 18-24}
-\end{table}
-
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{cccc}
-		\toprule
-		& LM 2007 & CCT 2014 & Bootstrap \\
-		\midrule
-		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\
-		Bandwidth & 7 & 6.074, 11.477 & 6.074, 11.477 \\
-		Effect    & 0.006 & 0.014 & 0.014 \\
-		SE        & 0.014 & 0.015 & 0.015 \\
-		p-value   & 0.666 & & \\
-		CI        & & (-0.014 0.043) & (-0.023 0.036) \\
-
-		&&& \\
-		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
-		Bandwidth & 7 & 5.509, 11.463 & 5.509, 11.463 \\
-		Effect    & 0.040 & 0.049 & 0.049 \\
-		SE        & 0.017 & 0.020 & 0.021 \\
-		p-value   & 0.009 & & \\
-		CI        & & (0.010 0.089) & (0.003 0.083) \\
-		\bottomrule
-	\end{tabular}
-	\caption{The effect of Head Start assistance on education (2000, ages 25-34). The first column is result for directly treated cohorts (2000, ages 25-34) in Table 4 in \cite{ludwig2007}.}
-	\label{tab: education 2000 ages 25-34}
-\end{table}
-
+%\section{Application}\label{application}
+%
+%In this section, we apply the bootstrap procedure to the data\footnote{The data is publicly available from http://faculty.econ.ucdavis.edu/faculty/dlmiller/statafiles/.} used in \cite{ludwig2007}. In their paper, the effects of Head Start application assistance on federal spending, mortality and education attainment were investigated under standard RD design. They utilized the fact that grant-writing assistance were offered only to the poorest 300 counties to identify the average treatment effect (ATE) at the cutoff.
+%
+%We estimate the ATE with alternative procedures and compare the new estimates with results in \cite{ludwig2007}. Bias-corrected point estimates and robust confidence intervals are reported. For completeness, we also include results following the procedure proposed by CCT. In \cite{ludwig2007}, analytical standard error and percentile-T bootstrapped p-value were reported\footnote{However, we were unable to reproduce their point estimates for the ATE under the nonparametric setting using triangular kernel, which was documented in their paper. Instead, we used uniform kernel and obtained exactly the same results as theirs.}. The procedure proposed by CCT provides analytical standard error and confidence interval. Our bootstrap procedure provides standard error and confidence interval from the bootstrap distribution. In both CCT and bootstrap procedures, we set $p = 1$, $q = 2$ and used uniform kernel. In the bootstrap procedure, we used 500 bootstraps for bias correction and 999 for confidence interval.
+%
+%These results are shown in Table \ref{tab: head start spending}-\ref{tab: education 2000 ages 25-34}. We find that (1) the choice of bandwidth may significantly affect estimated ATE and its significance level; (2) the optimal bandwidths following CCT procedure are much smaller than actually being used in \cite{ludwig2007} and (3) our bootstrap procedure produces similar results to CCT.
+%
+%\begin{table}[ht]
+%	\centering
+%	\begin{tabular}{cccccc}
+%		\toprule
+%		& \multicolumn{3}{c}{LM 2007} & CCT 2014 & Bootstrap \\
+%		\midrule
+%		& \multicolumn{5}{c}{Panel A: 1968 Head Start spending per child} \\
+%		Bandwidth & 9 & 18 & 36 & 5.414, 10.175 & 5.414, 10.175 \\
+%		Effect    & 137.251 & 114.711 & 134.491 & 143.811 & 148.990 \\
+%		SE        & 128.968 & 91.267  & 62.593 & 113.404 & 182.729 \\
+%		p-value   & 0.157   & 0.138   & 0.045  & & \\
+%		95\% CI   & & & & (-78.457 366.078) & (-179.120  547.755) \\
+%
+%		&&&&& \\
+%		& \multicolumn{5}{c}{Panel B: 1972 Head Start spending per child} \\
+%		Bandwidth & 9 & 18 & 36 & 5.034, 12.020 & 5.034, 12.020 \\
+%		Effect    & 182.119 & 88.959 & 130.153 & 94.260 & 100.404 \\
+%		SE        & 148.321 & 101.697 & 67.613 & 122.224 & 196.008 \\
+%		p-value   & 0.085   & 0.352   & 0.090  & & \\
+%		95\% CI   & & & & (-145.294 333.814) & (-165.816 622.976) \\
+%
+%		&&&&& \\
+%		& \multicolumn{5}{c}{Panel C: 1972 other social spending per capita} \\
+%		Bandwidth & 9 & 18 & 36 & 4.612, 8.461 & 4.612, 8.461 \\
+%		Effect    & 14.474 & 19.590 & 14.506 & 15.418 & 15.857 \\
+%		SE        & 28.356 & 19.612 & 14.929 & 29.041 & 39.902 \\
+%		p-value   & 0.459   & 0.222   & 0.478  & & \\
+%		95\% CI   & & & & (-41.501 72.337) & (-64.153 91.999) \\
+%		\bottomrule
+%	\end{tabular}
+%	\caption{The effect of Head Start assistance on Head Start spending. The first three columns come from Table 2 in \cite{ludwig2007}.}
+%	\label{tab: head start spending}
+%\end{table}
+%
+%\begin{table}[ht]
+%	\centering
+%	\begin{tabular}{cccccc}
+%		\toprule
+%		& \multicolumn{3}{c}{LM 2007} & CCT 2014 & Bootstrap \\
+%		\midrule
+%		Bandwidth & 9 & 18 & 36 & 3.888, 6.807 & 3.888, 6.807 \\
+%		Effect    & -1.895 & -1.198 & -1.114 & -3.795 & -3.852 \\
+%		SE        & 0.980 & 0.796  & 0.544 & 1.654 & 1.526 \\
+%		p-value   & 0.036   & 0.081   & 0.027  & & \\
+%		95\% CI   & & & & (-7.037 -0.554) & (-6.565 -0.578) \\
+%		\bottomrule
+%	\end{tabular}
+%	\caption{The effect of Head Start assistance on mortality. The first three columns come from Table 3 in \cite{ludwig2007}.}
+%	\label{tab: mortality}
+%\end{table}
+%
+%
+%\begin{table}[ht]
+%	\centering
+%	\begin{tabular}{cccc}
+%		\toprule
+%		& LM 2007 & CCT 2014 & Bootstrap \\
+%		\midrule
+%		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\
+%		Bandwidth & 7 & 3.671, 8.618 & 3.671, 8.618 \\
+%		Effect    & 0.030 & 0.055 & 0.054 \\
+%		SE        & 0.016 & 0.021 & 0.021 \\
+%		p-value   & 0.032 & & \\
+%		95\% CI        & & (0.014 0.096) & (0.010 0.094) \\
+%
+%		&&& \\
+%		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
+%		Bandwidth & 7 & 5.076, 10.251 & 5.076, 10.251 \\
+%		Effect    & 0.037 & 0.051 & 0.051 \\
+%		SE        & 0.020 & 0.024 & 0.024 \\
+%		p-value   & 0.031 & & \\
+%		95\% CI        & & (0.004 0.099) & (0.001 0.092) \\
+%		\bottomrule
+%	\end{tabular}
+%	\caption{The effect of Head Start assistance on education (1990, ages 18-24). The first column is result for directly treated cohorts (1990, ages 18-24) in Table 4 in \cite{ludwig2007}.}
+%	\label{tab: education 1990 ages 18-24}
+%\end{table}
+%
+%\begin{table}[ht]
+%	\centering
+%	\begin{tabular}{cccc}
+%		\toprule
+%		& LM 2007 & CCT 2014 & Bootstrap \\
+%		\midrule
+%		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\
+%		Bandwidth & 7 & 4.837, 9.85 & 4.837, 9.85 \\
+%		Effect    & 0.000 & 0.014 & 0.013 \\
+%		SE        & 0.016 & 0.019 & 0.019 \\
+%		p-value   & 0.974 & & \\
+%		CI        & & (-0.024 0.051) & (-0.026 0.051) \\
+%
+%		&&& \\
+%		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
+%		Bandwidth & 7 & 5.382, 10.621 & 5.382, 10.621 \\
+%		Effect    & 0.028 & 0.033 & 0.032 \\
+%		SE        & 0.019 & 0.023 & 0.022 \\
+%		p-value   & 0.017 & & \\
+%		CI        & & (-0.014 0.079) & (-0.009 0.077)\\
+%		\bottomrule
+%	\end{tabular}
+%	\caption{The effect of Head Start assistance on education (2000, ages 18-24). The first column is result for directly treated cohorts (2000, ages 18-24) in Table 4 in \cite{ludwig2007}.}
+%	\label{tab: education 2000 ages 18-24}
+%\end{table}
+%
+%\begin{table}[ht]
+%	\centering
+%	\begin{tabular}{cccc}
+%		\toprule
+%		& LM 2007 & CCT 2014 & Bootstrap \\
+%		\midrule
+%		& \multicolumn{3}{c}{Panel A: Fraction high school or more} \\
+%		Bandwidth & 7 & 6.074, 11.477 & 6.074, 11.477 \\
+%		Effect    & 0.006 & 0.014 & 0.014 \\
+%		SE        & 0.014 & 0.015 & 0.015 \\
+%		p-value   & 0.666 & & \\
+%		CI        & & (-0.014 0.043) & (-0.023 0.036) \\
+%
+%		&&& \\
+%		& \multicolumn{3}{c}{Panel B: Fraction some college or more} \\
+%		Bandwidth & 7 & 5.509, 11.463 & 5.509, 11.463 \\
+%		Effect    & 0.040 & 0.049 & 0.049 \\
+%		SE        & 0.017 & 0.020 & 0.021 \\
+%		p-value   & 0.009 & & \\
+%		CI        & & (0.010 0.089) & (0.003 0.083) \\
+%		\bottomrule
+%	\end{tabular}
+%	\caption{The effect of Head Start assistance on education (2000, ages 25-34). The first column is result for directly treated cohorts (2000, ages 25-34) in Table 4 in \cite{ludwig2007}.}
+%	\label{tab: education 2000 ages 25-34}
+%\end{table}
+%
 \section{Conclusion}\label{conclusion}
 This paper proposes a novel bootstrap procedure to obtain robust bias-corrected confidence intervals in regression discontinuity designs.
 The approach proposed builds upon the developments and intuition advanced by CCT and is based on a first-order bias correction.
