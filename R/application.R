@@ -1,57 +1,20 @@
 rm(list = ls())
 library(rdrobust)
 library(xtable)
-try(source("slackrISE.R"), silent = T)
-
-source("functions.R")
-
-setwd("C:/Users/Yang/OneDrive/QJE data and code PUBLIC/analysis data")
-
-###################################################################################
-## slightly modify the function rd.ci so that it exports standard error
-###################################################################################
-
-rd.ci <- function(dta, p, q, bw.p, bw.q, N.bc, N.ci, level, kernel, bc = T) {
-  # dta:    a data set contains y and x.
-  # p:      the order of polynomial for point estimation.
-  # q:      the order of polynomial for bias correction.
-  # bw.p:   bandwidth for point estimation.
-  # bw.q:   bandwidth for bias correction.
-  # N.bc:   number of bootstrap replications for bias correction.
-  # N.ci:   number of bootstrap replications for confidence interval.
-  # kernel: epanechnikov, uniform or triangular.
-  # bc:     perform bias correction?
-  
-  if (length(bw.p) == 1) bw.p <- rep(bw.p, 2)
-  if (length(bw.q) == 1) bw.q <- rep(bw.q, 2)
-  
-  # fit the high order polynomial on both sides
-  dta.q.l <- dta[dta$x > -bw.q[1] & dta$x < 0, ]
-  dta.q.r <- dta[dta$x < bw.q[2] & dta$x >= 0, ]
-  left  <- lpreg(dta.q.l, q, bw.q[1], kernel)
-  right <- lpreg(dta.q.r, q, bw.q[2], kernel)
-  
-  # bootstrap
-  trd.star <- replicate(N.ci, rd.estimate(data.frame(x = c(dta.q.l$x, dta.q.r$x),
-                                                     y = c(left$yhat + sample(left$res, nrow(dta.q.l), T, left$weight),
-                                                           right$yhat + sample(right$res, nrow(dta.q.r), T, right$weight))),
-                                          p, q, bw.p, bw.q, N.bc, kernel, bc))
-  ci <- quantile(trd.star, c((1 - level)/2, 1 - (1 - level)/2), na.rm = T)
-  sd <- sd(trd.star)
-  return(list(ci = ci, sd = sd))
-}
+library(testthat)
+source("RDfunctions.R")
 
 ###################################################################################
 ## replicate part of their results ################################################
 ###################################################################################
 
 cut <- 59.1984
-census2 <- read.csv("census2.csv")
-census3 <- read.csv("census3.csv")
-mort <- read.csv("mort.csv")
-mort4 <- read.csv("mort4.csv")
-census_1990 <- read.csv("census_1990.csv")
-census_2000 <- read.csv("census_2000.csv")
+census2 <- read.csv("./LM2007data/census2.csv")
+census3 <- read.csv("./LM2007data/census3.csv")
+mort <- read.csv("./LM2007data/mort.csv")
+mort4 <- read.csv("./LM2007data/mort4.csv")
+census_1990 <- read.csv("./LM2007data/census_1990.csv")
+census_2000 <- read.csv("./LM2007data/census_2000.csv")
 
 #### table 2 ####
 
@@ -299,37 +262,77 @@ test_that("table 2 pctsomecollege_25_34_00",{
 })
 
 ###################################################################################
-## compare with results from CCT and bootstrap ####################################
+## compare with results from robust methods #######################################
 ###################################################################################
+
 N.bc <- 500
 N.ci <- 999
 level <- 0.95
 set.seed(555)
 
-robustestimate <- function(dta) {
-  bws <- rdbwselect(dta$y, dta$x, kernel = "uni")$bws
-  boots.estimate <- rd.estimate(dta, 1, 2, bws[1], bws[2], N.bc, "uni", T)
-  boots.ci <- rd.ci(dta, 1, 2, bws[1], bws[2], N.bc, N.ci, level, "uni", T)
-  cct <- rdrobust(dta$y, dta$x, kernel = "uni")
-  return(list(bws = bws, 
-              b.e = boots.estimate,
-              b.c = boots.ci$ci,
-              b.s = boots.ci$sd,
-              c.e = cct$coef[3],
-              c.c = cct$ci[3, ],
-              c.s = cct$se[3]))
+original <- function(dta, bw) {
+  cct <- rdrobust(dta$y, dta$x, h = bw, b = bw, kernel = "uni")
+  t  <- cct$coef[1]
+  ci <- cct$ci[1, ]
+  return(c(t, ci, NA, bw, NA))
 }
 
-rd.hsspend_per_kid_68 <- robustestimate(hsspend_per_kid_68)
-rd.hsspend_per_kid_72 <- robustestimate(hsspend_per_kid_72)
-rd.socspend_per_cap72 <- robustestimate(socspend_per_cap72)
-rd.age5_9_sum2 <- robustestimate(age5_9_sum2)
-rd.hsplus18_24 <- robustestimate(hsplus18_24)
-rd.some_clg18_24 <- robustestimate(some_clg18_24)
-rd.pcthsplus_18_24_00 <- robustestimate(pcthsplus_18_24_00)
-rd.pctsomecollege_18_24_00 <- robustestimate(pctsomecollege_18_24_00)
-rd.pcthsplus_25_34_00 <- robustestimate(pcthsplus_25_34_00)
-rd.pctsomecollege_25_34_00 <- robustestimate(pctsomecollege_25_34_00)
+robust <- function(dta) {
+  cct <- rdrobust(dta$y, dta$x, kernel = "uni")
+  bws <- cct$bws
+  
+  t1  <- cct$coef[3]
+  ci1 <- cct$ci[3, ]
+  
+  t2  <- rd.estimate(dta, 1, 2, bws[1], bws[2], N.bc, "uni", T)
+  ci2 <- rd.ci(dta, 1, 2, bws[1], bws[2], N.bc, N.ci, level, "uni", T)$ci
+  
+  return(matrix(c(t1, ci1, NA, bws,
+                  t2, ci2, NA, bws), nrow = 2, byrow = T))
+}
+
+## Table 1: spending per child ##
+
+spending <- matrix(0, nrow = 10, ncol = 6)
+colnames(spending) <- c("Effect", "Lower CI", "Upper CI", "P-value", "h", "b")
+
+spending[1, ] <- original(hsspend_per_kid_68, 9)
+spending[2, ] <- original(hsspend_per_kid_68, 18)
+spending[3, ] <- original(hsspend_per_kid_68, 36)
+spending[4:5, ] <- robust(hsspend_per_kid_68)
+
+spending[6, ] <- original(hsspend_per_kid_72, 9)
+spending[7, ] <- original(hsspend_per_kid_72, 18)
+spending[8, ] <- original(hsspend_per_kid_72, 36)
+spending[9:10, ] <- robust(hsspend_per_kid_72)
+
+## Table 2: Mortality ##
+
+mortality <- matrix(0, nrow = 5, ncol = 6)
+colnames(mortality) <- c("Effect", "Lower CI", "Upper CI", "P-value", "h", "b")
+
+mortality[1, ] <- original(age5_9_sum2, 9)
+mortality[2, ] <- original(age5_9_sum2, 18)
+mortality[3, ] <- original(age5_9_sum2, 36)
+mortality[4:5, ] <- robust(age5_9_sum2)
+
+## Table 3: Education ##
+
+education <- matrix(0, nrow = 6, ncol = 6)
+colnames(education) <- c("Effect", "Lower CI", "Upper CI", "P-value", "h", "b")
+
+education[1, ] <- original(hsplus18_24, 7)
+education[2:3, ] <- robust(hsplus18_24)
+
+education[4, ] <- original(some_clg18_24, 7)
+education[5:6, ] <- robust(some_clg18_24)
+
+print(xtable(spending, digits = c(0,1,1,1,0,3,3)), include.rownames = F, type = "latex", file = "output/spending.tex")
+print(xtable(mortality, digits = c(0,3,3,3,0,3,3)), include.rownames = F, type = "latex", file = "output/mortality.tex")
+print(xtable(education, digits = c(0,3,3,3,0,3,3)), include.rownames = F, type = "latex", file = "output/education.tex")
+
+
+
 
 
 
