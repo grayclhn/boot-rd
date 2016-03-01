@@ -184,7 +184,7 @@ usage by applying it to the Head Start dataset used
 by~\cite{ludwig2007}.\footnote{%
   The simulations and empirical analysis were carried out in the R programming
   language \citep{R} and rely on the \textit{rdrobust} \citep{rdrobust},
-  \textit{doParallel} \citep{doparallel}, \textit{foreach} \citep{foreach}, and
+  \textit{doParallel}, \textit{foreach} \citep{doparallel,foreach}, and
   \textit{doRNG} \citep{dorng} packages.} %
 Finally, Section~\ref{conclusion} concludes.
 
@@ -605,11 +605,11 @@ generate 500 i.i.d.\ observations from the DGP
 \begin{align*}
 Y_{i}           &= \mu_{j}(X_{i}) + \varepsilon_{i} \\
 X_{i}           &\sim  2 \times \betarv(2,4) - 1 \\
-\varepsilon_{i} &\sim \normal(0, 0.1295^2),
+\varepsilon_{i} &\sim N(0, 0.1295^2),
 \end{align*}
 where $j$ will index the specific DGP. This is the experimental design used by
 \citet{IK} and CCT, which we adopt here to make our simulation results directly
-comparable with theirs and the rest of the literature. We
+comparable with theirs and with the rest of the literature. We
 will use the same three functional forms for $\mu_{j}$ as CCT as well.
 
 \nocite{lee2008rand}%
