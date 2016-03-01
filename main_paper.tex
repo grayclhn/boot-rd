@@ -337,8 +337,8 @@ form
 \end{equation*}
 where $\Bf_{+}(h)$ and $\Bf_{-}(h)$ are observed quantities that depend on the
 kernel, bandwidth, and running variables $X_1,\dots,X_n$; formal definitions of
-these terms are given in the Mathematical Appendix as Equations~\eqref{eq:5}
-and~\eqref{eq:6}. The plug-in bias-corrected estimator then requires estimates
+these terms are given in the Mathematical Appendix. The plug-in bias-corrected
+estimator then requires estimates
 for the second derivatives of the conditional mean from above and below the
 cutoff, $\mu_{+}^{(2)}$ and $\mu_{-}^{(2)}$, and CCT show that these derivatives
 can be estimated by fitting a second order local polynomial, i.e. one order
@@ -922,28 +922,22 @@ introduced by CCT): $r_p(x) = (1,\ x,\dots,\ x^p)'$,
   &= \argmin_{\mu_0, \mu_1, \mu_2} \ssum[-]{i}{h}
     (Y_i - \mu_0 - \mu_1 X_i/h - \mu_2 (X_i/h)^2)
 \end{align*}
-\begin{align}
-  \notag
+\begin{align*}
   \Gamma_{+,p}(h) &= \tfrac{1}{nh} \ssum[+]{i}{h} r_p(X_i/h) r_p(X_i/h)' \\
-  \notag
   \Gamma_{-,p}(h) &= \tfrac{1}{nh} \ssum[-]{i}{h} r_p(X_i/h) r_p(X_i/h)' \\
-  \notag
   \Psi_{+,p,q}(h,b)
   &= \tfrac{1}{nhb} \ssum[+]{i}{\min(h,b)} r_p(X_i/h) r_q(X_i/b)'
     \V(Y_i \mid X_i) \\
-  \notag
   \Psi_{-,p,q}(h,b)
   &= \tfrac{1}{nhb} \ssum[-]{i}{\min(h,b)} r_p(X_i/h) r_q(X_i/b)'
     \V(Y_i \mid X_i) \\
-  \label{eq:5}
   \Bf_+(h)
   & = e_0' \Gamma_{+,1}^{-1}
     \ssum[+]{i}{h} r_1(X_i/h) \; X_i^2 / h^2, \\
-  \label{eq:6}
   \Bf_-(h)
   & = e_0' \Gamma_{-,1}^{-1}
     \ssum[-]{i}{h} r_1(X_i/h) \; X_i^2 / h^2.
-\end{align}
+\end{align*}
 
 Also, for reference, define the variance terms
 \begin{equation*}
@@ -981,7 +975,7 @@ The design of the bootstrap ensures that
 \end{align*}
 almost surely, implying that
 \begin{equation}
-  \label{eq:7}
+  \label{eq:5}
   \E^* \hat\tau^*(h) - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf_+(h)/2
   - h^2\, \mu_{-}^{*(2)} \Bf_{-}(h)/2.
 \end{equation}
@@ -991,7 +985,7 @@ Combining this result with CCT's Lemma A1, gives
   &= \hat\tau(h) - \E\hat\tau(h)
    + h^2 \big((\mu_{-}^{*(2)} - \mu_{-}^{(2)}) \Bf_{-}(h) /2
    - (\mu_+^{*(2)}-\mu_+^{(2)}) \Bf_{+}(h) / 2 \big) + O_p(h^{3}) \notag \\
-  \label{eq:8}
+  \label{eq:6}
   &= \hat\tau(h) - \E\hat\tau(h)
    + h^2 (\hat\mu_-^{(2)}(b) - \mu_-^{(2)}) \Bf_{-}(h) /2 \\
   \notag
@@ -1006,7 +1000,7 @@ $\hat\mu_-^{(2)}(b) - \mu_-^{(2)}$ using similar arguments to
 CCT's Lemma SA4.D.\qed
 
 \subsection{Proof of Theorem~\ref{T2}}
-Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:8} to get
+Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:6} to get
 \begin{align*}
   \hat\tau(h)^* - &\Delta^{**}(h,b) - \tau^*
   = (\hat\tau^*(h) - \E^* \hat \tau^*(h)) +
@@ -1035,13 +1029,13 @@ The definitions of $\epb_{-}^{*}$ and $\Omega_-(h,b)$ have the same definitions 
 $\epb_{+}^{*}$ and $\Omega_+(h,b)$ after making the obvious substitutions of
 ``$-$'' for ``$+$.''
 
-Given~\eqref{eq:8}, it suffices to prove that
+Given~\eqref{eq:6}, it suffices to prove that
 \begin{gather}
-  \label{eq:9}
+  \label{eq:7}
   \rho(V'(h,b)^{-1/2} \Omega_+(h,b)'\epb_{+}^{*},\
     V'(h,b)^{-1/2}\Omega_+(h,b)'\epb_{+}) \to^p 0
   \intertext{and}
-  \label{eq:10}
+  \label{eq:8}
   \rho(V'(h,b)^{-1/2}\Omega_-(b)'\epb_{-}^{*},\
     V'(h,b)^{-1/2}\Omega_-(b)'\epb_{-}) \to^p 0
 \end{gather}
@@ -1066,7 +1060,7 @@ $\rho$ the Mallows metric \citep{bickel1981}.\footnote{%
     \big(\E \lVert U - V \rVert^2\big)^{1/2}.
   \end{equation*}}
 
-We will only prove~\eqref{eq:9} since the proof of~\eqref{eq:10} is
+We will only prove~\eqref{eq:7} since the proof of~\eqref{eq:8} is
 identical. By Theorem 2.1 of \cite{freedman1981}, we have
 \begin{align*}
   \rho(V'(h,b)^{-1/2} \Omega_+(h,b)'\epb_{+}^{*},\
