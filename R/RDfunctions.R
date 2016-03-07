@@ -1,3 +1,4 @@
+kweight <- rdrobust::kweight
 
 generate.data <- function(model.id) {
   x <- 2*rbeta(500, 2, 4) - 1
@@ -12,20 +13,8 @@ generate.data <- function(model.id) {
   return(data.frame(y = y, x = x))
 }
 
-k.weight <- function(x, h, kernel) {
-  u <- x / h
-  if (kernel == "epanechnikov" | kernel == "epa") {
-    w <- (0.75*(1 - u^2)*(abs(u) <= 1)) / h
-  } else if (kernel == "uniform" | kernel == "uni") {
-    w <- (0.5*(abs(u) <= 1)) / h
-  } else {
-    w <- ((1 - abs(u))*(abs(u) <= 1)) / h
-  }
-  return(w)	
-}
-
 lpreg <- function(dta, order, bw, kernel) {
-  weight <- k.weight(dta$x, bw, kernel)
+  weight <- kweight(dta$x, 0, bw, kernel)
   fit    <- lm.wfit(cbind(1, poly(dta$x, order, raw = T)), dta$y, weight)
   return(list(cons = fit$coefficients[1], 
               yhat = fit$fitted.values, 
@@ -139,7 +128,7 @@ bw.select <- function(dta, r1, r2, N.bw, kernel, hstart = NULL) {
   
   boot.mse <- function(h, boot.y, x, true.value) {
     mean(apply(boot.y, 2, function(yb) {
-      (lm.wfit(cbind(1, poly(x, r1, raw = T)), yb, k.weight(x, h, kernel))$coefficients[1] - true.value)^2
+      (lm.wfit(cbind(1, poly(x, r1, raw = T)), yb, kweight(x, 0, h, kernel))$coefficients[1] - true.value)^2
     }))
   }
   
