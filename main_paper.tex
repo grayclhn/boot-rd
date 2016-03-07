@@ -193,7 +193,8 @@ Finally, Section~\ref{conclusion} concludes.
 This section provides additional details of RD estimators in general and of
 CCT's proposed bias correction. It also defines some of the notation and
 presents the assumptions that will be used for our theoretical analysis in
-Section~\ref{boot}.
+Section~\ref{boot}. We have adopted CCT's notation where possible to aid
+readers familiar with that paper.
 
 In the typical sharp RD setting, a researcher wishes to estimate the local
 causal effect of treatment at a given threshold. A running variable, $X_{i}$,
@@ -911,8 +912,10 @@ are the subject of ongoing research.
 \appendix
 \section{Mathematical appendix}
 Let $e_p$ be the selection vector with 1 in element $p+1$ and 0
-everywhere else. Define the following additional notation (largely
-introduced by CCT): $r_p(x) = (1,\ x,\dots,\ x^p)'$,
+everywhere else. Define the following additional notation:\footnote{%
+  As we mention in Section~\ref{background}, we have adopted CCT's
+  notation where possible and these terms originate in that paper.} %
+$r_p(x) = (1,\ x,\dots,\ x^p)'$,
 \begin{align*}
   (\hat{\mu}_{+}(h),\ \hat{\mu}_{+}^{(1)}(h),\ \hat\mu_{+}^{(2)}(h))'
   &= \argmin_{\mu_0, \mu_1, \mu_2} \ssum[+]{i}{h}
