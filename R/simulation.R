@@ -1,4 +1,3 @@
-rm(list = ls())
 library(rdrobust)
 library(foreach)
 library(doParallel)
