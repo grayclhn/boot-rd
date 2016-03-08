@@ -38,7 +38,7 @@ simulation.1 <- function(model.id, p, q, kernel, bc) {
   
   cl <- makeCluster(N.core)
   registerDoParallel(cl)
-  export.obj <- c("N.ci", "N.bc", "level", "generate.data", "k.weight", "rd.estimate", "lpreg", "rd.ci")
+  export.obj <- c("N.ci", "N.bc", "level", "generate.data", "kweight", "rd.estimate", "lpreg", "rd.ci")
   collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng% 
     simu()
   stopCluster(cl)
