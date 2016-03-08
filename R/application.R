@@ -1,3 +1,6 @@
+## Copyright (c) 2016, Otávio Bartalotti, Gray Calhoun, and Yang He.
+## Available under the MIT "Expat" License, see README.md
+
 library(rdrobust)
 library(xtable)
 source("RDfunctions.R")
