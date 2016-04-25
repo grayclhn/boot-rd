@@ -206,14 +206,14 @@ readers familiar with that paper.
 
 In the typical sharp RD setting, a researcher wishes to estimate the local
 causal effect of treatment at a given threshold. A running variable, $X_{i}$,
-determines treatment assignment.  Given a known threshold, $\bar{x}$, which can
-be set to zero without loss of generality, the $i$th subject receives the
+determines treatment assignment.  Given a known threshold, which we
+will set to zero without loss of generality, the $i$th subject receives the
 treatment of interest if $X_{i} \geq 0$ and does not receive treatment if
 $X_{i} < 0$.
 
 Subject $i$'s potential outcomes are denoted by the variable $Y_i(\cdot)$;
-$Y_i(1)$ indicates that the subject has received treatment and $Y_i(0)$
-indicates that the subject has not received treatment. Since only one of the two
+$Y_i(1)$ is the subject's outcome under treatment and $Y_i(0)$
+is the outcome without treatment. Since only one of the two
 outcomes is observed, the sample is comprised of the running variable, $X_{i}$,
 and the observed outcome $Y_i$, where
 \begin{equation*}
@@ -221,7 +221,7 @@ and the observed outcome $Y_i$, where
 \end{equation*}
 and $\1\{ \cdot\}$ denotes the indicator function.
 
-In most cases the population parameter of interest is the Average Treatment
+In most cases, the population parameter of interest is the Average Treatment
 Effect (ATE) at the cutoff, which we will denote $\tau$. This parameter is the
 difference in expected potential outcomes given $X_i = 0$; formally,
 \begin{equation*}
@@ -238,7 +238,7 @@ where
 \begin{equation*}
   \mu(x)= \E(Y_{i} \mid X_{i}=x).
 \end{equation*}
-For convenience, also define
+For later convenience, also define the derivatives
 \begin{equation*}
   \mu^{(\eta)}(x)=\frac{d^{\eta}\mu(x)}{dx^{\eta}}
 \end{equation*}
@@ -263,9 +263,9 @@ RD literature. (See, in particular, \citealp{HTV2001}, \citealp{Porter03}, and
 CCT.)
 
 \begin{assumption}[Behavior of the DGP near the cutoff]\label{A1}
-  The random variables $Y_i, X_i$ form a random sample of size $n$.
+  The random variables $Y_i$, $X_i$ form a random sample of size $n$.
   There exists a positive number $\kappa_0$ such that the following
-  conditions hold for all $x$ in the neighborhood $(-\kappa_{0},\kappa_{0})$
+  conditions hold for all $x$ in the neighborhood $(-\kappa_{0},\ \kappa_{0})$
   around zero:
   \begin{enumerate}
   \item The density of each $X_i$ is continuous and bounded away from zero.
