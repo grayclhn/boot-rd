@@ -293,11 +293,11 @@ $\tau$, $\hat\tau(h)$, is defined as
 with
 \begin{align*}
   (\hat {\mu}_{+}(h),\ \hat {\mu}^{(1)}_{+}(h))'
-  &= \argmin_{\mu, \beta} \sum_{i=1}^{n}
-  \1\{h > X_{i} \geq 0\} (Y_{i} - \mu - X_{i} \beta)^{2}
+  &= \argmin_{\beta_0,\ \beta_1} \sum_{i=1}^{n}
+  \1\{h > X_{i} \geq 0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2}
 \intertext{and}
-  (\hat {\mu}_{-}(h),\hat {\mu}^{(1)}_{-}(h))'
-  &= \argmin_{\mu,\beta} \sum_{i=1}^{n}
+  (\hat {\mu}_{-}(h),\ \hat {\mu}^{(1)}_{-}(h))'
+  &= \argmin_{\beta_0,\ \beta_1} \sum_{i=1}^{n}
   \1\{0 > X_{i} > -h \} (Y_{i} - \mu - X_{i} \beta)^{2}.
 \end{align*}
 Conventional (naive) confidence intervals can be calculated by using an
