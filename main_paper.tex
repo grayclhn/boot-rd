@@ -49,78 +49,86 @@
 Regression Discontinuity (RD) designs have emerged in the last decade as an
 important and popular research design strategy for analyzing the causal impact
 of policies and interventions in several fields of the social sciences,
-including economics, political science, public policy, and sociology.
-This research strategy exploits the fact that many programs use somewhat
-arbitrary thresholds to determine whether or not to provide a ``treatment,''
-usually relying on some type of score, which this literature calls a ``running
-variable.'' In its basic version, the sharp RD,  individuals or groups with score above a
-certain threshold receive treatment while the ones below that cutoff are left
-untreated.
-The identification of the treatment effect at the threshold is then based on
-comparing treated and untreated units at the cutoff. When a subject's
-position just above or below the cutoff is credibly not related to
-other factors impacting outcomes, including their unobserved
-characteristics, differences between treated and untreated individuals
-at the cutoff can be plausibly attributed to the treatment alone. As a
-practical matter this involves comparing units within a bandwidth just
-above and just below the threshold.
+including economics, political science, public policy, and sociology.  This
+research strategy exploits the fact that many programs use a threshold based
+on a numeric score to determine whether or not to provide a
+treatment.\footnote{%
+  This score is often referred to as the \textit{running variable} in this
+  literature.} %
+In its basic version, \textit{sharp RD}, individuals or groups with score
+above the threshold are treated while those below the threshold are left
+untreated. The identification of the treatment effect at the threshold is then
+based on comparing treated and untreated units at the cutoff. When a subject's
+position just above or below the cutoff is credibly not related to unobserved
+characteristics that would affect the outcome of interest, differences between
+treated and untreated individuals at the cutoff can be plausibly attributed to
+the treatment alone. As a practical matter this involves comparing units
+within a bandwidth just above and just below the threshold. Other RD
+strategies exist that can exploit different forms of discontinuities as well.
 
 The RD design strategy was introduced by \cite{thistlethwaite1960} to study
-educational outcomes, and many of its first recent applications in economics
-were to estimate the effects of other educational policies: evaluating the
-impact of investments in school facilities, class sizes, remedial education,
-early childhood education, and financial aid effects on student achievement and
+educational outcomes and many of its recent applications in economics were to
+estimate the effects of other educational policies: evaluating the impact of
+investments in school facilities, class sizes, remedial education, early
+childhood education, and financial aid effects on student achievement and
 later outcomes, for example.\footnote{%
-  See, for example, \cite{vdk2002}, \cite{jacoblefgren2004}, \cite{ludwig2007},
-  \cite{urquiola2009}, \cite{cellini2010}} %
-But the underlying identification strategy has proven to apply much more widely
-and RD has been used in health economics;\footnote{%
+  See, for example, \cite{vdk2002}, \cite{jacoblefgren2004},
+  \cite{ludwig2007}, \cite{urquiola2009}, \cite{cellini2010}} %
+But the underlying identification strategy has proven to apply much more
+widely and RD has been used in health economics,\footnote{%
   \cite{Card2009,barreca2011saving}} %
-political science, providing evidence regarding incumbency advantage in
-elections, electoral enfranchising and policy changes associated with the
-introduction of electronic voting, strategic voting behavior, and local media
-effects and ad expenditure in presidential elections in the U.S.\footnote{%
+political science,\footnote{%
   \cite{lee2008}, \cite{caughey2011elections}, \cite{keele2014geographic},
-  \cite{erikson2015}, \cite{Fujiwara2011,Fujiwara2015}}, %
+  \cite{erikson2015}, \cite{Fujiwara2011,Fujiwara2015}} %
+and labor economics,\footnote{%
+  \cite{schmieder2012}.} %
 among other fields. \cite{imbens2008} and \cite{lee2010} provide recent
 overviews of this literature with many more examples.
 
 In these studies, identification occurs exactly at the cutoff, so the
-treatment effect is typically estimated by fitting separate local linear models
-above and below the cutoff, then extrapolating the models to the exact point of
-discontinuity. The difference between the estimated outcomes at that point is
-taken to be an estimate of the treatment effect. As a practical matter, a key
-econometric issue is determining the bandwidth for the local linear models.  One
-very popular choice is the bandwidth estimator proposed by \cite{IK} and
-extended by \cite{calonico2014}, which minimizes the Asymptotic Mean Squared
-Error (AMSE) of difference in the models' point estimators at the cutoff.
-
-As \cite{calonico2014}\footnote{%
+treatment effect is typically estimated by fitting separate local linear
+models above and below the cutoff, then extrapolating the models to the exact
+point of discontinuity. The difference between the estimated outcomes at that
+point is taken to be an estimate of the treatment effect. As a practical
+matter, a key econometric issue is determining the bandwidth for the local
+linear models.  One very popular choice is the bandwidth estimator proposed by
+\cite{IK} and extended by \cite{calonico2014}, which minimizes the Asymptotic
+Mean Squared Error (AMSE) of difference in the models' point estimators at the
+cutoff.  But, as observed by \cite{calonico2014}\footnote{%
   We will refer to \cite{calonico2014} frequently, so we will reference it as
   ``CCT'' for the rest of the paper.} %
-point out, however, the \cite{IK} bandwidth estimator has the serious drawback
-that, although it is AMSE-optimal for point estimation, it produces invalid
-confidence intervals and hypothesis tests. The AMSE-optimal bandwidth
-converges to zero slowly, so the remaining bias term is large enough to affect
-the asymptotic distribution of the estimator. In that case the usual ``naive''
-confidence intervals for the RD treatment effects may be biased and have
-coverage well below their nominal level.
-CCT propose an estimator of the bias resulting from undersmoothing and provide a
-treatment effect estimator that remains asymptotically unbiased even when the
-bandwidth converges to zero slowly, at the AMSE-optimal rate. They also show
-that this bias-correction term contributes to the asymptotic variance of the
-resulting treatment effect estimator and provide a new formula for the
-asymptotic variance of the bias-corrected estimator. The resulting confidence
-intervals have accurate coverage even when the naive RD interval does not.
+the AMSE-optimal bandwidth has the serious drawback that it produces invalid
+confidence intervals and hypothesis tests. Local polynomial estimators of the
+treatment effect are generally biased in finite samples because the functional
+form of the conditional expectation that they need to approximate is unknown.
+The unmodeled component of the conditional expectation becomes smaller as the
+bandwidth itself becomes smaller, so the estimator's bias vanishes
+asymptotically as long as the bandwidth shrinks as the sample size increases.
+AMSE-optimal bandwidth shrinks as the sample size increases, so its estimator
+of the treatment effect is consistent, but the bandwidth shrinks slowly enough
+that the remaining bias term is large enough to affect the asymptotic
+distribution of the estimator. Consequently the usual ``naive'' confidence
+intervals for the RD treatment effects are invalid and can have coverage well
+below their nominal level.
+
+CCT show that the bias resulting from undersmoothing can be estimated and they
+provide a bias-corrected treatment effect estimator that remains
+asymptotically unbiased even when the bandwidth converges to zero at the
+AMSE-optimal rate. They also show that this bias-correction term contributes
+to the asymptotic variance of the resulting treatment effect estimator and
+provide a new formula for the asymptotic variance of the bias-corrected
+estimator. The resulting confidence intervals have accurate coverage even when
+the naive RD interval does not.
 
 In this paper, we propose a bootstrap alternative to CCT's analytical
-corrections. CCT justify their estimator by showing that the bias and variance
-components for a local linear model can be accounted for by estimating a local
-second order polynomial with bandwidth of the same order.\footnote{%
-  More generally, they show that the bias and variance of a local polynomial of
-  order $p$ can be accounted for by estimating the $p+1$ local polynomial. We
-  will restrict our analysis to the case with $p = 1$ in this paper because
-  of its widespread use.} %
+corrections. CCT motivate their estimator by showing that the bias and
+variance components for the local linear estimator can be accounted for by
+estimating a local second order polynomial with bandwidth of the same
+order.\footnote{%
+  More generally, they show that the bias and variance of a local polynomial
+  of order $p$ can be accounted for by estimating the $p+1$ local
+  polynomial. We will restrict our analysis to the case with $p = 1$ in this
+  paper because of its widespread use.} %
 They use a Taylor expansion around the cutoff to show that the bias associated
 with the second order polynomial converges to zero at a faster rate, fast
 enough that the bias of the local linear model can be estimated and removed
