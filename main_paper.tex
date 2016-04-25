@@ -408,17 +408,18 @@ CCT's. As in CCT, this bias correction term introduces a new source of variance,
 invalidating standard (naive) critical values. Consequently, the second
 algorithm we propose an iterated bootstrap to estimate the correct
 critical values of the bias corrected estimator.
-
 The intuition behind both procedures is straightforward. CCT show that a
 local second order polynomial captures the aspects of the DGP
 necessary for constructing valid confidence intervals. Our proposed algorithms
 estimate and embed the second order behavior in the bootstrap DGP through a
-residual bootstrap. Throughout this section and the rest of the paper, we will
+residual bootstrap.
+
+Throughout this section and the rest of the paper, we will
 let $\E^{*}$, $\Pr^{*}$, etc. denote expectations and probabilities taken with
 respect to the distribution induced by the bootstrap (which implicitly
 conditions on $X_{1},\dots,X_{n}$ and $Y_{1},\dots,Y_{n}$) and let parameters with
 $^{*}$ superscripts be the parameter values under the distribution induced by
-the bootstrap. Two $*$ superscripts indicate that the parameter or probability
+the bootstrap. Two $^{*}$ superscripts indicate that the parameter or probability
 measure corresponds to a secondary bootstrap distribution.
 
 Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
@@ -487,10 +488,11 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
     \item Save $\hat\tau^*_k(h) = \hat\mu_+^*(h) - \hat\mu_-^*(h)$.
     \end{enumerate}
   \item Estimate the bias as
-    \begin{equation*}
+    \begin{equation}
+      \label{eq:9}
       \Delta^*(h,b) = \tfrac{1}{B_1} \sum_{k=1}^{B_1} \hat\tau^*_k(h) -
       \big[\hat g_+(0) - \hat g_-(0)\big].
-    \end{equation*}
+    \end{equation}
   \end{enumerate}
 \end{algorithm}
 Note that $\hat g_+(0) - \hat g_-(0)$ is the true treatment effect under the
@@ -512,8 +514,9 @@ be ignored. Theorem~\ref{T1} presents the result formally.
 \begin{equation}
   \label{eq:4}
   \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V'(h, b)^{1/2}}
-  \to^{d} N(0,1)
+  \to^{d} N(0,1),
 \end{equation}
+where $\Delta^*(h,b)$ is defined by Equation~\ref{eq:9}.
 \end{theorem}
 
 Note that the variance component of~\eqref{eq:4} is the same value used by CCT
