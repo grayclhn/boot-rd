@@ -1042,22 +1042,17 @@ $\Omega_{+,1i}(h,b) - \Omega_{+,2i}(h,b)$, which are defined as
   \Big(\ssum[+]{j}{b} r_2(X_j / b) r_2(X_j / b)' \Big)^{-1}
     r_2(X_{m_+(b,i)} / b).
 \end{align*}
-The definitions of $\epb_{-}^{*}$ and $\Omega_-(h,b)$ have the same definitions as
-$\epb_{+}^{*}$ and $\Omega_+(h,b)$ after making the obvious substitutions of
-``$-$'' for ``$+$.''
+The definitions of $\epb_{-}^{*}$ and $\Omega_-(h,b)$ have the same
+definitions as $\epb_{+}^{*}$ and $\Omega_+(h,b)$ after making the
+obvious substitutions of ``$-$'' for ``$+$.''
 
-Given~\eqref{eq:6}, it suffices to prove that
-\begin{gather}
-  \label{eq:7}
-  \rho(V'(h,b)^{-1/2} \Omega_+(h,b)'\epb_{+}^{*},\
-    V'(h,b)^{-1/2}\Omega_+(h,b)'\epb_{+}) \to^p 0
-  \intertext{and}
-  \label{eq:8}
-  \rho(V'(h,b)^{-1/2}\Omega_-(b)'\epb_{-}^{*},\
-    V'(h,b)^{-1/2}\Omega_-(b)'\epb_{-}) \to^p 0
-\end{gather}
-with $\epb_+$ an i.i.d. random vector of length $M_+(b)$, the $i$th element of
-which is distributed as
+Notice that~\eqref{eq:6} implies that
+\begin{equation*}
+  \hat\tau(h) - \tau
+  =^d \Omega_{+}(h,b)' \epb_{+} - \Omega_{-}(h,b)' \epb_{-} + O_p(h^3),
+\end{equation*}
+with $\epb_+$ an i.i.d. random vector of length $M_+(b)$, the $i$th
+element of which is distributed as
 \[
   \varepsilon_{i,+} =^d
   \begin{cases}
@@ -1068,14 +1063,27 @@ which is distributed as
     & \text{with probability\ } 1/M_+(b),
   \end{cases}
 \]
-$\epb_-$ the corresponding quantity after replacing ``+'' with ``--,'' and
-$\rho$ the Mallows metric \citep{bickel1981}.\footnote{%
-  For two random vectors $u$ and $v$ with finite 2nd moments, $\rho(u, v)$
-  is defined as
+and $\epb_-$ the corresponding quantity after replacing ``+'' with
+``--.''  Consequently, it suffices to prove that
+\begin{gather}
+  \label{eq:7}
+  \rho(V'(h,b)^{-1/2} \Omega_+(h,b)'\epb_{+}^{*},\
+    V'(h,b)^{-1/2}\Omega_+(h,b)'\epb_{+}) \to^p 0
+  \intertext{and}
+  \label{eq:8}
+  \rho(V'(h,b)^{-1/2}\Omega_-(b)'\epb_{-}^{*},\
+    V'(h,b)^{-1/2}\Omega_-(b)'\epb_{-}) \to^p 0
+\end{gather}
+with $\rho$ the ``Mallows metric'' used by
+\citet{bickel1981}.\footnote{%
+  For two random vectors $u$ and $v$ with finite 2nd moments,
+  $\rho(u, v)$ is defined as
   \begin{equation*}
     \rho(u, v) = \inf\nolimits_{(U, V)\ s.t.\ U =^d u,\ V =^d v}
     \big(\E \lVert U - V \rVert^2\big)^{1/2}.
   \end{equation*}}
+Convergence in $\rho$ is equivalent to both convergence in distribution
+and convergence of second moments. \citep[Lemma 8.3.]{bickel1981}
 
 We will only prove~\eqref{eq:7} since the proof of~\eqref{eq:8} is
 identical. By Theorem 2.1 of \cite{freedman1981}, we have
@@ -1088,24 +1096,24 @@ identical. By Theorem 2.1 of \cite{freedman1981}, we have
 \end{align*}
 the second line holding as a consequence of CCT's Lemma SA1. So it suffices
 to show that $\rho(\varepsilon_{+,1}^{*}, \varepsilon_{+,1}) \to^{p^{*}} 0$. Let
-$\dot{\varepsilon}_i$ be an i.i.d. sequence randomly drawn from $\epb_+$
-with replacement and let
-$\bar{\varepsilon} = (1/M_+(b)) \osum[+]{i}{b} \dot{\varepsilon}_i$. Then,
+$\varepsilon^\circ_i$ be an i.i.d. sequence randomly drawn from the
+realized values of $\epb_+$ with replacement and let
+$\bar{\varepsilon}^\circ = (1/M_+(b)) \osum[+]{i}{b} \varepsilon^\circ_i$. Then,
 using the same arguments as \cite{freedman1981}, we have the upper bound
 \begin{equation*}
   \rho(\varepsilon_{+,1}^*, \varepsilon_{+,1})
   \leq
-  \bar\varepsilon^2 +
+  (\bar\varepsilon^{\circ})^2 +
   (2/M_+(b)) \osum[+]{i}{b} (\hat\varepsilon_i - \varepsilon_i)^2
-  + \rho(\dot\varepsilon_1, \varepsilon_{+,1}).
+  + \rho(\varepsilon^\circ_1,\ \varepsilon_{+,1}).
 \end{equation*}
-But $\bar\varepsilon^2 \to^p 0$ by the LLN,
+But $(\bar\varepsilon^{\circ})^2 \to^p 0$ by the LLN,
 \[
   (1/M_+(b)) \osum[+]{i}{b}
   \E((\hat\varepsilon_i - \varepsilon_i)^2 \mid X_i) \to 0
 \]
 by CCT's Lemma SA1, and
-$\rho(\dot\varepsilon_1, \varepsilon_{+,1}) \to^p 0$ by Lemma~8.4 of
+$\rho(\varepsilon_1^\circ,\ \varepsilon_{+,1}) \to^p 0$ by Lemma~8.4 of
 \cite{bickel1981}.\qed
 
 \clearpage
