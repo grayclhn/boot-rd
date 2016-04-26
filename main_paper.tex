@@ -292,12 +292,12 @@ $\tau$, $\hat\tau(h)$, is defined as
 \end{equation*}
 with
 \begin{align*}
-  (\hat {\mu}_{+}(h),\ \hat {\mu}^{(1)}_{+}(h))'
-  &= \argmin_{\beta_0,\ \beta_1} \sum_{i=1}^{n}
+  \hat {\mu}_{+}(h)
+  &= \argmin_{\beta_0} \min_{\beta_1} \sum_{i=1}^{n}
   \1\{h > X_{i} \geq 0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2}
 \intertext{and}
-  (\hat {\mu}_{-}(h),\ \hat {\mu}^{(1)}_{-}(h))'
-  &= \argmin_{\beta_0,\ \beta_1} \sum_{i=1}^{n}
+  \hat {\mu}_{-}(h)
+  &= \argmin_{\beta_0} \min_{\beta_1} \sum_{i=1}^{n}
   \1\{0 > X_{i} > -h \} (Y_{i} - \mu - X_{i} \beta)^{2}.
 \end{align*}
 Conventional (naive) confidence intervals can be calculated by using an
@@ -928,13 +928,12 @@ everywhere else. Define the following additional notation:\footnote{%
   notation where possible and these terms originate in that paper.} %
 $r_p(x) = (1,\ x,\dots,\ x^p)'$,
 \begin{align*}
-  (\hat{\mu}_{+}(h),\ \hat{\mu}_{+}^{(1)}(h),\ \hat\mu_{+}^{(2)}(h))'
-  &= \argmin_{\mu_0, \mu_1, \mu_2} \ssum[+]{i}{h}
-    (Y_i - \mu_0 - \mu_1 X_i/h - \mu_2 (X_i/h)^2) \\
-  (\hat{\mu}_{-}(h),\ \hat{\mu}_{-}^{(1)}(h),\ \hat\mu_{-}^{(2)}(h))'
-  &= \argmin_{\mu_0, \mu_1, \mu_2} \ssum[-]{i}{h}
-    (Y_i - \mu_0 - \mu_1 X_i/h - \mu_2 (X_i/h)^2)
+  (\hat{\mu}_{+,p}(h),\ \hat{\mu}_{+,p}^{(1)}(h),\dots,\ \hat\mu_{+,p}^{(p)}(h))'
+  &= \argmin_{\beta} \ssum[+]{i}{h} (Y_i - r_p(X_i/h)'\beta)^2 \\
+  (\hat{\mu}_{-,p}(h),\ \hat{\mu}_{-,p}^{(1)}(h),\dots,\ \hat\mu_{-,p}^{(p)}(h))'
+  &= \argmin_{\beta} \ssum[-]{i}{h} (Y_i - r_p(X_i/h)'\beta)^2
 \end{align*}
+and
 \begin{align*}
   \Gamma_{+,p}(h) &= \tfrac{1}{nh} \ssum[+]{i}{h} r_p(X_i/h) r_p(X_i/h)' \\
   \Gamma_{-,p}(h) &= \tfrac{1}{nh} \ssum[-]{i}{h} r_p(X_i/h) r_p(X_i/h)' \\
@@ -981,18 +980,22 @@ We have
 \end{equation*}
 The design of the bootstrap ensures that
 \begin{align*}
-  \E^* \hat\mu_{+}^*(h) - \mu_{+}^{*}
-  &= h^{2} \mu_+^{*(2)} \Bf_{+}(h)/2,
-  &\E^* \hat\mu_{-}^*(h) - \mu_{-}^{*}
-  &= h^{2} \mu_-^{*(2)} \Bf_{-}(h)/2,
+  \E^* \hat\mu_{+,1}^*(h) - \mu_{+}^{*}
+  &= h^{2} \mu_{+}^{*(2)} \Bf_{+}(h)/2,
+  &\E^* \hat\mu_{-,1}^*(h) - \mu_{-}^{*}
+  &= h^{2} \mu_{-}^{*(2)} \Bf_{-}(h)/2,
 \end{align*}
 almost surely, implying that
-\begin{equation}
-  \label{eq:5}
+\begin{equation*}
   \E^* \hat\tau^*(h) - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf_+(h)/2
   - h^2\, \mu_{-}^{*(2)} \Bf_{-}(h)/2.
-\end{equation}
-Combining this result with CCT's Lemma A1, gives
+\end{equation*}
+CCT's Lemma A1 implies that
+\begin{equation*}
+  \E \hat\tau(h) - \tau = h^2\, \mu_+^{(2)} \Bf_+(h)/2
+  - h^2\, \mu_{-}^{(2)} \Bf_{-}(h)/2 + O_p(h^3)
+\end{equation*}
+as well, giving
 \begin{align}
   \hat\tau(h) - & \E \hat\tau(h) + (\E \hat\tau(h) - \tau) - (\E^* \hat\tau^*(h) - \tau^*)\notag \\
   &= \hat\tau(h) - \E\hat\tau(h)
@@ -1000,16 +1003,17 @@ Combining this result with CCT's Lemma A1, gives
    - (\mu_+^{*(2)}-\mu_+^{(2)}) \Bf_{+}(h) / 2 \big) + O_p(h^{3}) \notag \\
   \label{eq:6}
   &= \hat\tau(h) - \E\hat\tau(h)
-   + h^2 (\hat\mu_-^{(2)}(b) - \mu_-^{(2)}) \Bf_{-}(h) /2 \\
+   + h^2 (\hat\mu_{-,2}^{(2)}(b) - \mu_-^{(2)}) \Bf_{-}(h) /2 \\
   \notag
-  &\pushright{- h^2 (\hat\mu_+^{(2)}(b) - \mu_+^{(2)}) \Bf_{+}(h) / 2 + O_p(h^{3})}
+  &\pushright{- h^2 (\hat\mu_{+,2}^{(2)}(b) - \mu_+^{(2)}) \Bf_{+}(h) / 2
+   + O_p(h^{3})}
 \end{align}
 The second equality holds because
-$\mu_+^{*(2)} = \hat\mu_{+}^{(2)}(b)$ and
-$\mu_-^{*(2)} = \hat\mu_{-}^{(2)}(b)$ almost surely. Asymptotic
+$\mu_+^{*(2)} = \hat\mu_{+,2}^{(2)}(b)$ and
+$\mu_-^{*(2)} = \hat\mu_{-,2}^{(2)}(b)$ almost surely. Asymptotic
 normality then follows from normality of $\hat\tau(h) - \E\hat\tau(h)$,
-$\hat\mu_+^{(2)}(b) - \mu_+^{(2)}$, and
-$\hat\mu_-^{(2)}(b) - \mu_-^{(2)}$ using similar arguments to
+$\hat\mu_{+,2}^{(2)}(b) - \mu_+^{(2)}$, and
+$\hat\mu_{-,2}^{(2)}(b) - \mu_-^{(2)}$ using similar arguments to
 CCT's Lemma SA4.D.\qed
 
 \subsection{Proof of Theorem~\ref{T2}}
@@ -1019,8 +1023,8 @@ Repeat the steps from Theorem~\ref{T1}'s proof through~\eqref{eq:6} to get
   = (\hat\tau^*(h) - \E^* \hat \tau^*(h)) +
   (\E^* \hat \tau^*(h) - \tau^*) - (\E^{**} \hat \tau^{**}(h) - \tau^{**}) \\
   &= \hat\tau^*(h) - \E^*\hat\tau^*(h)
-   + h^2 (\hat\mu_-^{*(2)}(b) - \mu_-^{*(2)}) \Bf_{-}(h) /2
-   - h^2 (\hat\mu_+^{*(2)}(b) - \mu_+^{*(2)}) \Bf_{+}(h) / 2 \\
+   + h^2 (\hat\mu_{-,2}^{*(2)}(b) - \mu_-^{*(2)}) \Bf_{-}(h) /2
+   - h^2 (\hat\mu_{+,2}^{*(2)}(b) - \mu_+^{*(2)}) \Bf_{+}(h) / 2 \\
   &= \Omega_{+}(h,b)' \epb_{+}^{*} - \Omega_{-}(h,b)' \epb_{-}^{*},
 \end{align*}
 where
