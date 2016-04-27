@@ -607,7 +607,7 @@ Evidence of the usefulness of the procedures proposed above and their relative p
 
 This section presents evidence from Monte Carlo simulations that the bootstrap
 procedures proposed in Section~\ref{boot} produce valid, robust confidence
-intervals similar to the ones obtained by the analytical procedures established
+intervals similar to those obtained by the analytical procedures established
 in CCT. The bootstrap CIs obtained compare favorably to the analytical
 alternative, with coverage slightly closer to nominal coverage and shorter
 length of the intervals in the specifications implemented.
@@ -792,15 +792,15 @@ their AMSE-optimal bandwidths as well.
 
 \begin{table}[t]
   \centering
-  \begin{tabular}{lrr@{, }rr@{}rlr}
+  \begin{tabular}{lrr@{, }rr@{}rrr}
     \toprule
-                      & ATE     & \multicolumn{2}{r}{95\% CI}           & $h$&      & $b$   & p-value \\
+                      & ATE     & \multicolumn{2}{r}{95\% CI}            &     &  $h$ &   $b$ & p-value \\
     \midrule
-    LM (2007)         & --1.895 & (--3.930                    & 0.139)   &  9&     &       & 0.036   \\
-    LM (2007)         & --1.198 & (--2.561                    & 0.165)   & 18&     &       & 0.081   \\
-    LM (2007)         & --1.114 & (--2.138                    & --0.090) & 36&     &       & 0.027   \\
-    CCT               & --3.795 & (--7.037                    & --0.554) &  3&.888 & 6.807 &         \\
-    Resid.\ bootstrap & --3.792 & (--6.512                    & --0.262) &  3&.888 & 6.807 &         \\
+    LM (2007)         & --1.895 & (--3.930                    & 0.139)   & 9   &      &       & 0.036 \\
+    LM (2007)         & --1.198 & (--2.561                    & 0.165)   & 18  &      &       & 0.081 \\
+    LM (2007)         & --1.114 & (--2.138                    & --0.090) & 36  &      &       & 0.027 \\
+    CCT               & --3.795 & (--7.037                    & --0.554) & 3   & .888 & 6.807 &       \\
+    Resid.\ bootstrap & --3.792 & (--6.512                    & --0.262) & 3   & .888 & 6.807 &       \\
     \bottomrule
   \end{tabular}
   \caption{The effect of Head Start assistance on mortality. The first three
@@ -831,19 +831,19 @@ candidate bandwidths 9, 18, and 36. Their estimates indicate that Head Start
 assistance lowers the targeted mortality rate by --1.895, --1.198 and --1.114
 respectively, which are not very sensitive to the choice of bandwidths in this
 range. These ATEs are also significantly different from zero (with p-value
-0.036, 0.081 and 0.027) based on Ludwig and Miller's percentile-$T$ bootstrapped
+0.036, 0.081 and 0.027) based on Ludwig and Miller's percentile-$t$ bootstrapped
 p-value. The statistical inference changes when conventional analytical
 confidence interval is used, which includes zero for bandwidth 9 and 18.
 
 Results from the two robust procedures are similar to each other but greatly
-differ from the original estimates. The estimated ATEs are as high as -3.795
-from CCT and -3.792 from the bootstrap. Both are significantly different from
+differ from the original estimates. The estimated ATEs are as high as --3.795
+from CCT and --3.792 from the bootstrap. Both are significantly different from
 zero, though the confidence intervals are also very wide, which is likely to be
 due to the much smaller bandwidths used relative to the other estimators
-($h=3.888, b=6.807$).
+($h=3.888$, $b=6.807$).
 
 Table \ref{tbl:3} presents the effect of the program on schooling for the cohort
-aged 18-24 in 1990. The measurement of schooling is the fraction of people with
+aged 18--24 in 1990. The measurement of schooling is the fraction of people with
 high school or more in Panel A and the fraction of people with some college or
 more in Panel B. A bandwidth of 7 is used in \cite{ludwig2007}. Their estimates
 suggest that Head Start assistance increases the fraction of people with high
@@ -861,9 +861,9 @@ in Table~\ref{tbl:3} are much smaller.
 
 \begin{table}[t]
   \centering
-  \begin{tabular}{lrr@{, }rr@{}rlr}
+  \begin{tabular}{lrr@{, }rr@{}rrr}
     \toprule
-              & ATE   & \multicolumn{2}{r}{95\% CI} & $h$    &   & $b$  & p-value     \\
+              & ATE   & \multicolumn{2}{r}{95\% CI} & & $h$     & $b$ & p-value     \\
     \midrule                                                                          \\
     \multicolumn{5}{l}{Fraction ``high school or more'' (Panel A)}                    \\
     \midrule
@@ -878,7 +878,7 @@ in Table~\ref{tbl:3} are much smaller.
     \bottomrule
   \end{tabular}
   \caption{The effect of Head Start assistance on education for cohort
-    18-24 in 1990. Panel A uses the fraction of people with high school
+    18--24 in 1990. Panel A uses the fraction of people with high school
     or more as dependent variable. Panel B uses the fraction of people
     with some college or more as dependent variable. The first row in
     each panel comes from Table 4 in \cite{ludwig2007} except ``95\% CI,''
