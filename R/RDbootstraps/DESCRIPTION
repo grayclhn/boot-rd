@@ -1,0 +1,21 @@
+Package: RDbootstraps
+Type: Package
+Title: Bootstrapping robust confidence interval for sharp regression
+    discontinuity design.
+Version: 0.1.0
+Date: 2016-04-27
+Author: Gray Calhoun, Otávio Bartalotti, Yang He
+Maintainer: Yang He <yanghe@iastate.edu>
+Description: Implements R code for a paper that the authors are
+    working on.
+License: MIT
+LazyData: TRUE
+Depends:
+    R (>= 3.0.0)
+Imports:
+    Rcpp (>= 0.12.2),
+    rdrobust (>= 0.80)
+RoxygenNote: 5.0.1
+LinkingTo:
+    Rcpp,
+    RcppArmadillo
