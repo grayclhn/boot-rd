@@ -675,7 +675,7 @@ high curvature and local linear models are likely to exhibit high bias, making
 it a natural test case for both their analytical corrections and our bootstrap.
 
 To estimate the finite-sample coverage of our new bootstrap based confidence interval, we
-simulate 1500 samples from each of the three DGPs and calculate nominal 95\%
+simulate 5000 samples from each of the three DGPs and calculate nominal 95\%
 two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
 calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
@@ -697,19 +697,19 @@ report results for that estimator.
     \toprule
     DGP & Method     & Bias   & SD    & RMSE   & CI Coverage (\%) & CI Length \\
     \midrule
-    1   & \bootuni   & --0.018 & 0.066 & 0.069 & 93.1       & 0.240     \\
-        & \cctuni    & --0.016 & 0.067 & 0.069 & 92.4       & 0.246     \\
-        & \ccttri    & --0.010 & 0.068 & 0.068 & 91.1       & 0.241     \\\\
-    2   & \bootuni   & --0.012 & 0.088 & 0.089 & 95.3       & 0.324     \\
-        & \cctuni    & --0.010 & 0.087 & 0.088 & 93.8       & 0.350     \\
-        & \ccttri    & --0.011 & 0.085 & 0.086 & 93.5       & 0.343     \\\\
-    3   & \bootuni   & --0.004 & 0.064 & 0.064 & 96.0       & 0.246     \\
-        & \cctuni    & --0.004 & 0.065 & 0.065 & 94.3       & 0.250     \\
-        & \ccttri    & --0.008 & 0.067 & 0.067 & 91.9       & 0.246     \\
+    1   & \bootuni   & --0.014 & 0.067 & 0.069 & 93.4       & 0.242     \\
+        & \cctuni    & --0.014 & 0.067 & 0.069 & 92.5       & 0.246     \\
+        & \ccttri    & --0.014 & 0.067 & 0.068 & 91.4       & 0.239     \\\\
+    2   & \bootuni   & --0.011 & 0.088 & 0.089 & 95.1       & 0.323     \\
+        & \cctuni    & --0.011 & 0.088 & 0.089 & 93.7       & 0.353     \\
+        & \ccttri    & --0.008 & 0.086 & 0.086 & 93.2       & 0.346     \\\\
+    3   & \bootuni   & --0.004 & 0.065 & 0.065 & 95.9       & 0.247     \\
+        & \cctuni    & --0.004 & 0.065 & 0.065 & 93.8       & 0.251     \\
+        & \ccttri    & --0.005 & 0.065 & 0.065 & 93.4       & 0.244     \\
     \bottomrule
   \end{tabular}
   \caption{%
-    Experimental coverage probabilities for each interval estimator based on 1500
+    Experimental coverage probabilities for each interval estimator based on 5000
     simulations; nominal coverage probabilities are 95\% for each estimator. The column
     ``CI Coverage'' lists the coverage frequency in these simulations and ``CI Length''
     lists the average length of the confidence interval across simulations.}
@@ -728,19 +728,14 @@ standard deviation across all of the DGPs.
 
 The column ``CI Coverage'' lists the experimental coverage of each interval.
 All of the intervals are reasonably close to their nominal coverage, although
-the analytically corrected estimator using the triangular kernel seems to
-persistently under-cover by a few percentage points. Our proposed bootstrap
+the analytically corrected estimators seem to persistently under-cover the true 
+ATE (especially the one using triangular kernel). Our proposed bootstrap
 procedure consistently performs well, as it is about a percentage point closer
 to nominal coverage than the other interval estimators in DGPs 1 and 2, and is
-slightly conservative (96\% coverage) in DGP 3. The final column, ``CI Length,''
+slightly conservative (95.9\% coverage) in DGP 3. The final column, ``CI Length,''
 indicates that all three of these procedures generate intervals that are
 approximately the same length on average.
 
-It is important not to read too much into these simulation results. Where there
-are differences between these procedures, they are small enough that randomness
-in the simulations is likely a factor in their precise rankings.\footnote{%
-  To help address this concern, we are currently running a more extensive set of
-  simulations and will update this paper when they are complete.} %
 These are DGPs where the naive confidence intervals are known to perform poorly,
 and this set of simulation results indicates that our proposed bootstrap approach
 is quite competitive with analytical methods for producing valid intervals.
