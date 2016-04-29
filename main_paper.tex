@@ -94,13 +94,11 @@ matter, a key econometric issue is determining the bandwidth for the local
 linear models.  One very popular choice is the bandwidth estimator proposed by
 \cite{IK} and extended by \cite{calonico2014}, which minimizes the Asymptotic
 Mean Squared Error (AMSE) of difference in the models' point estimators at the
-cutoff.  But, as observed by \cite{calonico2014}\footnote{%
-  We will refer to \cite{calonico2014} frequently, so we will reference it as
-  ``CCT'' for the rest of the paper.} %
+cutoff.  But, as observed by \cite{calonico2014}, henceforth ``CCT,''
 the AMSE-optimal bandwidth has the serious drawback that it produces invalid
 confidence intervals and hypothesis tests. Local polynomial estimators of the
 treatment effect are generally biased in finite samples because the functional
-form of the conditional expectation that they need to approximate is unknown.
+form of the local conditional expectation that they need to approximate is unknown.
 The unmodeled component of the conditional expectation becomes smaller as the
 bandwidth itself becomes smaller, so the estimator's bias vanishes
 asymptotically as long as the bandwidth shrinks as the sample size increases.
@@ -132,7 +130,7 @@ order.\footnote{%
 They use a Taylor expansion around the cutoff to show that the bias associated
 with the second order polynomial converges to zero at a faster rate, fast
 enough that the bias of the local linear model can be estimated and removed
-using the second order polynomial. The second order polynomial also provides
+using the second order polynomial. Additionally, that approximation provides
 fast enough convergence that it can be used to estimate the correct variance
 correction as well.
 
@@ -158,7 +156,7 @@ an iterated bootstrap procedure \citep{hall1988}: use the second order
 polynomial residual bootstrap to produce many bootstrap replications of the bias
 corrected estimator, and then use the resulting bootstrap distribution to
 produce confidence intervals. This procedure, which requires bootstrapping the
-datasets produced by an initial bootstrap procedure, is described in Algorithm~\ref{Alg2}, and the resulting confidence intervals are shown to be asymptotically valid in Theorem~\ref{T2}.
+datasets produced by an initial bootstrap, is described in Algorithm~\ref{Alg2}, and the resulting confidence intervals are shown to be asymptotically valid in Theorem~\ref{T2}.
 
 This bootstrap procedure offers some advantages over analytical methods.  In
 particular, both this paper and CCT assume that the observations are generated
@@ -766,7 +764,7 @@ four-year-old as twice of that for 349 ``control'' counties with poverty rates
 
 \cite{ludwig2007} utilize this fact to estimate the ``intent-to-treat'' effect:
 the effect of proposal developing assistance on health and schooling. They use
-mortality as their health measure and use data from the National Vital
+mortality as their health outcome measure and use data from the National Vital
 Statistics System of the National Center for Health Statistics, which provide
 information on cause of death and age at death. \cite{ludwig2007} limited the
 causes of death to those which could be affected by Head Start health services
@@ -779,9 +777,7 @@ specific, we apply both the robust procedure proposed by CCT and the bootstrap
 procedure introduced in this paper.  Our bootstrap estimator uses the
 AMSE-optimal bandwidths proposed by CCT and the uniform kernel. In the bootstrap
 procedure, we use 500 bootstraps for bias correction and 999 to calculate the
-confidence intervals.\footnote{%
-  These are the same design choices made for the Monte Carlo study.} %
-The analytical estimator using CCT's bias correction and variance estimator use
+confidence intervals. The analytical estimator using CCT's bias correction and variance estimator use
 their AMSE-optimal bandwidths as well.
 
 \begin{table}[t]
