@@ -1,0 +1,491 @@
+#+TITLE: Bootstrap Confidence Intervals for Sharp Regression Discontinuity Designs with the Uniform Kernel
+#+DATE: 20 May 2016 · Advances in Econometrics Conference on Regression Discontinuity Designs
+
+* Introduction
+** What does this paper do that's new and interesting?
+   - We implement a bootstrap version of Calonico, Cattaneo, and
+     Titiunik's (2014) bias-corrected RD intervals
+     - Bias of RD estimates using common bandwidth rules affects
+       confidence intervals, even though estimates are consistent
+     - i.e. Imbens and Kalyanaraman's (2012) optimal MSE bandwidth
+     - Calonico, Cattaneo and Titiunik provide a bias correction and a
+       variance adjustment to generate valid intervals
+     - These modifications are determeined by the \((p+1)\)-th order polynomial
+     - $p$ is the order of the polynomial used in the RD to estimate
+       the treatment effect
+   - Our paper embeds the \((p+1)\)-th order behavior of the conditional
+     expectation in a bootstrap algorithm
+     - Residual bootstrap using the local $p+1$ order polynomial
+     - Used to estimate and remove the bias of the RD estimator
+     - Also used to estimate the variance of the bias-corrected estimator
+     - Iterated bootstrap: we apply the same algorithm twice
+*** _Limitations of the current paper_
+    - We only prove results in this paper for
+      - Local linear RD estimates
+      - Uniform kernel
+      - Sharp discontinuities
+      - i.i.d. samples
+
+    - We only prove consistency of the bootstrap, not higher order
+      refinements
+
+    - We're currently working on relaxing all of these limitations
+** Short outline of the talk
+    \tableofcontents
+* Setup and assumptions
+** Basic framework (background)
+   - $Y_i(\cdot)$ represents the potential outcomes of interest
+     - $Y_i(1)$ is the subject's outcome under treatment
+     - $Y_i(0)$ is without treatment
+   - $X_i$ is the /running variable/ that determines treatment
+     - $X_i \geq 0$ implies that individual $i$ is treated
+     - $X_i < 0$ implies no treatment
+     - Using 0 as the cutoff is a normalization and is not restrictive
+   - $Y_i$ is the observed outcome
+     \begin{equation*}
+       Y_{i}=Y_{i}(0) \1\{X_{i}<0\}+Y_{i}(1) \1\{0 \leq X_{i}\}
+     \end{equation*}
+     where $\1\{ \cdot\}$ is the indicator function.
+   - Estimand of interest is ATE at the cutoff,
+     \begin{equation*}
+       \tau=\E(Y_i(1)-Y_i(0) \mid X_i=0)
+     \end{equation*}
+     where $\E$ is the expectation
+** Much more notation (background)
+   Define the conditional mean
+   \begin{equation*}
+     \mu(x)= \E(Y_{i} \mid X_{i}=x).
+   \end{equation*}
+   Also define the derivatives
+   \begin{equation*}
+     \mu^{(\eta)}(x)=\frac{d^{\eta}\mu(x)}{dx^{\eta}}
+   \end{equation*}
+   and let
+   \begin{align*}
+   \mu_{+}(x)
+   &= \E( Y_{i}(1) \mid X_{i}=x )
+   &\mu_{-}(x)
+   &= \E( Y_{i}(0) \mid X_{i}=x ) \\
+   \sigma^{2}_{+}(x) &= \V( Y_{i}(1) \mid X_{i}=x )
+   &\sigma^{2}_{-}(x)&=\V( Y_{i}(0) \mid X_{i}=x ) \\
+   \intertext{and}
+   \mu^{(\eta)}_{+}
+   &= \lim_{x \rightarrow 0^{+}}\mu^{(\eta)}(x),
+   &\mu^{(\eta)}_{-}
+   &= \lim_{x \rightarrow 0^{-}}\mu^{(\eta)}(x),
+   \end{align*}
+   where $\V(\cdot)$ represents the variance.
+** Assumption 1
+   - The random variables $Y_i$, $X_i$ form a random sample of size
+     $n$.  There exists a positive number $\kappa_0$ such that the
+     following conditions hold for all $x$ in the neighborhood
+     $(-\kappa_{0},\ \kappa_{0})$ around zero:
+     1. The density of $X_i$ is continuous and bounded away from zero
+        at $x$.
+     2. $\E(Y_{i}^{4} \mid X_{i}=x)$ is bounded.
+     3. $\mu_+(x)$ and $\mu_-(x)$ are both 3 times continuously
+        differentiable.
+     4. $\sigma_+^2(x)$ and $\sigma_-^2(x)$ are both continuous and
+        bounded away from zero.
+   - This assumption implies that $\tau$ is identified:
+     \begin{equation*}
+       \tau = \mu_+(x) - \mu_-(x).
+     \end{equation*}
+     Both $\mu_+(x)$ and $\mu_-(x)$ can be estimated consistently.
+     (Hahn, Todd, and der Klaauw, 2001; Porter, 2003; and Calonico,
+     Cattaneo, and Titiunik, 2014)
+** Estimation and inference (background)
+   - $\mu_+$ and $\mu_-$ can be estimated by extrapolating from a
+     local polynomial regression with bandwidth $h$:
+     \begin{align*}
+       \hat {\mu}_{+}(h)
+       &= \argmin_{\beta_0} \Big(\min_{\beta_1} \sum_{i=1}^{n}
+       \1\{h > X_{i} \geq 0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2}\Big) \\
+       \hat {\mu}_{-}(h)
+       &= \argmin_{\beta_0}\Big( \min_{\beta_1} \sum_{i=1}^{n}
+       \1\{0 > X_{i} > -h \} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2} \Big)
+     \end{align*}
+   - Then the obvious estimator for $\tau$ is
+     \begin{equation*}
+       \hat\tau = \hat\mu_+(x) - \hat\mu_-(x).
+     \end{equation*}
+   - Conventional confidence intervals can be produced from an asymptotic
+     approximation for $\hat\tau$ if $h \to 0$ quickly enough
+     \begin{equation}
+     \label{eq:1}
+     \frac{\hat{\tau}(h)-\tau}{\sqrt{V(h)}} \to^d N(0,1),
+     \end{equation}
+     with $V(h) \big/ \V(\hat\tau(h) \mid X_{1},\dots,X_{n}) \to^p 1$
+   - Bandwidth choices designed for optimal point estimation
+     (e.g. Imbens and Kalyanaraman, 2012) can converge to zero too
+     slowly for these asymptotics to hold
+** Estimation and inference (background)
+   - CCT find the analytical form of the first-order bias and
+     explicitly recenter $\hat\tau(h)$:
+     \begin{equation*}
+       \E(\hat{\tau}(h) \mid X_1,\dots,X_n) - \tau =
+         h^{2}\Big[ \tfrac{\mu_{+}^{(2)}}{2}\Bf_{+}(h) - \tfrac{\mu_{-}^{(2)}}{2}\Bf_{-}(h) \Big]
+         (1+o_{p}(1))
+     \end{equation*}
+     - $\mu_+^{(2)}$ and $\mu_-^{(2)}$ are the crucial terms
+     - $\Bf_{+}(h)$ and $\Bf_{-}(h)$ are observed quantities that
+       depend on the kernel, bandwidth, and running variables
+       $X_1,\dots,X_n$.
+   - CCT's bias-corrected estimator is
+     \begin{gather*}
+       \hat{\tau}'(h, b) = \hat{\tau}(h) - h^{2}
+       \Big[\tfrac{\hat{\mu}_{+}^{(2)}(b)}{2} \Bf_{+}(h) - \tfrac{\hat{\mu}_{-}^{(2)}(b)}{2}\Bf_{-}(h) \Big]
+     \end{gather*}
+     - $\hat\mu_{+}^{(2)}$ and $\hat\mu_-^{(2)}$ are estimated with a
+       second order local polynomial
+     - $b$ is a different pilot bandwidth.
+   - The bias-correction introduces additional variance, so
+     \begin{equation*}
+       \frac{\hat{\tau}'(h, b) - \tau}{V'(h, b)^{1/2}} \to^d N(0,1)
+     \end{equation*}
+     under weaker assumptions on the bandwidth
+     - $V'(h, b) = V(h) + C(h, b)$
+     - $C(h, b)$ is the additional variance component
+   - $C(h,b)$ can be consistently estimated from $\hat\mu_+^{(2)}$ and $\hat\mu_-^{(2)}$
+** Assumption 2 (bandwidth)
+
+   - Let $h$ be the bandwidth used to estimate the local linear model
+     and let $b$ be the bandwidth used to estimate a second local
+     quadratic model. Then $n h \to \infty$, $n b \to \infty$, $n
+     h^{5} b^{2} \to 0$, and $n b^{5} h^{2} \to 0$ as $n \to \infty$.
+     The relationship $h \leq b$ also holds for all $n$.
+
+  {{{s}}}
+
+   - Note that this assumption is not strong enough to ensure that the
+     uncorrected interval is asymptotically valid.
+   - The assumption ensures that the "bias corrected" interval is
+     asymptotically valid
+
+* Definition of the bootstrap algorithm
+** Resampling algorithm (for $X_i < 0$) --- Sketch of Algorithm 1
+   - To keep the notation manageable, this slide describes the
+     bootstrap for the left side of the cutoff (i.e. where $X_i < 0$).
+   - We also do the same procedure for $X_i \geq 0$
+   - Define the following terms
+     - $I_{-}(h) &= \{i : -h < X_{i} < 0\}$
+     - $M_{-}(h)$ is the number of elements in $I_{-}(h)$
+     - $m_{-}(h,1),\dots,m_{-}(h,M_{-}(h))$ is the subsequence of
+       $1,\dots,n$ that indexes $I_{-}(h)$
+   - For the bootstrap, do the following:
+     1. Estimate a local second order polynomials $\hat g_{-}$ using the observations in $I_i(b)$
+        \begin{align}
+          \label{eq:2}
+          \hat g_{-}(x)
+          &= \hat\beta_{-,0} + \hat\beta_{-,1} x + \hat\beta_{-,2} x^{2},
+        \end{align}
+        with $\hat\beta_{-} &= \argmin_\beta \sum_{i \in I_-(b)}
+        (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^2$
+
+     2. Calculate the residuals for $i \in I_-(b)$
+        \[
+          \hat\varepsilon_{i} = Y_{i} - \hat g_-(X_{i})
+	\]
+   - Let $\varepsilon^*_{-,i}$ be a draw from $\{\hat\varepsilon_j\}$
+     (each with equal probability) and define
+     \begin{align*}
+       Y_{-,i}^* &= \hat g_-(X_{i}) + \varepsilon_{-,i}^{*}
+     \end{align*}
+   - $Y_{+,i}^*$ is defined similarly for $X_i \geq 0$.
+* Bias correction through the bootstrap
+** Bias estimation through the bootstrap --- Sketch of Algorithm 1
+   - $\hat\tau^*(h)$ is the ATE estimate from the local linear
+     model on the bootstrap sample,
+     \[
+       \hat\tau^*(h) = \hat\mu_+^*(h) - \hat\mu_-^*(h)
+     \]
+     and
+     \begin{align*}
+       \hat\mu_-^*(h)
+       &= \argmin_{\mu} \Big( \min_{\beta} \ssum[-]{i}{h}
+          (Y_i^* - \mu - \beta X_i^*)^2 \Big) \\
+       \hat\mu_+^*(h)
+       &= \argmin_{\mu} \Big( \min_{\beta} \ssum[+]{i}{h}
+         (Y_i^* - \mu - \beta X_i^*)^2 \Big).
+     \end{align*}
+   - Under the distribution induced by the bootstrap, we know the
+     Average Treatment Effect at $x=0$ is
+     \begin{align*}
+       \tau^*
+       &= \hat g_+(0) - \hat g_-(0) \\
+       &= \hat \beta_{+,0} - \hat \beta_{-,0}
+     \end{align*}
+   - The bias of the RD estimator under the bootstrap distribution is
+     \begin{equation}
+       \Delta^*(h,b) = \E^*( \hat\tau^*(h) - \tau^* )
+     \end{equation}
+   - This expectation can be approximated by simulation
+** Theorem 1
+   Under Assumptions 1 and 2,
+   \begin{equation}
+   \label{eq:4}
+   \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V'(h, b)^{1/2}}
+   \to^{d} N(0,1).
+   \end{equation}
+*** _Sketch of a proof_
+
+    {{{s}}}
+
+    - $\hat\tau(h) - \Delta^*(h,b) - \tau = (\hat\tau(h) - \E \hat \tau(h)) + (\E \hat \tau(h) - \tau) - (\E^* \hat \tau^*(h) - \tau^*)$
+
+    - The design of the bootstrap ensures that (a.s.)
+      \begin{align*}
+      \E^* \hat\mu_{+,1}^*(h) - \mu_{+}^{*}
+      &= h^{2} \mu_{+}^{*(2)} \Bf_{+}(h)/2, \\
+      \E^* \hat\mu_{-,1}^*(h) - \mu_{-}^{*}
+      &= h^{2} \mu_{-}^{*(2)} \Bf_{-}(h)/2,
+      \end{align*}
+    - Then
+      \begin{equation*}
+        \E^* \hat\tau^*(h) - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf_+(h)/2 - h^2\, \mu_{-}^{*(2)} \Bf_{-}(h)/2.
+      \end{equation*}
+    - $\mu_-^{*(2)}$ and $\mu_+^{*(2)}$ are sample moments and consistently
+      estimate $\mu_-^{(2)}$ and $\mu_+^{(2)}$
+    - The proof reduces to CCT's.
+* Bootstrap critical values
+** Bootstrap critical values (Algorithm 2)
+   To produce critical values for the bias-corrected statistic,
+   iterate the bootstrap from before.
+
+   1. Generate bootstrap values $Y_{-,i}^*$ and $Y_{+,i}^*$ using the
+      residual bootstrap defined earlier
+   2. Estimate $\hat\tau^*$ on the bootstrap dataset
+   3. On each bootstrapped dataset, use the bootstrap _again_ to
+      estimate the bias of $\hat\tau^*$. Call this estimate $\Delta^{**}$
+
+   The distribution of $\hat\tau^* - \Delta^{**} - \tau^*$ can be
+   approximated by repeated simulation.
+
+   {{{s}}}
+
+*** _Theorem 2_
+
+    {{{s}}}
+
+   Under Assumptions 1 and 2,
+   \[
+     \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V'(h,b) \to^p 1
+   \]
+   and
+   \begin{multline*}
+     \sup_{x} \Big\rvert \Pr^*[\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^* \leq x ]\\ - \Pr[\hat\tau(h) - \Delta^*(h,b) - \tau \leq x] \Big\lvert \to^p 0.
+   \end{multline*}
+*** _Tiniest sketch of a proof
+    1. Use CCT's results to prove that expansion terms of order $p+2$ and higher
+       are negligeable
+    2. Use an argument similar to Freedman (1981) to prove that the residual bootstrap
+       approximates the distribution of $\hat\tau$ under truncated DGP.
+* Simulation Evidence
+** Monte Carlo setup
+   - Monte Carlo DGPs mimic Imbens and Kalyanaraman (2012) and CCT
+   - 5000 simulations, each with 500 i.i.d. draws from
+     \begin{align*}
+     Y_{i}           &= \mu_{j}(X_{i}) + \varepsilon_{i} \\
+     X_{i}           &\sim  2 \times \betarv(2,4) - 1 \\
+     \varepsilon_{i} &\sim N(0, 0.1295^2),
+     \end{align*}
+     where $j$ indexes the specific DGP
+   - DGP 1:
+     \begin{equation*}
+       \mu_{1}(x) =
+       \begin{cases}
+       0.48 + 1.27x + 7.18x^{2} + 20.21x^{3} + 21.54x^{4} + 7.33x^{5}
+       & \textif\ x < 0 \\
+       0.52 + 0.84x - 3.00x^{2} + 7.99x^3 - 9.01x^4 + 3.56x^{5}
+       & \otherwise.
+       \end{cases}
+     \end{equation*}
+   - DGP 2:
+     \begin{equation*}
+       \mu_{2}(x) =
+       \begin{cases}
+         3.71 + 2.30x + 3.28x^2 + 1.45x^3 + 0.23x^4 + 0.03x^5
+         & \textif\ x < 0, \\
+         0.26 + 18.49x - 54.81x^2 + 74.30x^3 - 45.02x^4 + 9.83x^5
+         & \otherwise
+       \end{cases}
+     \end{equation*}
+   - DGP 3:
+     \begin{equation*}
+       \mu_{3}(x) =
+       \begin{cases}
+         0.48 + 1.27x + 3.59 x^{2} + 14.147 x^3 + 23.694 x^4 + 10.995 x^5
+         & \textif\ x < 0 \\
+         0.52 + 0.84x - 0.30 x^{2} + 2.397 x^3 - 0.901 x^4 + 3.56 x^5
+         & \otherwise
+     \end{cases}
+     \end{equation*}
+** Estimation strategies considered
+   - "Good" estimators
+     - Theoretical intervals: CCT with uniform and triangular kernels
+     - Bootstrap estimator: ours
+     - Use CCT's AMSE-optimal bandwidth rule
+   - "Bad" estimators
+     - Naive theoretical confidence interval (asymptotic normality)
+       using uniform kernel and Imbens and Kalyanaraman's AMSE-optimal
+       kernel.
+     - Pairs bootstrapped version of the same estimator
+   - All intervals use the 0.025 and 0.975 quantiles of the sampling
+     distributions
+** Monte Carlo results
+  \small
+  \begin{tabular}{rlrrrrrrr}
+    \toprule
+    DGP & Method     & Bias   & SD    & RMSE   & CI Coverage (\%) & CI Length \\
+    \midrule
+    1   & \bootuni   & --0.014 & 0.067 & 0.069 & 93.4       & 0.242     \\
+        & \cctuni    & --0.014 & 0.067 & 0.069 & 92.5       & 0.246     \\
+        & \ccttri    & --0.011 & 0.067 & 0.068 & 91.4       & 0.239     \\
+        & \bootnaive & --0.040 & 0.042 & 0.058 & 89.0       & 0.182     \\
+        & \naiveuni  & --0.040 & 0.042 & 0.058 & 81.5       & 0.156     \\\\
+    2   & \bootuni   & --0.011 & 0.088 & 0.089 & 95.3       & 0.323     \\
+        & \cctuni    & --0.011 & 0.088 & 0.089 & 93.7       & 0.353     \\
+        & \ccttri    & --0.008 & 0.086 & 0.086 & 93.2       & 0.346     \\
+        & \bootnaive & --0.151 & 0.067 & 0.165 & 35.4       & 0.269     \\
+        & \naiveuni  & --0.151 & 0.067 & 0.165 & 29.5       & 0.230     \\\\
+    3   & \bootuni   & --0.004 & 0.065 & 0.065 & 95.9       & 0.247     \\
+        & \cctuni    & --0.004 & 0.065 & 0.065 & 93.8       & 0.251     \\
+        & \ccttri    & --0.005 & 0.065 & 0.065 & 93.4       & 0.244     \\
+        & \bootnaive &   0.033 & 0.052 & 0.062 & 91.3       & 0.215     \\
+        & \naiveuni  &   0.033 & 0.052 & 0.062 & 86.1       & 0.191     \\
+    \bottomrule\\
+  \end{tabular}
+
+  Table 1 of the paper. (Reordered --- decreasing in coverage)
+
+  - DGP 2 is the most interesting
+  - The residual bootstrap is competetive with the other bias-corrected
+    intervals
+  - All bias-corrected intervals perform well
+  - Both uncorrected estimators perform very badly for DGP 2 and show some
+    undercoverage on other DGPs
+
+* Application
+** Empirical application: effect of Head Start program on mortality rates
+   - We apply this bootstrap to Ludwig and Miller's (2007) analysis of the Head
+     Start program
+     - Data available at
+       http://faculty.econ.ucdavis.edu/faculty/dlmiller/statafiles
+   - Head start was established in 1965 to help poor children age
+     three to five and their families.
+   - The program elements include parent involvement, nutrition,
+     social services, mental health services and health services.
+   - Office of Economic Opportunity provided grant-writing assistance
+     to the poorest 300 counties in the United States based on the
+     1960 poverty rate.
+   - The poverty rate of the 300th poorest county serves as a sharp
+     cutoff of treatment. (Ludwig and Miller, 2007)
+     - The 228 ``treatment'' counties with poverty rates 10 percentage
+       points above this cutoff have average Head Start spending per
+       four-year-old as twice of that for 349 ``control'' counties
+       with poverty rates 10 percentage points below this cutoff.
+   - Ludwig and Miller (2007) uses this to estimate the "intent-to-treat" effect
+     of the proposal on mortality
+     - Limited to causes of death that could plausibly be affected by
+       Head Start health services
+     - Found a large drop in mortality rates of children five to nine
+       years of age over the period of 1973--1983. They also found some
+       evidence for a positive effect on schooling from decennial census
+       data.
+** Results: effect of Head Start on mortality
+    \begin{tabular}{lrr@{, }rr@{}rrr}
+      \toprule
+			& ATE     & \multicolumn{2}{r}{95\% CI}            &     &  $h$ &   $b$  \\
+      \midrule
+      LM (2007)         & --1.895 & (--3.930                    & 0.139)   & 9   &      &        \\
+      LM (2007)         & --1.198 & (--2.561                    & 0.165)   & 18  &      &        \\
+      LM (2007)         & --1.114 & (--2.138                    & --0.090) & 36  &      &        \\
+      CCT               & --3.795 & (--7.037                    & --0.554) & 3   & .888 & 6.807  \\
+      Resid.\ bootstrap & --3.792 & (--6.512                    & --0.262) & 3   & .888 & 6.807  \\
+      \bottomrule \\
+    \end{tabular}
+
+    Table 2 of paper
+    - First three estimates of ATE, labeled LM (2007), are from
+      Ludwig and Miller's paper (results presented for several bandwidths)
+      - First three CI's are conventional asymptotic confidence intervals
+      - $p$-values in the original paper are based on pairs bootstrap (and were generally significant)
+    - CCT: bias-corrected ATE estimate & corresponding confidence interval
+    - Resid. bootstrap: bootstrap-corrected ATE estimate &
+      corresponding interval
+    - Both procedures use CCT's AMSE-optimal bandwidth
+*** Main message
+    - Head start significantly lowers mortality (supporting the
+      results presented by Ludwig and Miller, 2007)
+    - Bias is potentially substantial
+      - Note difference between bias corrected and original ATE
+    - Both bias-corrected estimators essentially agree
+    - Bias correction can substantially affect inference
+** Secondary results: effect of Head Start on education
+   \begin{tabular}{lrr@{, }rr@{}rrr}
+    \toprule
+              & ATE   & \multicolumn{2}{r}{95\% CI} & & $h$     & $b$ & p-value     \\
+    \midrule                                                                          \\
+    \multicolumn{5}{l}{Fraction ``high school or more'' (Panel A)}                    \\
+    \midrule
+    LM (2007) & 0.030 & (0.003                      & 0.057) & 7&     &  & 0.032    \\
+    CCT       & 0.055 & (0.014                      & 0.096) & 3&.671 & 8.618       \\
+    Bootstrap & 0.054 & (0.013                      & 0.096) & 3&.671 & 8.618       \\\\
+    \multicolumn{5}{l}{Fraction ``some college or more'' (Panel B)}                   \\
+    \midrule
+    LM (2007) & 0.037 & (0.002                      & 0.073) & 7&     &  & 0.032 \T \\
+    CCT       & 0.051 & (0.004                      & 0.099) & 5&.076 & 10.251      \\
+    Bootstrap & 0.052 & (0.001                      & 0.094) & 5&.076 & 10.251      \\
+    \bottomrule \\
+    \end{tabular}
+
+    Table 3 of the paper
+
+    - Effect of Head Start assistance on education for cohort
+      18--24 in 1990.
+    - Panel A uses the fraction of people with high school
+      or more as dependent variable.
+    - Panel B uses the fraction of people with some college coursework
+      or more as the dependent variable
+
+*** Main message of this empirical exercise
+    - Both bias corrected estimators have similar behavior and produce
+      intervals containing larger values than the uncorrected estimator
+* Conclusion
+** Conclusion
+   - We've derived a bootstrap implementation of CCT's bias correction
+     - You can use a residual bootstrap from a $p+1$ order polynomial to
+       produce a bias-corrected (sharp) RD estimator of order $p$
+   - We have proven consistency of the bootstrap in this paper for a
+     local linear estimator using the uniform kernel
+
+   - Performance of both estimators is very similar
+
+   - The bootstrap is arguably easier to extend to other patterns of
+     data dependence, but is more limited (at the moment)
+     - Uniform kernel only
+
+     - Sharp RD only
+
+     - Linear estimator only
+
+   - Relaxing those assumptions is an ongoing research project
+
+   - Higher-order convergence is an ongoing research project
+
+   - Extensions to nonparametric regression in general is ongoing
+* COMMENT Local variables and spellcheck
+#+STARTUP: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [presentation,fleqn,t,8pt]
+#+LaTeX_HEADER: \usepackage{lucidabr,booktabs}
+#+LaTeX_HEADER: \input{../tex/slidesetup.tex}
+#+LaTeX_HEADER: \input{../tex/macros.tex}
+#+OPTIONS: H:2
+#+BEAMER_FRAME_LEVEL: 2
+#+MACRO: h 2.4in
+#+MACRO: w 4in
+#+MACRO: s \vspace{\baselineskip}
+#+OPTIONS: toc:nil
+
+#  LocalWords:  Edgeworth tfrac leq versa TODO itS DGP
