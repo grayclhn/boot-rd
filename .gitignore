@@ -15,6 +15,7 @@ _region_.tex
 .Rhistory
 .RData
 .Rproj.user
+.tar.gz
 
 # ...LaTeX
 *.acn
