@@ -15,7 +15,8 @@ rdboot(y, x, c = 0, p = 1, q = 2, h = NULL, b = NULL, Nbc = 500,
 
 \item{c}{specifies the RD cutoff in x; default is c = 0.}
 
-\item{p}{specifies the order of the local-polynomial used to construct the}
+\item{p}{specifies the order of the local-polynomial used to construct the
+point-estimator; default is p = 1 (local linear regression).}
 
 \item{q}{specifies the order of the local-polynomial used to construct the
 bias-correction; default is q = 2 (local quadratic regression).}
@@ -36,12 +37,9 @@ estimator(s). Options are triangular (default option), epanechnikov and
 uniform.}
 
 \item{level}{sets the confidence levels, a vector of length 3.}
-
-\item{p}{specifies the order of the local-polynomial used to construct the
-point-estimator; default is p = 1 (local linear regression).}
 }
 \value{
-A matrix containing point and interval estimates.
+A vector containing point and interval estimates.
 }
 \description{
 This package was created to speed up the simulations using
