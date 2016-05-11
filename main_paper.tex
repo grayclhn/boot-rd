@@ -934,10 +934,10 @@ and
   &= \tfrac{1}{nhb} \ssum[-]{i}{\min(h,b)} r_p(X_i/h) r_q(X_i/b)'
     \V(Y_i \mid X_i) \\
   \Bf_+(h)
-  & = e_0' \Gamma_{+,1}^{-1}
+  & = e_0' \Gamma_{+,1}^{-1}(h)
     \ssum[+]{i}{h} r_1(X_i/h) \; X_i^2 / h^2, \\
   \Bf_-(h)
-  & = e_0' \Gamma_{-,1}^{-1}
+  & = e_0' \Gamma_{-,1}^{-1}(h)
     \ssum[-]{i}{h} r_1(X_i/h) \; X_i^2 / h^2.
 \end{align*}
 
@@ -1050,7 +1050,7 @@ element of which is distributed as
     Y_{m_+(1,b)} - \E(Y_{m_+(1,b)} \mid X_{m_+(1,b)})
     & \text{with probability\ } 1/M_+(b) \\
     \vdots \\
-    Y_{m_+(M_+(b),b)} - \E(Y_{m_+(M_+(b),b)} \mid X_{m_+(1,b)})
+    Y_{m_+(M_+(b),b)} - \E(Y_{m_+(M_+(b),b)} \mid X_{m_+(M_+(b),b)})
     & \text{with probability\ } 1/M_+(b),
   \end{cases}
 \]
