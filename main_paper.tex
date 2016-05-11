@@ -684,9 +684,16 @@ We also show the coverage of two of CCT's interval estimators for comparison.
 We estimate their bias corrected procedure with AMSE-optimal bandwidths for both
 the uniform kernel and the triangular kernel. The uniform kernel provides a
 direct comparison with our bootstrap, while the triangular kernel may be more
-appealing to practitioners. Since CCT establish conclusively that the ``naive''
-uncorrected interval estimator has poor coverage in these settings we do not
-report results for that estimator.
+appealing to practitioners. 
+
+In addition, we present the coverage of the ``naive'' uncorrected interval 
+estimator using the uniform kernel and an optimal bandwidth $h$ proposed by 
+\cite{IK}, which has been shown by CCT to have poor coverage. As an alternative, 
+we show the coverage of the interval estimator obtained by bootstrapping the 
+``naive'' uncorrected point estimate. Specifically, we resample the data with 
+equal weights, find optimal bandwidth for each bootstrapped sample and calculate 
+the uncorrected point estimate. The $0.025$ and $0.975$ quantiles of the bootstrap 
+distribution are used as the lower and upper bound of the confidence interval.
 
 \begin{table}[t]
   \centering
@@ -695,14 +702,20 @@ report results for that estimator.
     DGP & Method     & Bias   & SD    & RMSE   & CI Coverage (\%) & CI Length \\
     \midrule
     1   & \bootuni   & --0.014 & 0.067 & 0.069 & 93.4       & 0.242     \\
+	    & \bootnaive & --0.040 & 0.042 & 0.058 & 89.0       & 0.182     \\
         & \cctuni    & --0.014 & 0.067 & 0.069 & 92.5       & 0.246     \\
-        & \ccttri    & --0.014 & 0.067 & 0.068 & 91.4       & 0.239     \\\\
-    2   & \bootuni   & --0.011 & 0.088 & 0.089 & 95.1       & 0.323     \\
+        & \ccttri    & --0.011 & 0.067 & 0.068 & 91.4       & 0.239     \\
+        & \naiveuni  & --0.040 & 0.042 & 0.058 & 81.5       & 0.156     \\\\
+    2   & \bootuni   & --0.011 & 0.088 & 0.089 & 95.3       & 0.323     \\
+        & \bootnaive & --0.151 & 0.067 & 0.165 & 35.4       & 0.269     \\
         & \cctuni    & --0.011 & 0.088 & 0.089 & 93.7       & 0.353     \\
-        & \ccttri    & --0.008 & 0.086 & 0.086 & 93.2       & 0.346     \\\\
+        & \ccttri    & --0.008 & 0.086 & 0.086 & 93.2       & 0.346     \\
+        & \naiveuni  & --0.151 & 0.067 & 0.165 & 29.5       & 0.230     \\\\
     3   & \bootuni   & --0.004 & 0.065 & 0.065 & 95.9       & 0.247     \\
+	    & \bootnaive &   0.033 & 0.052 & 0.062 & 91.3       & 0.215     \\
         & \cctuni    & --0.004 & 0.065 & 0.065 & 93.8       & 0.251     \\
         & \ccttri    & --0.005 & 0.065 & 0.065 & 93.4       & 0.244     \\
+        & \naiveuni  &   0.033 & 0.052 & 0.062 & 86.1       & 0.191     \\
     \bottomrule
   \end{tabular}
   \caption{%
@@ -714,17 +727,20 @@ report results for that estimator.
 \end{table}
 
 Table~\ref{tbl:1} presents the results of these simulations. The rows labeled
-``\bootuni'' show results for our proposed bootstrap interval; ``\cctuni'' and
-``\ccttri'' show results for the analytically-corrected intervals. The first
-three columns give the bias, standard deviation, and Root-MSE of the \emph{bias corrected} point
-estimators corresponding to each confidence interval.  As expected, these
-estimators are close to unbiased, with their standard deviation largely
+``\bootuni'' show results for our proposed bootstrap interval; ``\bootnaive'' 
+show results for the naive bootstrap interval; ``\cctuni'' and ``\ccttri'' show 
+results for the analytically-corrected intervals; and ``\naiveuni'' show results 
+for the analytically-uncorrected interval. The first three columns give the bias, 
+standard deviation, and Root-MSE of the point
+estimators corresponding to each confidence interval.  As expected, the three 
+bias corrected estimators (``\bootuni'', ``\cctuni'' and ``\ccttri'') have 
+bias close to zero, with their standard deviation largely
 determining the estimators' RMSE. Moreover, as Theorem~\ref{T1} suggests, the
 bootstrap and analytically-corrected estimators have essentially the same
 standard deviation across all of the DGPs.
 
 The column ``CI Coverage'' lists the experimental coverage of each interval.
-All of the intervals are reasonably close to their nominal coverage, although
+All of the intervals from three robust estimators are reasonably close to their nominal coverage, although
 the analytically corrected estimators seem to persistently under-cover the true 
 ATE (especially the one using triangular kernel). Our proposed bootstrap
 procedure consistently performs well, as it is about a percentage point closer
