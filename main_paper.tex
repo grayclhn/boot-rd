@@ -223,8 +223,9 @@ In most cases, the population parameter of interest is the Average Treatment
 Effect (ATE) at the cutoff, which we will denote $\tau$. This parameter is the
 difference in expected potential outcomes given $X_i = 0$; formally,
 \begin{equation*}
-  \tau=\E(Y(1)-Y(0) \mid X=0).
+  \tau=\E(Y(1)-Y(0) \mid X=0)
 \end{equation*}
+with $\E$ representing the expectation.
 \cite{HTV2001} show that the effect $\tau$ is identified under continuity and
 smoothness conditions on the joint distribution of $X_i$, $Y_i(0)$, and $Y_i(1)$
 around the cutoff $X_i = 0$. Under these conditions, which are made precise
