@@ -89,9 +89,9 @@
         bounded away from zero.
    - This assumption implies that $\tau$ is identified:
      \begin{equation*}
-       \tau = \mu_+(x) - \mu_-(x).
+       \tau = \mu_+(0) - \mu_-(0).
      \end{equation*}
-     Both $\mu_+(x)$ and $\mu_-(x)$ can be estimated consistently.
+     Both $\mu_+(0)$ and $\mu_-(0)$ can be estimated consistently.
      (Hahn, Todd, and der Klaauw, 2001; Porter, 2003; and Calonico,
      Cattaneo, and Titiunik, 2014)
 ** Estimation and inference (background)
@@ -107,7 +107,7 @@
      \end{align*}
    - Then the obvious estimator for $\tau$ is
      \begin{equation*}
-       \hat\tau = \hat\mu_+(x) - \hat\mu_-(x).
+       \hat\tau = \hat\mu_+(0) - \hat\mu_-(0).
      \end{equation*}
    - Conventional confidence intervals can be produced from an asymptotic
      approximation for $\hat\tau$ if $h \to 0$ quickly enough
