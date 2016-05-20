@@ -1,5 +1,5 @@
 #+TITLE: Bootstrap Confidence Intervals for Sharp Regression Discontinuity Designs with the Uniform Kernel
-#+DATE: 20 May 2016 \\ Advances in Econometrics Conference on \\ Regression Discontinuity Designs
+#+DATE: 20 May 2016 \\\hfill\\ Advances in Econometrics Conference on \\ Regression Discontinuity Designs
 #+AUTHOR: Otàvio Bartalotti, Gray Calhoun, and Yang He \\\hfill\\ Economics Department \\ Iowa State University
 * Introduction
 ** What does this paper do that's new and interesting?
