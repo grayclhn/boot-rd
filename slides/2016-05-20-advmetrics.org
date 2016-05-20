@@ -295,7 +295,7 @@
 * Simulation Evidence
 ** Monte Carlo setup
    - Monte Carlo DGPs mimic Imbens and Kalyanaraman (2012) and CCT
-   - 5000 simulations, bootstrap uses 500 i.i.d. draws from
+   - 5000 simulations, 500 observations each, i.i.d. draws from
      \begin{align*}
      Y_{i}           &= \mu_{j}(X_{i}) + \varepsilon_{i} \\
      X_{i}           &\sim  2 \times \betarv(2,4) - 1 \\
@@ -336,6 +336,8 @@
    - "Good" estimators
      - Theoretical intervals: CCT with uniform and triangular kernels
      - Bootstrap estimator: ours
+     - 500 draws for bias correction
+     - 999 draws to approximate distribution
      - Use CCT's AMSE-optimal bandwidth rule for $h$ and $b$
    - "Bad" estimators
      - Naive theoretical confidence interval (asymptotic normality)
@@ -424,7 +426,8 @@
       - $p$-values in the original paper are based on pairs bootstrap (and were generally significant)
     - CCT: bias-corrected ATE estimate & corresponding confidence interval
     - Resid. bootstrap: bootstrap-corrected ATE estimate &
-      corresponding interval
+      corresponding interval (500 draws for bias correction, 999 for
+      critical values)
     - Both procedures use CCT's AMSE-optimal bandwidth
 ** Main message from analysis of mortality
    - Head start significantly lowers mortality
