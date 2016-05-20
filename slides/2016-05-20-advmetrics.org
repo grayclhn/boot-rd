@@ -343,7 +343,7 @@
      - Naive theoretical confidence interval (asymptotic normality)
        using uniform kernel and Imbens and Kalyanaraman's AMSE-optimal
        bandwidth.
-     - Pairs bootstrapped version of the same estimator
+     - Pairs bootstrapped version of the same estimator (999 replications)
    - All intervals use the 0.025 and 0.975 quantiles of the sampling
      distributions
 ** Monte Carlo results
