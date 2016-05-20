@@ -16,6 +16,19 @@
 }
 \setbeamertemplate{frametitle}{\vspace{\baselineskip}\underline{\insertframetitle\vphantom{g}}}
 \setbeamertemplate{itemize/enumerate body begin}{\setlength{\leftmargini}{0pt}}
+\setbeamerfont{itemize/enumerate subbody}{size=\normalsize}
+
+\makeatletter
+\newcommand{\setlistspacing}[2]{\def\@ld{#1}\expandafter\def\csname
+@list\romannumeral\@ld \endcsname{\leftmargin\csname
+leftmargin\romannumeral\@ld \endcsname
+              \topsep    #2
+              \parsep    0\p@   \@plus\p@
+              \itemsep   #2}}
+\makeatother
+\setlistspacing{1}{1.3ex}
+\setlistspacing{2}{1.3ex}
+\setlistspacing{3}{1.3ex}
 
 \usepackage{tikz}
 \usepackage{xcolor}
