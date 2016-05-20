@@ -3,22 +3,23 @@
 #+AUTHOR: Otàvio Bartalotti, Gray Calhoun, and Yang He \\\hfill\\ Economics Department \\ Iowa State University
 * Introduction
 ** What does this paper do that's new and interesting?
-   - We implement a bootstrap version of Calonico, Cattaneo, and
-     Titiunik's (2014) bias-corrected RD intervals
-     - Bias of RD estimates using common bandwidth rules affects
-       confidence intervals, even though estimates are consistent
-     - i.e. Imbens and Kalyanaraman's (2012) optimal MSE bandwidth
-     - Calonico, Cattaneo and Titiunik provide a bias correction and a
-       variance adjustment to generate valid intervals
-     - These modifications are determeined by the \((p+1)\)-th order polynomial
-     - $p$ is the order of the polynomial used in the RD to estimate
-       the treatment effect
-   - Our paper embeds the \((p+1)\)-th order behavior of the conditional
-     expectation in a bootstrap algorithm
-     - Residual bootstrap using the local $p+1$ order polynomial
-     - Used to estimate and remove the bias of the RD estimator
-     - Also used to estimate the variance of the bias-corrected estimator
-     - Iterated bootstrap: we apply the same algorithm twice
+   We implement a bootstrap version of Calonico, Cattaneo, and
+   Titiunik's (2014) bias-corrected RD intervals
+   - Bias of RD estimates using common bandwidth rules affects
+     confidence intervals, even though estimates are consistent
+   - i.e. Imbens and Kalyanaraman's (2012) optimal MSE bandwidth
+   - Calonico, Cattaneo and Titiunik provide a bias correction and a
+     variance adjustment to generate valid intervals
+   - These modifications are determined by the \((p+1)\)-th order polynomial
+   - $p$ is the order of the polynomial used in the RD to estimate
+     the treatment effect
+** What does this paper do that's new and interesting?
+   Our paper embeds the \((p+1)\)-th order behavior of the conditional
+   expectation in a bootstrap algorithm
+   - Residual bootstrap using the local $p+1$ order polynomial
+   - Used to estimate and remove the bias of the RD estimator
+   - Also used to estimate the variance of the bias-corrected estimator
+   - Iterated bootstrap: we apply the same algorithm twice
 *** _Limitations of the current paper_
     - We only prove results in this paper for
       - Local linear RD estimates
@@ -26,8 +27,8 @@
       - Sharp discontinuities
       - i.i.d. samples
 
-    - We only prove consistency of the bootstrap, not higher order
-      refinements
+    - We only prove consistency of the bootstrap, no higher order
+      properties
 
     - We're currently working on relaxing all of these limitations
 ** Short outline of the talk
@@ -139,6 +140,7 @@
      - $\hat\mu_{+}^{(2)}$ and $\hat\mu_-^{(2)}$ are estimated with a
        second order local polynomial
      - $b$ is a different bandwidth.
+** Estimation and inference (background)
    - The bias-correction introduces additional variance, so
      \begin{equation*}
        \frac{\hat{\tau}'(h, b) - \tau}{V'(h, b)^{1/2}} \to^d N(0,1)
@@ -147,13 +149,20 @@
      - $V'(h, b) = V(h) + C(h, b)$
      - $C(h, b)$ is the additional variance component
    - $C(h,b)$ can be consistently estimated from $\hat\mu_+^{(2)}$ and $\hat\mu_-^{(2)}$
+
 ** Assumption 2 (bandwidth)
 
    - Let $h$ be the bandwidth used to estimate the local linear model
-     and let $b$ be the bandwidth used to estimate a second local
-     quadratic model. Then $n h \to \infty$, $n b \to \infty$, $n
-     h^{5} b^{2} \to 0$, and $n b^{5} h^{2} \to 0$ as $n \to \infty$.
-     The relationship $h \leq b$ also holds for all $n$.
+     and
+   - let $b$ be the bandwidth used to estimate a second local
+     quadratic model.
+   - Then
+     - $n h \to \infty$,
+     - $n b \to \infty$,
+     - $n h^{5} b^{2} \to 0$, and
+     - $n b^{5} h^{2} \to 0$ as
+     - $n \to \infty$.
+   - The relationship $h \leq b$ also holds for all $n$.
 
   {{{s}}}
 
@@ -172,6 +181,7 @@
      - $M_{-}(h)$ is the number of elements in $I_{-}(h)$
      - $m_{-}(h,1),\dots,m_{-}(h,M_{-}(h))$ is the subsequence of
        $1,\dots,n$ that indexes $I_{-}(h)$
+** Resampling algorithm (for $X_i < 0$) --- Sketch of Algorithm 1
    - For the bootstrap, do the following:
      1. Estimate a local second order polynomials $\hat g_{-}$ using the observations in $I_i(b)$
         \begin{align}
@@ -229,8 +239,6 @@
    \end{equation}
 *** _Sketch of a proof_
 
-    {{{s}}}
-
     - $\hat\tau(h) - \Delta^*(h,b) - \tau = (\hat\tau(h) - \E \hat \tau(h)) + (\E \hat \tau(h) - \tau) - (\E^* \hat \tau^*(h) - \tau^*)$
 
     - The design of the bootstrap ensures that (a.s.)
@@ -249,35 +257,32 @@
     - The proof reduces to CCT's.
 * Bootstrap critical values
 ** Bootstrap critical values (Algorithm 2)
-   To produce critical values for the bias-corrected statistic,
-   iterate the bootstrap from before.
+   - To produce critical values for the bias-corrected statistic,
+     iterate the bootstrap from before.
 
-   1. Generate bootstrap values $Y_{-,i}^*$ and $Y_{+,i}^*$ using the
-      residual bootstrap defined earlier
-   2. Estimate $\hat\tau^*$ on the bootstrap dataset
-   3. On each bootstrapped dataset, use the bootstrap _again_ to
-      estimate the bias of $\hat\tau^*$. Call this estimate $\Delta^{**}$
+     1. Generate bootstrap values $Y_{-,i}^*$ and $Y_{+,i}^*$ using the
+        residual bootstrap defined earlier
+     2. Estimate $\hat\tau^*$ on the bootstrap dataset
+     3. On each bootstrapped dataset, use the bootstrap _again_ to
+        estimate the bias of $\hat\tau^*$. Call this estimate $\Delta^{**}$
 
-   The distribution of $\hat\tau^* - \Delta^{**} - \tau^*$ can be
-   approximated by repeated simulation.
+   - The distribution of $\hat\tau^* - \Delta^{**} - \tau^*$ can be
+     approximated by repeated simulation.
 
    {{{s}}}
 
-*** _Theorem 2_
-
-    {{{s}}}
-
-   Under Assumptions 1 and 2,
-   \[
-     \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V'(h,b) \to^p 1
-   \]
-   and
-   \begin{multline*}
-     \sup_{x} \Big\rvert \Pr^*[\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^* \leq x ]\\ - \Pr[\hat\tau(h) - \Delta^*(h,b) - \tau \leq x] \Big\lvert \to^p 0.
-   \end{multline*}
-*** _Tiniest sketch of a proof
+** Theorem 2
+  Under Assumptions 1 and 2,
+  \[
+    \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V'(h,b) \to^p 1
+  \]
+  and
+  \begin{multline*}
+    \sup_{x} \Big\rvert \Pr^*[\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^* \leq x ]\\ - \Pr[\hat\tau(h) - \Delta^*(h,b) - \tau \leq x] \Big\lvert \to^p 0.
+  \end{multline*}
+*** _Tiniest sketch of a proof_
     1. Use CCT's results to prove that expansion terms of order $p+2$ and higher
-       are negligeable
+       are negligible
     2. Use an argument similar to Freedman (1981) to prove that the residual bootstrap
        approximates the distribution of $\hat\tau$ under truncated DGP.
 * Simulation Evidence
@@ -290,7 +295,7 @@
      \varepsilon_{i} &\sim N(0, 0.1295^2),
      \end{align*}
      where $j$ indexes the specific DGP
-   - DGP 1:
+   - DGP 1:\small
      \begin{equation*}
        \mu_{1}(x) =
        \begin{cases}
@@ -300,7 +305,7 @@
        & \otherwise.
        \end{cases}
      \end{equation*}
-   - DGP 2:
+   - DGP 2:\small
      \begin{equation*}
        \mu_{2}(x) =
        \begin{cases}
@@ -310,7 +315,7 @@
          & \otherwise
        \end{cases}
      \end{equation*}
-   - DGP 3:
+   - DGP 3:\small
      \begin{equation*}
        \mu_{3}(x) =
        \begin{cases}
@@ -333,7 +338,7 @@
    - All intervals use the 0.025 and 0.975 quantiles of the sampling
      distributions
 ** Monte Carlo results
-  \small
+  \footnotesize
   \begin{tabular}{rlrrrrrrr}
     \toprule
     DGP & Method     & Bias   & SD    & RMSE   & CI Coverage (\%) & CI Length \\
@@ -359,14 +364,14 @@
   Table 1 of the paper. (Reordered --- decreasing in coverage)
 
   - DGP 2 is the most interesting
-  - The residual bootstrap is competetive with the other bias-corrected
+  - The residual bootstrap is competitive with the other bias-corrected
     intervals
   - All bias-corrected intervals perform well
   - Both uncorrected estimators perform very badly for DGP 2 and show some
     undercoverage on other DGPs
 
 * Application
-** Empirical application: effect of Head Start program on mortality rates
+** Empirical application: effects of Head Start program
    - We apply this bootstrap to Ludwig and Miller's (2007) analysis of the Head
      Start program
      - Data available at
@@ -380,18 +385,19 @@
      1960 poverty rate.
    - The poverty rate of the 300th poorest county serves as a sharp
      cutoff of treatment. (Ludwig and Miller, 2007)
-     - The 228 ``treatment'' counties with poverty rates 10 percentage
-       points above this cutoff have average Head Start spending per
-       four-year-old as twice of that for 349 ``control'' counties
-       with poverty rates 10 percentage points below this cutoff.
-   - Ludwig and Miller (2007) uses this to estimate the "intent-to-treat" effect
-     of the proposal on mortality
-     - Limited to causes of death that could plausibly be affected by
-       Head Start health services
-     - Found a large drop in mortality rates of children five to nine
-       years of age over the period of 1973--1983. They also found some
-       evidence for a positive effect on schooling from decennial census
-       data.
+     - 228 ``treated'' counties
+     - 349 ``control'' counties
+** Empirical application: effects of Head Start program
+   - We look at two estimates studied by Ludwig and Miller (2007)
+   - Estimate the "intent-to-treat" effect of the proposal on
+     1. mortality and
+     2. attainment of high-school and college education
+   - Mortality is limited to causes of death that could plausibly be
+     affected by Head Start health services
+   - Found a large drop in mortality rates of children five to nine
+     years of age over the period of 1973--1983. They also found some
+     evidence for a positive effect on schooling from decennial census
+     data.
 ** Results: effect of Head Start on mortality
     \begin{tabular}{lrr@{, }rr@{}rrr}
       \toprule
@@ -405,7 +411,6 @@
       \bottomrule \\
     \end{tabular}
 
-    Table 2 of paper
     - First three estimates of ATE, labeled LM (2007), are from
       Ludwig and Miller's paper (results presented for several bandwidths)
       - First three CI's are conventional asymptotic confidence intervals
@@ -414,43 +419,42 @@
     - Resid. bootstrap: bootstrap-corrected ATE estimate &
       corresponding interval
     - Both procedures use CCT's AMSE-optimal bandwidth
-*** Main message
-    - Head start significantly lowers mortality (supporting the
-      results presented by Ludwig and Miller, 2007)
-    - Bias is potentially substantial
-      - Note difference between bias corrected and original ATE
-    - Both bias-corrected estimators essentially agree
-    - Bias correction can substantially affect inference
-** Secondary results: effect of Head Start on education
+** Main message from empirical analysis
+   - Head start significantly lowers mortality (supporting the
+     results presented by Ludwig and Miller, 2007)
+   - Bias is potentially substantial
+     - Note difference between bias corrected and original ATE
+   - Both bias-corrected estimators essentially agree
+   - Bias correction can substantially affect inference
+** Secondary results: effect of Head Start on education attainment
+   \small
+
    \begin{tabular}{lrr@{, }rr@{}rrr}
     \toprule
-              & ATE   & \multicolumn{2}{r}{95\% CI} & & $h$     & $b$ & p-value     \\
-    \midrule                                                                          \\
-    \multicolumn{5}{l}{Fraction ``high school or more'' (Panel A)}                    \\
+              & ATE   & \multicolumn{2}{r}{95\% CI} & & $h$     & $b$    \\
+    \midrule                                                               \\
+    \multicolumn{5}{l}{Fraction ``high school or more'' (Panel A)}         \\
     \midrule
-    LM (2007) & 0.030 & (0.003                      & 0.057) & 7&     &  & 0.032    \\
-    CCT       & 0.055 & (0.014                      & 0.096) & 3&.671 & 8.618       \\
-    Bootstrap & 0.054 & (0.013                      & 0.096) & 3&.671 & 8.618       \\\\
-    \multicolumn{5}{l}{Fraction ``some college or more'' (Panel B)}                   \\
+    LM (2007) & 0.030 & (0.003                      & 0.057) & 7&        \\
+    CCT       & 0.055 & (0.014                      & 0.096) & 3&.671    \\
+    Bootstrap & 0.054 & (0.013                      & 0.096) & 3&.671    \\\\
+    \multicolumn{5}{l}{Fraction ``some college or more'' (Panel B)}        \\
     \midrule
-    LM (2007) & 0.037 & (0.002                      & 0.073) & 7&     &  & 0.032 \T \\
-    CCT       & 0.051 & (0.004                      & 0.099) & 5&.076 & 10.251      \\
-    Bootstrap & 0.052 & (0.001                      & 0.094) & 5&.076 & 10.251      \\
+    LM (2007) & 0.037 & (0.002                      & 0.073) & 7&     \T \\
+    CCT       & 0.051 & (0.004                      & 0.099) & 5&.076    \\
+    Bootstrap & 0.052 & (0.001                      & 0.094) & 5&.076    \\
     \bottomrule \\
     \end{tabular}
 
-    Table 3 of the paper
-
     - Effect of Head Start assistance on education for cohort
       18--24 in 1990.
-    - Panel A uses the fraction of people with high school
-      or more as dependent variable.
-    - Panel B uses the fraction of people with some college coursework
-      or more as the dependent variable
-
-*** Main message of this empirical exercise
-    - Both bias corrected estimators have similar behavior and produce
-      intervals containing larger values than the uncorrected estimator
+    - Panel A uses the fraction of subjects attaining high school (or
+      more) as the outcome
+    - Panel B uses the fraction of subjects attaining some college
+      coursework or more as the outcome
+*** Main message of the second empirical exercise
+    - Both bias corrected estimators have similar behavior
+    - Head Start has had a positive effect on educational attainment
 * Conclusion
 ** Conclusion
    - We've derived a bootstrap implementation of CCT's bias correction
@@ -471,13 +475,13 @@
 
    - Relaxing those assumptions is an ongoing research project
 
-   - Higher-order convergence is an ongoing research project
+   - Higher-order properties are an ongoing research project
 
    - Extensions to nonparametric regression in general is ongoing
 * COMMENT Local variables and spellcheck
 #+STARTUP: beamer
 #+LaTeX_CLASS: beamer
-#+LaTeX_CLASS_OPTIONS: [presentation,fleqn,t,8pt]
+#+LaTeX_CLASS_OPTIONS: [presentation,fleqn,t,9pt]
 #+LaTeX_HEADER: \usepackage{lucidabr,booktabs}
 #+LaTeX_HEADER: \input{../tex/slidesetup.tex}
 #+LaTeX_HEADER: \input{../tex/macros.tex}
@@ -488,4 +492,8 @@
 #+MACRO: s \vspace{\baselineskip}
 #+OPTIONS: toc:nil
 
-#  LocalWords:  Edgeworth tfrac leq versa TODO itS DGP
+#  LocalWords:  Edgeworth tfrac leq versa TODO itS DGP hfill Otàvio
+#  LocalWords:  Bartalotti Calonico Cattaneo Titiunik's Imbens cdot
+#  LocalWords:  Kalyanaraman's Titiunik tableofcontents geq infty toc
+#  LocalWords:  analytical subsequence varepsilon beamer LaTeX fleqn
+#  LocalWords:  usepackage lucidabr booktabs vspace baselineskip
