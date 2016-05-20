@@ -471,7 +471,7 @@
    - We've derived a bootstrap implementation of CCT's bias correction
      - You can use a residual bootstrap from a $p+1$ order polynomial to
        produce a bias-corrected (sharp) RD estimator of order $p$
-     - Use the boostrap a _second time_ to account for changes in the variance
+     - Use the bootstrap a _second time_ to account for changes in the variance
    - We have proven consistency of the bootstrap in this paper for a
      local linear estimator using the uniform kernel
 
@@ -480,7 +480,8 @@
    - The bootstrap is arguably easier to extend to other patterns of
      data dependence, but is more limited (at the moment)
 
-     - Uniform kernel, linear models, sharp design, given bandwidth
+     - Limitations: we assume uniform kernel, linear models, sharp
+       design, given bandwidth
 
      - We're currently working on relaxing these restrictions
 
