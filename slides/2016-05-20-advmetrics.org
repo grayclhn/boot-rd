@@ -328,7 +328,7 @@
    - "Bad" estimators
      - Naive theoretical confidence interval (asymptotic normality)
        using uniform kernel and Imbens and Kalyanaraman's AMSE-optimal
-       kernel.
+       bandwidth.
      - Pairs bootstrapped version of the same estimator
    - All intervals use the 0.025 and 0.975 quantiles of the sampling
      distributions
