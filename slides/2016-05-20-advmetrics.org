@@ -3,23 +3,25 @@
 #+AUTHOR: Otàvio Bartalotti, Gray Calhoun, and Yang He \\\hfill\\ Economics Department \\ Iowa State University
 * Introduction
 ** What does this paper do that's new and interesting?
-   We implement a bootstrap version of Calonico, Cattaneo, and
-   Titiunik's (2014) bias-corrected RD intervals
-   - Bias of RD estimates using common bandwidth rules affects
-     confidence intervals, even though estimates are consistent
-   - i.e. Imbens and Kalyanaraman's (2012) optimal MSE bandwidth
-   - Calonico, Cattaneo and Titiunik provide a bias correction and a
-     variance adjustment to generate valid intervals
-   - These modifications are determined by the \((p+1)\)-th order polynomial
-   - $p$ is the order of the polynomial used in the RD to estimate
-     the treatment effect
+   - We implement a bootstrap version of Calonico, Cattaneo, and
+     Titiunik's (2014) bias-corrected RD confidence intervals
+     - Bias of RD estimates using common bandwidth rules affects
+       confidence intervals, even though estimates are consistent
+     - i.e. Imbens and Kalyanaraman's (2012) optimal MSE bandwidth
+     - Calonico, Cattaneo and Titiunik provide a bias correction and a
+       variance adjustment to generate valid intervals
+     - These modifications are determined by the \((p+1)\)-th order polynomial
+     - $p$ is the order of the polynomial used in the RD to estimate
+       the treatment effect
+     - To save space on the rest of the slides, I'll use ``CCT'' to
+       refer to Calonico, Cattaneo, and Titiunik (2014)
 ** What does this paper do that's new and interesting?
-   Our paper embeds the \((p+1)\)-th order behavior of the conditional
-   expectation in a bootstrap algorithm
-   - Residual bootstrap using the local $p+1$ order polynomial
-   - Used to estimate and remove the bias of the RD estimator
-   - Also used to estimate the variance of the bias-corrected estimator
-   - Iterated bootstrap: we apply the same algorithm twice
+  - Our paper embeds the \((p+1)\)-th order behavior of the conditional
+    expectation in a bootstrap algorithm
+    - Residual bootstrap using the local $p+1$ order polynomial
+    - This bootstrap is used to estimate the bias of the order $p$ RD estimator
+    - It's also used to estimate the variance of the bias-corrected estimator
+    - Iterated bootstrap: we apply the same algorithm twice
 *** _Limitations of the current paper_
     - We only prove results in this paper for
       - Local linear RD estimates
@@ -30,7 +32,6 @@
     - We only prove consistency of the bootstrap, no higher order
       properties
 
-    - We're currently working on relaxing all of these limitations
 ** Short outline of the talk
     \tableofcontents
 * Setup and assumptions
@@ -88,16 +89,18 @@
         differentiable.
      4. $\sigma_+^2(x)$ and $\sigma_-^2(x)$ are both continuous and
         bounded away from zero.
+
+   ----------------------------------------------------------------------
+
    - This assumption implies that $\tau$ is identified:
      \begin{equation*}
        \tau = \mu_+(0) - \mu_-(0).
      \end{equation*}
      Both $\mu_+(0)$ and $\mu_-(0)$ can be estimated consistently.
-     (Hahn, Todd, and der Klaauw, 2001; Porter, 2003; and Calonico,
-     Cattaneo, and Titiunik, 2014)
+     (Hahn, Todd, and der Klaauw, 2001; Porter, 2003; and CCT)
 ** Estimation and inference (background)
    - $\mu_+$ and $\mu_-$ can be estimated by extrapolating from a
-     local polynomial regression with bandwidth $h$:
+     local linear regression with bandwidth $h$:
      \begin{align*}
        \hat {\mu}_{+}(h)
        &= \argmin_{\beta_0} \Big(\min_{\beta_1} \sum_{i=1}^{n}
@@ -146,7 +149,7 @@
        \frac{\hat{\tau}'(h, b) - \tau}{V'(h, b)^{1/2}} \to^d N(0,1)
      \end{equation*}
      under weaker assumptions on the bandwidth
-     - $V'(h, b) = V(h) + C(h, b)$
+     - \udot{$V'(h, b) = V(h) + C(h, b)$}
      - $C(h, b)$ is the additional variance component
    - $C(h,b)$ can be consistently estimated from $\hat\mu_+^{(2)}$ and $\hat\mu_-^{(2)}$
 
@@ -164,26 +167,22 @@
      - $n \to \infty$.
    - The relationship $h \leq b$ also holds for all $n$.
 
-  {{{s}}}
+   ----------------------------------------------------------------------
 
    - Note that this assumption is not strong enough to ensure that the
      uncorrected interval is asymptotically valid.
    - The assumption ensures that the "bias corrected" interval is
-     asymptotically valid
+     asymptotically valid (along with assumptions on the kernel)
 
 * Definition of the bootstrap algorithm
 ** Resampling algorithm (for $X_i < 0$) --- Sketch of Algorithm 1
-   - To keep the notation manageable, this slide describes the
-     bootstrap for the left side of the cutoff (i.e. where $X_i < 0$).
-   - We also do the same procedure for $X_i \geq 0$
-   - Define the following terms
-     - $I_{-}(h) &= \{i : -h < X_{i} < 0\}$
-     - $M_{-}(h)$ is the number of elements in $I_{-}(h)$
-     - $m_{-}(h,1),\dots,m_{-}(h,M_{-}(h))$ is the subsequence of
-       $1,\dots,n$ that indexes $I_{-}(h)$
-** Resampling algorithm (for $X_i < 0$) --- Sketch of Algorithm 1
-   - For the bootstrap, do the following:
-     1. Estimate a local second order polynomials $\hat g_{-}$ using the observations in $I_i(b)$
+   - To keep the presentation manageable, this slide describes
+     the bootstrap for the left side of the cutoff (i.e. where $X_i <
+     0$) and hides some notation.
+   - Define $I_{-}(b) &= \{i : -b < X_{i} < 0\}$
+   - Do the following for each bootstrap sample:
+     1. Estimate a local second order polynomials $\hat g_{-}$ using
+        the observations in $I_-(b)$
         \begin{align}
           \label{eq:2}
           \hat g_{-}(x)
@@ -196,11 +195,11 @@
         \[
           \hat\varepsilon_{i} = Y_{i} - \hat g_-(X_{i})
 	\]
-   - Let $\varepsilon^*_{-,i}$ be a draw from $\{\hat\varepsilon_j\}$
-     (each with equal probability) and define
-     \begin{align*}
-       Y_{-,i}^* &= \hat g_-(X_{i}) + \varepsilon_{-,i}^{*}
-     \end{align*}
+     3. Let $\varepsilon^*_{-,i}$ be a draw from $\{\hat\varepsilon_j\}$
+	(each with equal probability) and define
+	\begin{align*}
+	  Y_{-,i}^* &= \hat g_-(X_{i}) + \varepsilon_{-,i}^{*}
+	\end{align*}
    - $Y_{+,i}^*$ is defined similarly for $X_i \geq 0$.
 * Bias correction through the bootstrap
 ** Bias estimation through the bootstrap --- Sketch of Algorithm 1
@@ -227,9 +226,9 @@
      \end{align*}
    - The bias of the RD estimator under the bootstrap distribution is
      \begin{equation}
-       \Delta^*(h,b) = \E^*( \hat\tau^*(h) - \tau^* )
+       \udot{$\Delta^*(h,b) = \E^*( \hat\tau^*(h) - \tau^* )$}
      \end{equation}
-   - This expectation can be approximated by simulation
+     which can be approximated by simulation
 ** Theorem 1
    Under Assumptions 1 and 2,
    \begin{equation}
@@ -237,6 +236,9 @@
    \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V'(h, b)^{1/2}}
    \to^{d} N(0,1).
    \end{equation}
+
+   ----------------------------------------------------------------------
+
 *** _Sketch of a proof_
 
     - $\hat\tau(h) - \Delta^*(h,b) - \tau = (\hat\tau(h) - \E \hat \tau(h)) + (\E \hat \tau(h) - \tau) - (\E^* \hat \tau^*(h) - \tau^*)$
@@ -253,18 +255,20 @@
         \E^* \hat\tau^*(h) - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf_+(h)/2 - h^2\, \mu_{-}^{*(2)} \Bf_{-}(h)/2.
       \end{equation*}
     - $\mu_-^{*(2)}$ and $\mu_+^{*(2)}$ are sample moments and consistently
-      estimate $\mu_-^{(2)}$ and $\mu_+^{(2)}$
+      estimate $\mu_-^{(2)}$, $\mu_+^{(2)}$
     - The proof reduces to CCT's.
 * Bootstrap critical values
 ** Bootstrap critical values (Algorithm 2)
    - To produce critical values for the bias-corrected statistic,
      iterate the bootstrap from before.
 
-     1. Generate bootstrap values $Y_{-,i}^*$ and $Y_{+,i}^*$ using the
+     1. Generate bootstrap values $\{Y_{-,i}^*\}_i$ and $\{Y_{+,i}^*\}_i$ using the
         residual bootstrap defined earlier
-     2. Estimate $\hat\tau^*$ on the bootstrap dataset
+     2. Estimate $\hat\tau^*(h)$ on the bootstrap dataset
      3. On each bootstrapped dataset, use the bootstrap _again_ to
-        estimate the bias of $\hat\tau^*$. Call this estimate $\Delta^{**}$
+        estimate the bias of $\hat\tau^*(h)$. Call this estimate $\Delta^{**}$
+
+   - $\Delta^{**} = \E^{**}(\hat\tau^{**}(h) - \tau^{**}$)
 
    - The distribution of $\hat\tau^* - \Delta^{**} - \tau^*$ can be
      approximated by repeated simulation.
@@ -274,12 +278,15 @@
 ** Theorem 2
   Under Assumptions 1 and 2,
   \[
-    \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V'(h,b) \to^p 1
+    \frac{\V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))}{V'(h,b)} \to^p 1
   \]
   and
   \begin{multline*}
     \sup_{x} \Big\rvert \Pr^*[\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^* \leq x ]\\ - \Pr[\hat\tau(h) - \Delta^*(h,b) - \tau \leq x] \Big\lvert \to^p 0.
   \end{multline*}
+
+  ----------------------------------------------------------------------
+
 *** _Tiniest sketch of a proof_
     1. Use CCT's results to prove that expansion terms of order $p+2$ and higher
        are negligible
@@ -288,7 +295,7 @@
 * Simulation Evidence
 ** Monte Carlo setup
    - Monte Carlo DGPs mimic Imbens and Kalyanaraman (2012) and CCT
-   - 5000 simulations, each with 500 i.i.d. draws from
+   - 5000 simulations, bootstrap uses 500 i.i.d. draws from
      \begin{align*}
      Y_{i}           &= \mu_{j}(X_{i}) + \varepsilon_{i} \\
      X_{i}           &\sim  2 \times \betarv(2,4) - 1 \\
@@ -305,7 +312,7 @@
        & \otherwise.
        \end{cases}
      \end{equation*}
-   - DGP 2:\small
+   - \udot{DGP 2}:\small
      \begin{equation*}
        \mu_{2}(x) =
        \begin{cases}
@@ -329,7 +336,7 @@
    - "Good" estimators
      - Theoretical intervals: CCT with uniform and triangular kernels
      - Bootstrap estimator: ours
-     - Use CCT's AMSE-optimal bandwidth rule
+     - Use CCT's AMSE-optimal bandwidth rule for $h$ and $b$
    - "Bad" estimators
      - Naive theoretical confidence interval (asymptotic normality)
        using uniform kernel and Imbens and Kalyanaraman's AMSE-optimal
@@ -370,13 +377,13 @@
   - Both uncorrected estimators perform very badly for DGP 2 and show some
     undercoverage on other DGPs
 
-* Application
+* Application to analysis of Head Start
 ** Empirical application: effects of Head Start program
    - We apply this bootstrap to Ludwig and Miller's (2007) analysis of the Head
      Start program
      - Data available at
        http://faculty.econ.ucdavis.edu/faculty/dlmiller/statafiles
-   - Head start was established in 1965 to help poor children age
+   - Head Start was established in 1965 to help poor children age
      three to five and their families.
    - The program elements include parent involvement, nutrition,
      social services, mental health services and health services.
@@ -389,15 +396,15 @@
      - 349 ``control'' counties
 ** Empirical application: effects of Head Start program
    - We look at two estimates studied by Ludwig and Miller (2007)
-   - Estimate the "intent-to-treat" effect of the proposal on
-     1. mortality and
-     2. attainment of high-school and college education
-   - Mortality is limited to causes of death that could plausibly be
-     affected by Head Start health services
-   - Found a large drop in mortality rates of children five to nine
-     years of age over the period of 1973--1983. They also found some
-     evidence for a positive effect on schooling from decennial census
-     data.
+     - Estimate the "intent-to-treat" effect of the proposal on
+       - mortality and
+       - attainment of high-school and college education
+     - Mortality is limited to causes of death that could plausibly be
+       affected by Head Start health services
+     - Found a large drop in mortality rates of children five to nine
+       years of age over the period of 1973--1983. They also found some
+       evidence for a positive effect on schooling from decennial census
+       data.
 ** Results: effect of Head Start on mortality
     \begin{tabular}{lrr@{, }rr@{}rrr}
       \toprule
@@ -419,13 +426,14 @@
     - Resid. bootstrap: bootstrap-corrected ATE estimate &
       corresponding interval
     - Both procedures use CCT's AMSE-optimal bandwidth
-** Main message from empirical analysis
-   - Head start significantly lowers mortality (supporting the
-     results presented by Ludwig and Miller, 2007)
+** Main message from analysis of mortality
+   - Head start significantly lowers mortality
+     - supporting the results presented by Ludwig and Miller (2007)
+     - not what you would find from the conventional confidence intervals
    - Bias is potentially substantial
      - Note difference between bias corrected and original ATE
    - Both bias-corrected estimators essentially agree
-   - Bias correction can substantially affect inference
+   - Bias correction can substantially impact inference
 ** Secondary results: effect of Head Start on education attainment
    \small
 
@@ -437,12 +445,12 @@
     \midrule
     LM (2007) & 0.030 & (0.003                      & 0.057) & 7&        \\
     CCT       & 0.055 & (0.014                      & 0.096) & 3&.671    \\
-    Bootstrap & 0.054 & (0.013                      & 0.096) & 3&.671    \\\\
+    Resid.\ bootstrap & 0.054 & (0.013                      & 0.096) & 3&.671    \\\\
     \multicolumn{5}{l}{Fraction ``some college or more'' (Panel B)}        \\
     \midrule
     LM (2007) & 0.037 & (0.002                      & 0.073) & 7&     \T \\
     CCT       & 0.051 & (0.004                      & 0.099) & 5&.076    \\
-    Bootstrap & 0.052 & (0.001                      & 0.094) & 5&.076    \\
+    Resid.\ bootstrap & 0.052 & (0.001                      & 0.094) & 5&.076    \\
     \bottomrule \\
     \end{tabular}
 
@@ -460,6 +468,7 @@
    - We've derived a bootstrap implementation of CCT's bias correction
      - You can use a residual bootstrap from a $p+1$ order polynomial to
        produce a bias-corrected (sharp) RD estimator of order $p$
+     - Use the boostrap a _second time_ to account for changes in the variance
    - We have proven consistency of the bootstrap in this paper for a
      local linear estimator using the uniform kernel
 
@@ -467,17 +476,14 @@
 
    - The bootstrap is arguably easier to extend to other patterns of
      data dependence, but is more limited (at the moment)
-     - Uniform kernel only
 
-     - Sharp RD only
+     - Uniform kernel, linear models, sharp design, given bandwidth
 
-     - Linear estimator only
+     - We're currently working on relaxing these restrictions
 
-   - Relaxing those assumptions is an ongoing research project
-
-   - Higher-order properties are an ongoing research project
-
-   - Extensions to nonparametric regression in general is ongoing
+   - We're also starting to look into higher-order properties,
+     extensions to nonparametric regression in general, and other
+     bootstrap methods
 * COMMENT Local variables and spellcheck
 #+STARTUP: beamer
 #+LaTeX_CLASS: beamer
@@ -496,4 +502,4 @@
 #  LocalWords:  Bartalotti Calonico Cattaneo Titiunik's Imbens cdot
 #  LocalWords:  Kalyanaraman's Titiunik tableofcontents geq infty toc
 #  LocalWords:  analytical subsequence varepsilon beamer LaTeX fleqn
-#  LocalWords:  usepackage lucidabr booktabs vspace baselineskip
+#  LocalWords:  usepackage lucidabr booktabs vspace baselineskip CCT

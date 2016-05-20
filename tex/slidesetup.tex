@@ -17,6 +17,7 @@
 \setbeamertemplate{frametitle}{\vspace{\baselineskip}\underline{\insertframetitle\vphantom{g}}}
 \setbeamertemplate{itemize/enumerate body begin}{\setlength{\leftmargini}{0pt}}
 \setbeamerfont{itemize/enumerate subbody}{size=\normalsize}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\normalsize}
 
 \makeatletter
 \newcommand{\setlistspacing}[2]{\def\@ld{#1}\expandafter\def\csname
@@ -41,3 +42,10 @@ leftmargin\romannumeral\@ld \endcsname
   {}
   {}
 \makeatother
+
+\newcommand{\udot}[1]{%
+    \tikz[baseline=(todotted.base)]{
+        \node[inner sep=1pt,outer sep=0pt] (todotted) {#1};
+        \draw[densely dotted] (todotted.south west) -- (todotted.south east);
+    }%
+}%
