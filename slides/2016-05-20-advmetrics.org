@@ -138,7 +138,7 @@
      \end{gather*}
      - $\hat\mu_{+}^{(2)}$ and $\hat\mu_-^{(2)}$ are estimated with a
        second order local polynomial
-     - $b$ is a different pilot bandwidth.
+     - $b$ is a different bandwidth.
    - The bias-correction introduces additional variance, so
      \begin{equation*}
        \frac{\hat{\tau}'(h, b) - \tau}{V'(h, b)^{1/2}} \to^d N(0,1)
