@@ -158,26 +158,25 @@ corrected estimator, and then use the resulting bootstrap distribution to
 produce confidence intervals. This procedure, which requires bootstrapping the
 datasets produced by an initial bootstrap, is described in Algorithm~\ref{Alg2}, and the resulting confidence intervals are shown to be asymptotically valid in Theorem~\ref{T2}.
 
-This bootstrap procedure offers some advantages over analytical methods.  In
-particular, both this paper and CCT assume that the observations are generated
-independently of each other; however, extending these bias correction methods to
-other forms of dependence is relatively straightforward for the bootstrap but
-can be substantially more complicated for analytical
-corrections, which have to be explicitly derived by the researcher. Similarly,
-although we only provide results for the local linear model in this paper, it is
-trivial to implement this procedure for higher order polynomials, for
-covariate-adjusted estimators (\citealp{frolich2007}, \citealp{calonico2015}),
-or for other local smoothers. \citep{loader2006} However, in this paper we focus
-on the baseline case of sharp RD with a local linear model and uniform
-kernel. Extensions to fuzzy RD designs\footnote{%
-  ``Fuzzy'' regression discontinuity design \citep{HTV2001}, as opposed to
-  ``sharp'' RD, describes situations where the probability of treatment changes
-  discontinuously at a known threshold, but by less than 100\%. Then there are
-  treated and untreated subjects above and below the discontinuity but the
-  treatment effect remains identified.} %
-and nonuniform kernels, which require nontrivial changes to the underlying
-bootstrap algorithm, as well as developments to address cross sectional
-dependence, are the subject of ongoing research.
+The methods presented in this paper are intended as a ``proof of concept'' that
+demonstrates that the analytical correction proposed by CCT can also be
+implemented through a new bootstrap procedure. We believe that this procedure is
+especially promising because it can allow applied researchers to construct
+accurate confidence intervals in settings where unusual forms of dependence
+would make it difficult to derive CCT's analytical correction---the dependence
+can be accommodates in principle by modifying the resampling algorithm to one
+that matches the dependence in the dataset. The specific version of the bootstrap
+presented in this paper, however, does not achieve that level of generality yet,
+and two limitations should be noted in particular. First, the confidence
+intervals produced by this bootstrap depend on two separate bandwidth parameters
+that must be generated elsewhere. Since these bandwidths are generated using
+analytical methods, the confidence intervals could easily be produced using the
+same methods. Second, the bootstrap proposed in this paper imposes local
+homoskedasticity and can perform poorly when the DGP exhibits significant
+heteroskedasticity. Moreover, in this paper we focus on the baseline case of
+sharp RD with a local linear model and uniform kernel. So the practical benefits
+of using the bootstrap in this context are relatively limited. Relaxing these
+limitations is the subject of ongoing research by the authors.
 
 The paper is organized as follows. Section~\ref{background} describes the basic
 RD approach, its usual implementation, and the explicit analytical bias
@@ -917,19 +916,11 @@ estimating the local linear model as usual, then estimating a local second order
 polynomial and generating bootstrap datasets by resampling the residuals of that
 polynomial. This bootstrap allows the bias of the linear model to be estimated
 and removed, and the bootstrap can be repeated to accurately estimate the
-sampling distribution of the bias-corrected estimator.
-
-Bootstrap procedures are appealing in this setting because they are relatively
-easy for applied researchers to modify to account for new and unusual dependence
-structures or functional forms. The variance adjustment was proven to be correct
-under the assumption of i.i.d.\ data, but could easily be extended to handle
-cross-sectional or time series dependence by using the appropriate resampling
-strategy on the second order polynomial's residuals. For the analytical methods,
-however, new formulas need to be derived to accommodate new features of the
-DGP. To fully take advantage of the bootstrap's flexibility, though, these
-results need to be extended to other kernels, design strategies (e.g. fuzzy and
-kink RD designs) and other more realistic dependence structures. All of these
-are the subject of ongoing research.
+sampling distribution of the bias-corrected estimator. These results demonstrate
+that there are bootstrap procedures that can generate asymptotically valid
+confidence intervals in the same settings as CCT's. The current implementation
+of this bootstrap is very specialized, however, and relaxing its limitations
+is the subject of ongoing research.
 
 \appendix
 \section{Mathematical appendix}
