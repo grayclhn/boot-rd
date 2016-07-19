@@ -20,7 +20,7 @@ source("RDfunctions.R")
 #### to run in servor ####
 N.ci <- 999
 level <- 0.95
-N.simu <- 1500
+N.simu <- 5000
 N.core <- 15
 N.bc <- 500
 
