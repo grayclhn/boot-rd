@@ -2,131 +2,139 @@
 ## Available under the MIT "Expat" License, see README.md
 
 library(rdrobust)
-library(RDbootstraps)
 library(foreach)
 library(doParallel)
 library(doRNG)
 library(xtable)
-
 try(source("slackrISE.R"), T)
 
-#### global parameters ####
-Nci <- 999
-Nbc <- 500
-Nsimu <- 5000
-Ncore <- 32
+source("RDfunctions.R")
 
-#### functions for simulation ####
+#### for testing in my computer ####
+# N.ci <- 20
+# level <- 0.95
+# N.simu <- 20
+# N.core <- 2
+# N.bc <- 20
 
-generate.data <- function(model.id) {
-  x <- 2*rbeta(500, 2, 4) - 1
-  e <- rnorm(500, 0, 0.1295)
-  y <- e + switch(model.id,
-                  ifelse(x < 0, 0.48 +  1.27*x +  7.18*x^2 + 20.21*x^3 + 21.54*x^4 + 7.33*x^5,
-                         0.52 +  0.84*x -  3.00*x^2 +  7.99*x^3 -  9.01*x^4 + 3.56*x^5),
-                  ifelse(x < 0, 3.71 +  2.30*x +  3.28*x^2 +  1.45*x^3 +  0.23*x^4 + 0.03*x^5,
-                         0.26 + 18.49*x - 54.81*x^2 + 74.30*x^3 - 45.02*x^4 + 9.83*x^5),
-                  ifelse(x < 0, 0.48 +  1.27*x - 0.5*7.18*x^2 + 0.7*20.21*x^3 + 1.1*21.54*x^4 + 1.5*7.33*x^5,
-                         0.52 +  0.84*x - 0.1*3.00*x^2 - 0.3*7.99*x^3 - 0.1*9.01*x^4 + 3.56*x^5))
-  return(data.frame(y = y, x = x))
-}
+#### to run in servor ####
+N.ci <- 999
+level <- 0.95
+N.simu <- 1500
+N.core <- 15
+N.bc <- 500
 
-naiveboot <- function(y, x, kernel, Nci = 999) {
-  ## point estimate
-  tau <- rdrobust(y, x, kernel = kernel, bwselect = "IK")$coef[1]
-  ## bootstrap
-  tauboot <- function(y, x) {
-    i <- sample.int(length(y), length(y), replace = T)
-    rdrobust(y[i], x[i], kernel = kernel, bwselect = "IK")$coef[1]
-  }
-  Btau <- replicate(Nci, tauboot(y, x))
+## simulation 1: coverage of CI from bootstrap
 
-  return(c(tau,
-           quantile(Btau, c(0.05, 0.95)),
-           quantile(Btau, c(0.025, 0.975)),
-           quantile(Btau, c(0.005, 0.995))))
-}
-
-rdsimu <- function(model.id, kernel) {
-
-  ## a function for each random draw
-  eachdraw <- function() {
+simulation.1 <- function(model.id, p, q, kernel, bc) {
+  
+  simu <- function() {
     dta   <- generate.data(model.id)
-
-    ## naive bootstraps + IK bandwidth
-    boot.naive <- naiveboot(dta$y, dta$x, kernel = kernel, Nci = Nci)
-
-    ## robust bootstraps + CCT bandwidth
-    boot.robust <- rdboot(dta$y, dta$x, kernel = kernel, Nci = Nci, Nbc = Nbc)
-
-    ## traditional + IK bandwidth
-    result <- rdrobust(dta$y, dta$x, kernel = kernel, bwselect = "IK")
-    tau <- result$coef[1]
-    ci90 <- c(tau - qnorm(0.95)*result$se[1], tau + qnorm(0.95)*result$se[1])
-    ci95 <- c(tau - qnorm(0.975)*result$se[1], tau + qnorm(0.975)*result$se[1])
-    ci99 <- c(tau - qnorm(0.995)*result$se[1], tau + qnorm(0.995)*result$se[1])
-    analytic.ik <- c(tau, ci90, ci95, ci99)
-
-    ## robust + CCT bandwidth
-    result <- rdrobust(dta$y, dta$x, kernel = kernel)
-    tau <- result$coef[3]
-    ci90 <- c(tau - qnorm(0.95)*result$se[3], tau + qnorm(0.95)*result$se[3])
-    ci95 <- c(tau - qnorm(0.975)*result$se[3], tau + qnorm(0.975)*result$se[3])
-    ci99 <- c(tau - qnorm(0.995)*result$se[3], tau + qnorm(0.995)*result$se[3])
-    analytic.cct <- c(tau, ci90, ci95, ci99)
-
-    return(c(boot.naive, boot.robust, analytic.ik, analytic.cct))
+    # CCT bandwidth from Calonico package
+    bw    <- rdbwselect(dta$y, dta$x, p = p, q = q, kernel = kernel, bwselect = "CCT")
+    bw.p  <- bw$bws[1,1]
+    bw.q  <- bw$bws[1,2]
+    t     <- rd.estimate(dta, p, q, bw.p, bw.q, N.bc, kernel, bc)
+    ci    <- rd.ci(dta, p, q, bw.p, bw.q, N.bc, N.ci, level, kernel, bc)$ci
+    return(c(t, ci))
   }
-
-  ## parallel computing
-  cl <- makeCluster(Ncore)
+  
+  cl <- makeCluster(N.core)
   registerDoParallel(cl)
-  export.obj <- c("Nci", "Nbc", "generate.data", "naiveboot")
-  result <- foreach(i=1:Nsimu, .combine="rbind", .packages=c("rdrobust", "RDbootstraps"),
-                    .export=export.obj, .inorder=F) %dorng% eachdraw()
+  export.obj <- c("N.ci", "N.bc", "level", "generate.data", "kweight", "rd.estimate", "lpreg", "rd.ci")
+  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng% 
+    simu()
   stopCluster(cl)
-
-  ## clean the results
-  tau    <- ifelse(model.id ==2, -3.45, 0.04)
-  Nestimator <- 4
-  table <- matrix(0, nrow = Nestimator, ncol = 9)
-  colnames(table) <- c("bias", "SD", "RMSE",
-                       "coverage90", "length90",
-                       "coverage95", "length95",
-                       "coverage99", "length99")
-  rownames(table) <- c("boot.naive", "boot.robust",
-                       "analytic.ik", "analytic.cct")
-  for (i in 1:Nestimator) {
-    table[i, 1] <- tau - mean(result[ , (7*(i - 1) + 1)])
-    table[i, 2] <- sd(result[ , (7*(i - 1) + 1)])
-    table[i, 3] <- sqrt(mean((result[ , (7*(i - 1) + 1)] - tau)^2))
-    table[i, 4] <- mean(result[ , (7*(i - 1) + 2)] <= tau &
-                        result[ , (7*(i - 1) + 3)] >= tau)
-    table[i, 5] <- mean(result[ , (7*(i - 1) + 3)] - result[ , (7*(i - 1) + 2)])
-    table[i, 6] <- mean(result[ , (7*(i - 1) + 4)] <= tau &
-                          result[ , (7*(i - 1) + 5)] >= tau)
-    table[i, 7] <- mean(result[ , (7*(i - 1) + 5)] - result[ , (7*(i - 1) + 4)])
-    table[i, 8] <- mean(result[ , (7*(i - 1) + 6)] <= tau &
-                          result[ , (7*(i - 1) + 7)] >= tau)
-    table[i, 9] <- mean(result[ , (7*(i - 1) + 7)] - result[ , (7*(i - 1) + 6)])
-  }
-  return(round(table, digits = 3))
+  
+  t.true    <- ifelse(model.id ==2, -3.45, 0.04)
+  bias      <- t.true - mean(collect.simu[ , 1])
+  SD        <- sd(collect.simu[ , 1])
+  MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
+  coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
+  length    <- mean(collect.simu[ , 3] - collect.simu[ , 2])
+  
+  return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
 }
 
-#### organize results ####
+## simulation 2: coverage of CI from CCT(2004)
 
-kernels <- c("uni", "tri", "epa")
-models <- c(1, 2, 3)
-
-for (k in kernels) {
-  for (m in models) {
-    set.seed(798)
-    km <- paste(k, m, sep = ".")
-    assign(km, rdsimu(m, k))
-    try(slackr(print(km)), T)
-    try(slackr(print(eval(parse(text = km)))), T)
+simulation.2 <- function(model.id, p, q, kernel) {
+  
+  simu <- function() {
+    dta   <- generate.data(model.id)
+    results <- rdrobust(dta$y, dta$x, p = p, q = q, kernel = kernel, bwselect = "CCT", level = 100*level)
+    t     <- results$coef[3]
+    ci    <- results$ci[3, ]
+    return(c(t, ci))
   }
+  
+  cl <- makeCluster(N.core)
+  registerDoParallel(cl)
+  export.obj <- c("generate.data", "level")
+  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng% 
+    simu()
+  stopCluster(cl)
+  
+  t.true    <- ifelse(model.id ==2, -3.45, 0.04)
+  bias      <- t.true - mean(collect.simu[ , 1])
+  SD        <- sd(collect.simu[ , 1])
+  MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
+  coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
+  length    <- mean(collect.simu[ , 3] - collect.simu[ , 2])
+  
+  return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
 }
 
-save.image("output/SRDsimuresult.RData")
+## generate tables
+
+gen.table <- function(model.id, p, q){
+  table <- matrix(0, nrow = 4, ncol = 6)
+  colnames(table) <- c("true", "bias", "SD", "MSE", "coverage", "length")
+  rownames(table) <- c("cct.tri", "cct.uni", "boot.uni", "boot.uni(uncorrected)")
+
+  try(environment(slackr) <- environment(), T)
+  
+  table[1, ] <- simulation.2(model.id, p, q, "tri")
+  try(slackr(print(table[1,])), T)
+  table[2, ] <- simulation.2(model.id, p, q, "uni")
+  try(slackr(print(table[2,])), T)
+  table[3, ] <- simulation.1(model.id, p, q, "uni", T)
+  try(slackr(print(table[3,])), T)
+  table[4, ] <- simulation.1(model.id, p, q, "uni", F)
+  try(slackr(print(table[4,])), T)
+  
+  table
+}
+
+set.seed(798)
+table.112 <- gen.table(1, 1, 2)
+try(slackr("table.112 done 1/6"), T)
+
+table.212 <- gen.table(2, 1, 2)
+try(slackr("table.212 done 2/6"), T)
+
+table.312 <- gen.table(3, 1, 2)
+try(slackr("table.312 done 3/6"), T)
+
+table.123 <- gen.table(1, 2, 3)
+try(slackr("table.123 done 4/6"), T)
+
+table.223 <- gen.table(2, 2, 3)
+try(slackr("table.223 done 5/6"), T)
+
+table.323 <- gen.table(3, 2, 3)
+try(slackr("table.323 done 6/6"), T)
+
+## table 1: p = 1, q = 2
+
+table.1 <- rbind(table.112, table.212, table.312)
+print(xtable(table.1, digits = 3), include.rownames = F, type = "latex", file = "output/simu_table_1.tex")
+
+## table 2: p = 2, q = 3
+
+table.2 <- rbind(table.123, table.223, table.323)
+print(xtable(table.2, digits = 3), include.rownames = F, type = "latex", file = "output/simu_table_2.tex")
+
+
+
 
