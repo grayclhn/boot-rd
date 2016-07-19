@@ -1,4 +1,0 @@
-useDynLib(RDbootstraps)
-importFrom(Rcpp, evalCpp)
-exportPattern("^[[:alpha:]]+")
-
