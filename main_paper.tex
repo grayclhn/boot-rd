@@ -279,6 +279,15 @@ regression.\footnote{%
   bootstrap algorithm proposed in this paper can be extended to accommodate
   higher order polynomials discontinuities in the derivatives of the conditional
   expectation, like ``Kink RD'' design \citep{card2009b}.} %
+
+Assumption~\ref{A3} specifies the properties of the kernel function assumed by CCT, which we will also use in this paper.
+\begin{assumption}[Kernel]\label{A3}
+  For some $\kappa>0$, the kernel function $k(\cdot):[0, \kappa]\mapsto \mathbb{R}$ is bounded and nonnegative, zero outside its support, positive and continuous on $(0, \kappa)$.
+\end{assumption}
+
+This allows for the vast majority kernel functions commonly used by practitioners. Note that different kernel functions could be used for the baseline estimate, say using the linear model, and the higher order estimation used to determine the bias correction, say using a quadratic model. For simplicity, in the following discussion we use the same function for all steps of estimation.
+Potentially different kernel functions could be used for estimation below and above the cutoff. We follow CCT's notation in setting $K(\cdot)=k(-u)\1[u<0]+k(u)\1[u \geq 0]$.
+
 For this model, if $h$ represents a bandwidth parameter, the estimator of
 $\tau$, $\hat\tau(h)$, is defined as
 \begin{equation*}
@@ -288,12 +297,14 @@ with
 \begin{align*}
   \hat {\mu}_{+}(h)
   &= \argmin_{\beta_0} \min_{\beta_1} \sum_{i=1}^{n}
-  \1\{h > X_{i} \geq 0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2}
+  \1\{X_{i} \geq 0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2} K_{h}(X_{i})
 \intertext{and}
   \hat {\mu}_{-}(h)
   &= \argmin_{\beta_0} \min_{\beta_1} \sum_{i=1}^{n}
-  \1\{0 > X_{i} > -h \} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2}.
+  \1\{X_{i}<0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2} K_{h}(X_{i}).
 \end{align*}
+where $ K_{h}(u)=\frac{1}{h}K\left( \frac{u}{h}\right)$ with $K(\cdot)$ a kernel function.
+
 Conventional (naive) confidence intervals can be calculated by using an
 asymptotic approximation for $\hat\tau(h)$. In particular, if
 \begin{gather}
