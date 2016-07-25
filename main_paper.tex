@@ -169,8 +169,7 @@ intervals produced by this bootstrap depend on two separate bandwidth parameters
 that must be generated elsewhere. Since these bandwidths are generated using
 analytical methods, the confidence intervals could easily be produced using the
 same methods. Moreover, in this paper we focus on the baseline case of
-sharp RD with a local linear model, however, the results and procedures can be easily extended to the general local polynomial
-and higher order derivatives cases (e.g., Regression Kink Designs).
+sharp RD.
 
 The paper is organized as follows. Section~\ref{background} describes the basic
 RD approach, its usual implementation, and the explicit analytical bias
@@ -278,13 +277,13 @@ regression.\footnote{%
   higher order polynomials discontinuities in the derivatives of the conditional
   expectation, like ``Kink RD'' design \citep{card2009b}.} %
 
-Assumption~\ref{A3} specifies the properties of the kernel function assumed by CCT, which we will also use in this paper.
+Assumption~\ref{A3} specifies the properties of the kernel functions, which are usually assumed by in the literature (see CCT).
 \begin{assumption}[Kernel]\label{A3}
   For some $\kappa>0$, the kernel function $k(\cdot):[0, \kappa]\mapsto \mathbb{R}$ is bounded and nonnegative, zero outside its support, positive and continuous on $(0, \kappa)$.
 \end{assumption}
 
 This allows for the vast majority kernel functions commonly used by practitioners. Note that different kernel functions could be used for the baseline estimate, say using the linear model, and the higher order estimation used to determine the bias correction, say using a quadratic model. For simplicity, in the following discussion we use the same function for all steps of estimation.
-Potentially different kernel functions could be used for estimation below and above the cutoff. We follow CCT's notation in setting $K(\cdot)=k(-u)\1[u<0]+k(u)\1[u \geq 0]$.
+Potentially different kernel functions could also be used for estimation below and above the cutoff. We follow CCT's notation in setting $K(\cdot)=k(-u)\1[u<0]+k(u)\1[u \geq 0]$.
 
 For this model, if $h$ represents a bandwidth parameter, the estimator of
 $\tau$, $\hat\tau(h)$, is defined as
@@ -397,7 +396,7 @@ the same first-order bias correction approximation. Assumption~\ref{A2} requirem
 \section{Bootstrap Bias Correction}\label{boot}
 
 This section presents our theoretical contributions. We propose two algorithms
-in this section. The first uses a residual bootstrap based on a second
+in this section. The first uses a wild bootstrap based on a second
 order local polynomial to estimate the bias of the local linear model. That
 estimate can be subtracted from the biased original estimator to provide an
 asymptotically unbiased estimator with the same asymptotic distribution as
@@ -409,7 +408,7 @@ The intuition behind both procedures is straightforward. CCT show that a
 local second order polynomial captures the aspects of the DGP
 necessary for constructing valid confidence intervals. Our proposed algorithms
 estimate and embed the second order behavior in the bootstrap DGP through a
-residual bootstrap.
+wild bootstrap.
 
 Throughout this section and the rest of the paper, we will
 let $\E^{*}$, $\Pr^{*}$, etc. denote expectations and probabilities taken with
@@ -499,7 +498,7 @@ larger, the approximate DGP mimics the unknown real DGP more closely, and the
 population parameter values in the bootstrap DGP can become accurate estimates
 of the true parameter values in the real DGP.
 
-Under Assumptions~\ref{A1} and~\ref{A2} the procedure described by
+Under Assumptions~\ref{A1} through ~\ref{A2} the procedure described by
 Algorithm~\ref{Alg1} provides a consistent estimator of the bias component that
 converges fast enough in probability that it can be be used as a correction. As
 is standard in the bootstrap literature, we will assume that the number of
@@ -507,7 +506,7 @@ bootstrap replications, $B_{1}$, is large enough that the simulation error can
 be ignored. Theorem~\ref{T1} presents the result formally.
 
 \begin{theorem}\label{T1}
-  Under Assumptions~\ref{A1} and~\ref{A2},
+  Under Assumptions~\ref{A1} through ~\ref{A2},
 \begin{equation}
   \label{eq:4}
   \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V'(h, b)^{1/2}}
@@ -526,8 +525,7 @@ Since the second order polynomial captures the relevant aspects of the DGP for
 estimating the variance as well as the bias, the asymptotic distribution of the
 bias corrected estimator $\hat\tau(h) - \Delta^*(h,b)$ can also be approximated
 with a bootstrap. We propose bootstrapping $\hat\tau(h) - \Delta^*(h,b)$ using
-the same residual bootstrap method used in
-Algorithm~\ref{Alg1}. Algorithm~\ref{Alg2} provides the details of our procedure
+the same wild bootstrap method used in Algorithm~\ref{Alg1}. Algorithm~\ref{Alg2} provides the details of our procedure
 and Theorem~\ref{T2} establishes its theoretical properties.
 
 \begin{algorithm}[Confidence intervals]\label{Alg2}
@@ -587,7 +585,7 @@ Algorithm~\ref{Alg1} and justifies this second algorithm.  As before, we assume
 that $B_1$ and $B_2$ are large enough that simulation error can be ignored.
 
 \begin{theorem}\label{T2}
-  Under Assumptions~\ref{A1} and~\ref{A2},
+  Under Assumptions~\ref{A1} through ~\ref{A2},
   \begin{gather*}
     \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V'(h,b) \to^p 1
   \intertext{and}
