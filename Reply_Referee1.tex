@@ -50,7 +50,37 @@ First, we thank the reviewer for providing detailed and helpful comments, which 
 
  We added results that allow for more general kernels typically used in RDD. The title has been changed accordingly.
 
-\item 
+\item \textit{``...What are the potential benefits of bootstrap over the analytical calculations.''}
+
+   \textbf{We need to decide what to answer here. In the current version of the paper (which I assume is what they read) we have a paragraph discussing it that needs to be updated with the kernel and wild bootstrap innovations. However it is not clear to me what else he wants or what we could write. Here is the full original paragraph. I will start editing it in the main file, but feel free to add your two cents if you have an idea. ``The methods presented in this paper are intended as a ``proof of concept'' that
+demonstrates that the analytical correction proposed by CCT can also be
+implemented through a new bootstrap procedure. We believe that this procedure is
+promising because it can allow applied researchers to construct
+accurate confidence intervals in settings where unusual forms of dependence
+would make it difficult to derive CCT's analytical correction---the dependence
+can be accommodates in principle by modifying the resampling algorithm to one
+that matches the dependence in the dataset. The specific version of the bootstrap
+presented in this paper, however, does not achieve that level of generality yet,
+and two limitations should be noted in particular. First, the confidence
+intervals produced by this bootstrap depend on two separate bandwidth parameters
+that must be generated elsewhere. Since these bandwidths are generated using
+analytical methods, the confidence intervals could easily be produced using the
+same methods. Second, the bootstrap proposed in this paper imposes local
+homoskedasticity and can perform poorly when the DGP exhibits significant
+heteroskedasticity. Moreover, in this paper we focus on the baseline case of
+sharp RD with a local linear model and uniform kernel. So the practical benefits
+of using the bootstrap in this context are relatively limited. Relaxing these
+limitations is the subject of ongoing research by the authors.''}
+
+\item \textit{`` The most critical point: Assumption 1.4 allows for heteroskedasticity but I suspect the residual bootstrap is invalid in this setting...''}
+
+ We thank the reviewer for focusing our attention to this point and suggesting the use of the Wild bootstrap. Following his recommendation we altered the algorithm to use a wild bootstrap approach and discuss its properties, hence allowing for conditional heteroskedasticity.
+
+\item \textit{``Are the bootstrap residuals conditionally centered?...''}
+
+ Yes, the bootstrap residuals are conditionally centered. Hopefully this is clear on the discussion about the wild bootstrap approach.
+
+
 \end{enumerate}
 
 

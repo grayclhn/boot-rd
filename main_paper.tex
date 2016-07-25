@@ -163,19 +163,16 @@ implemented through a new bootstrap procedure. We believe that this procedure is
 promising because it can allow applied researchers to construct
 accurate confidence intervals in settings where unusual forms of dependence
 would make it difficult to derive CCT's analytical correction---the dependence
-can be accommodates in principle by modifying the resampling algorithm to one
+can be accommodated in principle by modifying the resampling algorithm to one
 that matches the dependence in the dataset. The specific version of the bootstrap
 presented in this paper, however, does not achieve that level of generality yet,
-and two limitations should be noted in particular. First, the confidence
+and a limitation should be noted in particular. The confidence
 intervals produced by this bootstrap depend on two separate bandwidth parameters
 that must be generated elsewhere. Since these bandwidths are generated using
 analytical methods, the confidence intervals could easily be produced using the
-same methods. Second, the bootstrap proposed in this paper imposes local
-homoskedasticity and can perform poorly when the DGP exhibits significant
-heteroskedasticity. Moreover, in this paper we focus on the baseline case of
-sharp RD with a local linear model and uniform kernel. So the practical benefits
-of using the bootstrap in this context are relatively limited. Relaxing these
-limitations is the subject of ongoing research by the authors.
+same methods. Moreover, in this paper we focus on the baseline case of
+sharp RD with a local linear model, however, the results and procedures can be easily extended to the general local polynomial
+and higher order derivatives (e.g., "Regression Kink Designs) cases.
 
 The paper is organized as follows. Section~\ref{background} describes the basic
 RD approach, its usual implementation, and the explicit analytical bias
