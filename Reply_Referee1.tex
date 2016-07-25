@@ -1,0 +1,57 @@
+\documentclass[12pt,fleqn]{article}
+
+% Add commit information from Git to the pdf. It is automatically
+% generated with the R script 'tex/git and can be run from
+% the command line in the project's top directory via:
+%
+% $ tex/git
+%
+% If VERSION.tex does not exist we can't add information from
+% Git, so we'll use today's date as a fallback.
+
+\IfFileExists{./VERSION.tex}{\input{VERSION}}{%
+\providecommand\VERSION{\today}}
+
+\input{tex/setup}
+\input{tex/macros}
+
+\title{Reply to the report by Referee 1 for ``Bootstrap Confidence Intervals for Sharp Regression Discontinuity Designs
+  with the Uniform Kernel''}
+
+\author{Ot\'avio Bartalotti \and Gray Calhoun \and Yang He\thanks{%
+  All authors: Department of Economics, Iowa State University.
+  260 Heady Hall, Ames, IA 50011.
+  Bartalotti: \protect\url{bartalot@iastate.edu};
+  Calhoun: \protect\url{gcalhoun@iastate.edu} and
+  \protect\url{http://gray.clhn.org};
+  He: \protect\url{yanghe@iastate.edu}.}}
+
+\begin{document}
+\maketitle
+
+First, we thank the reviewer for providing detailed and helpful comments, which we feel have significantly improved the quality of the draft.  Below we provide replies to the reviewer’s specific comments detailing how we address each comment.
+
+\section{Main Comments}
+
+\begin{enumerate}
+ \item \textit{``...the proposed bootstrap method is only valid under conditional homocedasticity for distributional approximations...''}
+
+  We thank the referee for pointing out this limitation of the procedure proposed initially and suggesting the use of a wild bootstrap. In the new version of the paper we provide a wild bootstrap algorithm and results about its properties, allowing for conditional heteroskedasticity.
+
+\item \textit{``...the need of a computationally intensive iterated bootstrap for distributional approximations...''}
+
+   We share the reviewer's concern about the computing power demands an iterative bootstrap procedure imposes. Even though it would certainly be desirable to obtain an alternative implementation method that could achieve similar outcomes with a lesser burden on computational resources, it is not immediately obvious to the authors what that approach would be, and that was not the focus of the advances being proposed currently in this paper. Additionally, the simulation and computational work developed in this study seem to indicate that, in practice, the iterated bootstrap procedure proposed is not excessivelly burdensome for most applications faced by practitioners using standard computing resources widely available. Clearly, while we embrace the merit and usefulness of developing less intensive methods, we believe that even a demanding procedure like ours can be easily implemented by practitioners.
+\end{enumerate}
+
+\section{Specific Comments}
+
+\begin{enumerate}
+ \item  \textit{``It is not clear what is special about the uniform kernel. If possible, the authors should consider a general kernel and remove Uniform kernel from the title.''}
+
+ We added results that allow for more general kernels typically used in RDD. The title has been changed accordingly.
+
+\item 
+\end{enumerate}
+
+
+\end{document}
