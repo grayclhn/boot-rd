@@ -30,8 +30,7 @@
 
 \begin{abstract}\noindent
   This paper develops a novel bootstrap procedure to obtain robust
-  bias-corrected confidence intervals in regression discontinuity (RD) designs
-  using the uniform kernel. The procedure uses a residual bootstrap from a
+  bias-corrected confidence intervals in regression discontinuity (RD) designs. The procedure uses a wild bootstrap from a
   second order local polynomial to estimate the bias of the local linear RD
   estimator; the bias is then subtracted from the original estimator. The
   bias-corrected estimator is then bootstrapped itself to generate valid
@@ -51,9 +50,8 @@ of policies and interventions in several fields of the social sciences,
 including economics, political science, public policy, and sociology.  This
 research strategy exploits the fact that many programs use a threshold based
 on a numeric score to determine whether or not to provide a
-treatment.\footnote{%
-  This score is often referred to as the \textit{running variable} in this
-  literature.} %
+treatment.\footnote{This score is often referred to as the \textit{running variable} in this
+  literature.}
 In its basic version, \textit{sharp RD}, individuals or groups with score
 above the threshold are treated while those below the threshold are left
 untreated. The identification of the treatment effect at the threshold is then
@@ -133,10 +131,10 @@ using the second order polynomial. Additionally, that approximation provides
 fast enough convergence that it can be used to estimate the correct variance
 correction as well.
 
-Our approach exploits CCT's theoretical insight through a new residual
+Our approach exploits CCT's theoretical insight through a new wild
 bootstrap. In particular, we propose estimating the local linear model as usual,
 then estimating a local second order polynomial and generating bootstrap
-datasets by resampling the residuals of that polynomial. Since the second order
+datasets based on the approximation provided by that polynomial. Since the second order
 polynomial is the true Data Generating Process (DGP) for the bootstrapped data,
 its estimate of the treatment effect is the true value of the treatment effect
 under the distribution induced by this bootstrap. The bias of the linear model
@@ -152,7 +150,7 @@ variability. However, the second order polynomial again adequately estimates the
 features of the true DGP that are necessary for estimating and accommodating that
 additional variability. So we propose
 an iterated bootstrap procedure \citep{hall1988}: use the second order
-polynomial residual bootstrap to produce many bootstrap replications of the bias
+polynomial wild bootstrap to produce many bootstrap replications of the bias
 corrected estimator, and then use the resulting bootstrap distribution to
 produce confidence intervals. This procedure, which requires bootstrapping the
 datasets produced by an initial bootstrap, is described in Algorithm~\ref{Alg2}, and the resulting confidence intervals are shown to be asymptotically valid in Theorem~\ref{T2}.
@@ -172,7 +170,7 @@ that must be generated elsewhere. Since these bandwidths are generated using
 analytical methods, the confidence intervals could easily be produced using the
 same methods. Moreover, in this paper we focus on the baseline case of
 sharp RD with a local linear model, however, the results and procedures can be easily extended to the general local polynomial
-and higher order derivatives (e.g., "Regression Kink Designs) cases.
+and higher order derivatives cases (e.g., Regression Kink Designs).
 
 The paper is organized as follows. Section~\ref{background} describes the basic
 RD approach, its usual implementation, and the explicit analytical bias
