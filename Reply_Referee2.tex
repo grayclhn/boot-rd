@@ -1,0 +1,114 @@
+\documentclass[12pt,fleqn]{article}
+
+% Add commit information from Git to the pdf. It is automatically
+% generated with the R script 'tex/git and can be run from
+% the command line in the project's top directory via:
+%
+% $ tex/git
+%
+% If VERSION.tex does not exist we can't add information from
+% Git, so we'll use today's date as a fallback.
+
+\IfFileExists{./VERSION.tex}{\input{VERSION}}{%
+\providecommand\VERSION{\today}}
+
+\input{tex/setup}
+\input{tex/macros}
+
+\title{Reply to the report by Referee 2 for ``Bootstrap Confidence Intervals for Sharp Regression Discontinuity Designs
+  with the Uniform Kernel''}
+
+\author{Ot\'avio Bartalotti \and Gray Calhoun \and Yang He\thanks{%
+  All authors: Department of Economics, Iowa State University.
+  260 Heady Hall, Ames, IA 50011.
+  Bartalotti: \protect\url{bartalot@iastate.edu};
+  Calhoun: \protect\url{gcalhoun@iastate.edu} and
+  \protect\url{http://gray.clhn.org};
+  He: \protect\url{yanghe@iastate.edu}.}}
+
+\begin{document}
+\maketitle
+
+First, we thank the reviewer for providing detailed and helpful comments, which we feel have significantly improved the quality of the draft.  Below we provide replies to the reviewer’s specific comments detailing how we address each comment.
+
+\section{Main Comments}
+
+\begin{enumerate}
+
+\item \textit{``..., the procedure is limited to the uniform kernel,...''}
+
+ Thank you for focusing our attention to this expansion of the scope of the paper. The new draft incorporates other classes of kernel commonly used by practitioners.
+
+ \item \textit{``Second, by using the residual bootstrap, any heteroskedastic feature of the DGP will be ignored. Assumption 1.4 ensures the validity of the procedure asymptotically, while the finite sample performance still depends on the variability of $\sigma^{2}(x)$ near the cutoff. The wild bootstrap seems to be a better alternative.''}
+
+  We thank the referee for pointing out this limitation of the procedure proposed initially and suggesting the use of a wild bootstrap. In the new version of the paper we provide a wild bootstrap algorithm and results about its properties, allowing for conditional heteroskedasticity. The title has been changed accordingly.
+
+\end{enumerate}
+
+\section{Specific Comments}
+
+\begin{enumerate}
+
+ \item  \textit{``Page 4 line 4: ``can be accommodated''.''}
+
+ Thank you very much for pointing some typos. They have been corrected.
+
+\item \textit{``Although standard in the RDD literature, it will be useful to distinguish conditions for identification from those for estimation and inference. Most of Assumption 1 is for
+estimation and inference, and I suggest adding a short discussion there to explain each component of Assumption 1, and make it clear which are essential for identification. ''}
+
+   \textbf{We need to decide what to answer here. My general feeling is that this is all very standard in RDD. We could however add a couple of paragraphs as he suggests, what do you think?}
+
+\item \textit{`` To match the notation used in Calonico et al. (2014), I suggest to define $V(h) :=\V[\hat{\tau}(h)|X_{1}, \dots ,X_{n}]$, and use $\hat{V}(h)$ when constructing confidence intervals. See the definition of $V_{SRD}(h_{n})$ in Calonico et al. (2014).''}
+
+ %Thanks for suggesting a notation choice that could make the exposition easier for readers familiar with the literature. We changed it on the latest draft. \textbf{Yang, please change and check if this was updated throughout the paper.}
+
+\item \textit{``By assuming the bandwidth condition $b \geq h, nb \rightarrow \infty$ is redundant. Moreover, the bandwidth condition in Theorem 1 of Calonico et al. (2014) reduces to $nh^{5}b^{2} \rightarrow 0$. This paper assumes, additionally, that $nb^{5}h^{2} \rightarrow 0$. It is not clear why the extra condition is needed, and I recommend adding some discussion/explanation.''}
+
+  Thank you very much for bringing up to our attention the relationship between $h$ and $b$ in our setup. In the general kernel setup developed for this draft it became clear that the condition $h<b$ is not necessary and it has been dropped. Regarding the conditions $nh^{5}b^{2} \rightarrow 0$ and $nb^{5}h^{2} \rightarrow 0$, we originally decided to present the conditions in this form to make it more accessible to the readers. Note that CCT Theorem 1 assumes $n \min\{h^{5},b^{5}\}\max\{h^{2}, b^{2}\} \rightarrow 0$.
+
+
+\item \textit{``Calonico et al. (2014) allow $h/b \rightarrow \rho \in [0,\infty]$, while the assumption used in this paper requires $h/b \leq 1$. It is mentioned in footnote 12 that the condition $h \leq b$ can be generalized with other kernels. Please provide more intuition, and to what extent it can be relaxed.''}
+
+Please see the discussion to about the relationship between $h$ and $b$ in the previous comment.
+
+\item \textit{``Use $\mathbb{P}$ instead of Pr.''}
+
+Thanks for suggesting a notation choice that could make the exposition easier for readers. We changed it on the latest draft.
+
+\item \textit{``In Algorithm 1, use $\Delta(h,b)$ or $\hat{\Delta}(h,b)$ instead of $\Delta^{*}(h,b)$, as there is no bootstrap uncertainty in the estimated bias. Accordingly in Algorithm 2, use $\Delta^{*}(h,b)$ or $\hat{\Delta}^{*}(h,b)$ instead of $\Delta^{**}(h,b)$.''}
+
+
+\item \textit{``In Algorithm 2.1, it should be ``$\hat{g}_{−}$ and $\hat{g}_{+}$''.''}
+ 
+ Thank you pointing this typo. It has been corrected.
+
+\item \textit{``Instead of $\hat{\tau}'(h,b)$ and $V'(h,b)$, I recommend using $\hat{\tau}^{bc}(h,b)$ and $V^{bc}(h,b)$ to make the notation more explicit.''}
+%Thanks for suggesting a notation choice that could make the exposition easier for readers familiar with the literature.  We changed it on the latest draft.
+
+
+\item \textit{``In Algorithm 1.2(b) and Algorithm 2.2(b), it should be $X_{i}$ rather than $X^{∗}_{i}$.''}
+ 
+%Thank you very much for pointing this. The notation has been corrected.
+
+\item \textit{``In Section 4 (Simulation Evidence), the Naive Bootstrap is implemented with nonparametric resampling and the bandwidth is re-calculated for each bootstrap repetition.
+This is quite different from the other procedures, and can be misleading. I recommend not including the Naive Bootstrap.''}
+
+\item \textit{``As mentioned earlier, the wild bootstrap seems to be more appealing in terms of finite sample performance when the variance $\sigma^{2}(x)$ varies near the cutoff. The algebra should not be difficult and I recommend the authors to include theoretical results with the wild bootstrap.''}
+
+ We thank the reviewer for focusing our attention to this point and suggesting the use of the Wild bootstrap. Following his recommendation we altered the algorithm to use a wild bootstrap approach and discuss its properties, hence allowing for conditional heteroskedasticity.
+
+\item \textit{``It will be helpful to have simulation results for DGPs with heteroskedastic variance.''}
+
+ Thank you for suggesting additional DGPs. We have performed new simulations using new DGPs with both mild and severe heteroskedasticity, please see the simulations section in the new draft.
+
+\item \textit{``In the Mathematical Appendix, the authors used min(h, b), which is redundant. (Page 19, line 4-5)''}
+
+
+\item \textit{``The Mathematical Appendix should contain more details.''}
+
+Thank you very much for pointing out instances in the proofs that might require checking and clarifications. We are sorry this was confusing to read. In the new proofs we have added some additional details. Since the proof for theorem 2 changed substantially with the adoption of the Wild Bootstrap scheme (which addresses the heteroskedasticity issue, as discussed before) we made substantial changes that hopefully will make the proof's steps clearer to the reader. 
+
+\end{enumerate}
+
+
+\end{document}

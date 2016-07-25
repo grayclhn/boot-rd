@@ -374,22 +374,16 @@ will also use in this paper.
   Let $h$ be the bandwidth used to estimate the local linear model and let
   $b$ be the bandwidth used to estimate a second local quadratic model. Then
   $n h \to \infty$, $n b \to \infty$, $n h^{5} b^{2} \to 0$, and
-  $n b^{5} h^{2} \to 0$ as $n \to \infty$.\footnote{%
-    Unless otherwise stated, all limits in this paper are assumed to hold as
-    $n \to \infty$.} %
-  The relationship $h \leq b$ also holds for all $n$.
+  $n b^{5} h^{2} \to 0$ as $n \to \infty$.\footnote{Unless otherwise stated, all limits in this paper are assumed to hold as
+    $n \to \infty$.}
+ 
 \end{assumption}
 
 In the next section, we build upon the insight provided by CCT bias-corrected
 estimator and propose a simple bootstrap procedure that can directly construct
 the robust CIs without requiring the derivation of analytical formulas and
 direct estimators for the bias, variance and covariance terms, while relying on
-the same first-order bias correction approximation. The requirement $h < b$ is
-one additional restriction that we impose in this paper because the bootstrap
-can not be implemented for the uniform kernel without it, but the other parts of
-Assumption~\ref{A2} are identical to CCT.\footnote{%
-  This assumption can be relaxed by considering other kernels, which is the
-  subject of current research by the authors.} %
+the same first-order bias correction approximation. Assumption~\ref{A2} requirements are identical to CCT.
 
 \section{Bootstrap Bias Correction}\label{boot}
 
@@ -530,7 +524,7 @@ and Theorem~\ref{T2} establishes its theoretical properties.
 \begin{algorithm}[Confidence intervals]\label{Alg2}
   Define the same notation as in Algorithm~\ref{Alg1}.
   \begin{enumerate}
-  \item Estimate $\hat g_+$ and $g_-$ and generate the residuals
+  \item Estimate $\hat{g}_{+}$ and $\hat{g}_{-}$ and generate the residuals
     $\hat\varepsilon_i$ just as in Algorithm~\ref{Alg1}.
   \item Repeat the following steps $B_{2}$ times to produce the
     bootstrap estimates
