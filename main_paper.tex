@@ -974,14 +974,23 @@ We have
   \hat\tau(h) - \Delta^*(h,b) - \tau = (\hat\tau(h) - \E \hat \tau(h)) +
   (\E \hat \tau(h) - \tau) - (\E^* \hat \tau^*(h) - \tau^*).
 \end{equation*}
-The design of the bootstrap ensures that
+By construction,
+\begin{align*}
+  \hat\beta^*_{+,p} - \beta^*_{+,p}
+  & = \Big(\sum_{i\in I_+} K_h(X_i) r_p(X_i) r_p(X_i)'\Big)^{-1}
+  \sum_{i \in I_+} K_h(X_i) r_p(X_i) \hat\varepsilon_i e_i^* \\
+  \hat\beta^*_{-,p} - \beta^*_{-,p}
+  &= \Big(\sum_{i\in I_-} K_h(X_i) r_p(X_i) r_p(X_i)'\Big)^{-1}
+  \sum_{i \in I_-} K_h(X_i) r_p(X_i) \hat\varepsilon_i e_i^*
+\end{align*}
+ensuring that
 \begin{align*}
   \E^* \hat\mu_{+,1}^*(h) - \mu_{+}^{*}
   &= h^{2} \mu_{+}^{*(2)} \Bf_{+}(h)/2,
   &\E^* \hat\mu_{-,1}^*(h) - \mu_{-}^{*}
   &= h^{2} \mu_{-}^{*(2)} \Bf_{-}(h)/2,
 \end{align*}
-almost surely, implying that
+almost surely. Consequently,
 \begin{equation*}
   \E^* \hat\tau^*(h) - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf_+(h)/2
   - h^2\, \mu_{-}^{*(2)} \Bf_{-}(h)/2.
