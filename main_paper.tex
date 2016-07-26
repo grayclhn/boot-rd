@@ -169,7 +169,8 @@ intervals produced by this bootstrap depend on two separate bandwidth parameters
 that must be generated elsewhere. Since these bandwidths are generated using
 analytical methods, the confidence intervals could easily be produced using the
 same methods. Moreover, in this paper we focus on the baseline case of
-sharp RD.
+sharp RD with a local linear model, however, the results and procedures can be easily extended to the general local polynomial
+and higher order derivatives cases (e.g., Regression Kink Designs).
 
 The paper is organized as follows. Section~\ref{background} describes the basic
 RD approach, its usual implementation, and the explicit analytical bias
@@ -498,7 +499,7 @@ larger, the approximate DGP mimics the unknown real DGP more closely, and the
 population parameter values in the bootstrap DGP can become accurate estimates
 of the true parameter values in the real DGP.
 
-Under Assumptions~\ref{A1} through ~\ref{A2} the procedure described by
+Under Assumptions~\ref{A1}--\ref{A3} the procedure described by
 Algorithm~\ref{Alg1} provides a consistent estimator of the bias component that
 converges fast enough in probability that it can be be used as a correction. As
 is standard in the bootstrap literature, we will assume that the number of
@@ -506,7 +507,7 @@ bootstrap replications, $B_{1}$, is large enough that the simulation error can
 be ignored. Theorem~\ref{T1} presents the result formally.
 
 \begin{theorem}\label{T1}
-  Under Assumptions~\ref{A1} through ~\ref{A2},
+  Under Assumptions~\ref{A1}--\ref{A3},
 \begin{equation}
   \label{eq:4}
   \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V'(h, b)^{1/2}}
@@ -585,7 +586,7 @@ Algorithm~\ref{Alg1} and justifies this second algorithm.  As before, we assume
 that $B_1$ and $B_2$ are large enough that simulation error can be ignored.
 
 \begin{theorem}\label{T2}
-  Under Assumptions~\ref{A1} through ~\ref{A2},
+  Under Assumptions~\ref{A1}--\ref{A3},
   \begin{gather*}
     \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V'(h,b) \to^p 1
   \intertext{and}
