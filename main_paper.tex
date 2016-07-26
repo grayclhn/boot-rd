@@ -432,16 +432,16 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
 \begin{algorithm}[Bias estimation]\label{Alg1}
   Assume $h$ and $b$ are bandwidths as defined by Assumption~\ref{A2} and define
   \begin{align*}
-    I_{-}(h) &= \{i : -h < X_{i} < 0\}, &
-    I_{+}(h) &= \{i : 0 \leq X_{i} < h\}.
+    I_{-} &= \{i : X_i < 0 \}, &
+    I_{+} &= \{i : X_i > 0 \}.
   \end{align*}
-  Also define $M_{-}(h)$ and $M_{+}(h)$ to be the number of elements in $I_{-}(h)$ and
-  $I_{+}(h)$ respectively, and $m_{-}(h,1),\dots,m_{-}(h,M_{-}(h))$ and
-  $m_{+}(h,1),\dots,m_{+}(h,M_+(h))$ to be subsequences of $1,\dots,n$ that index
-  $I_{-}(h)$ and $I_{+}(h)$, respectively.
+  Also define $M_{-}$ and $M_{+}$ to be the number of elements in $I_{-}$ and
+  $I_{+}$ respectively, and $m_{-}(1),\dots,m_{-}(M_{-})$ and
+  $m_{+}(1),\dots,m_{+}(M_+)$ to be subsequences of $1,\dots,n$ that index
+  $I_-$ and $I_+$, respectively.
   \begin{enumerate}
   \item Estimate local second order polynomials $\hat g_{-}$ and $\hat g_{+}$ using
-    the observations in $I_{-}(b)$ and $I_{+}(b)$:
+    the observations in $I_-$ and $I_+$ and the kernel $K_{b}(X_{i})$:
     \begin{align}
       \label{eq:2}
       \hat g_{-}(x)
@@ -451,44 +451,40 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
     \end{align}
     with
     \begin{align*}
-      \hat\beta_{-} &= \argmin_\beta \sum_{i \in I_-(b)}
-      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^2 \\
-      \hat\beta_{+} &= \argmin_\beta \sum_{i \in I_+(b)}
-      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^2.
+      \hat\beta_{-} &= \argmin_\beta \sum_{i \in I_-}
+      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{b}(X_{i}) \\
+      \hat\beta_{+} &= \argmin_\beta \sum_{i \in I_+}
+      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{b}(X_{i}).
     \end{align*}
-    Calculate the residuals
-    \begin{equation}
-      \label{eq:3}
-      \hat\varepsilon_{i} =
-      \begin{cases}
-        Y_{i} - \hat g_-(X_{i}) & \textif\ X_{i} < 0 \\
-        Y_{i} - \hat g_+(X_{i}) & \otherwise.
+    Let
+    \[
+      \hat g(x) = \begin{cases}
+        \hat g_-(x) & \textif\ x < 0 \\
+        \hat g_+(x) & \otherwise
       \end{cases}
-    \end{equation}
+    \]
+    and calculate the residuals $\hat\varepsilon_{i} = Y_i - \hat g(X_i)$.
   \item Repeat the following steps $B_{1}$ times to produce the
     bootstrap estimates $\hat{\tau}_{1}^{*}(h),\dots,\hat\tau_{B_{1}}^{*}(h)$. For the
     $k$th value:
     \begin{enumerate}
-    \item Draw an i.i.d. sample of size $M_-(b)$ from
-      $\{\hat\varepsilon_i : i \in I_-(b)\}$ and one of size $M_+(b)$ from
-      $\{\hat\varepsilon_i : i \in I_+(b)\}$. Let $\varepsilon_{-,i}^{*}$ and
-      $\varepsilon_{+,i}^{*}$ denote the $i$th element of each sample and
+    \item Draw i.i.d.\ random variables $e_i^{*}$ with mean zero, variance one,
+      and bounded fourth moments independent of the original data and
       construct
       \begin{align*}
-        Y_{-,m_-(b,i)}^* &= \hat g_-(X_{m_-(b,i)}) + \varepsilon_{-,i}^{*} &
-        Y_{+,m_+(b,i)}^* &= \hat g_+(X_{m_-(b,i)}) + \varepsilon_{+,i}^{*}.
+        \varepsilon_i^{*} &= \hat{\varepsilon}_i e^{*}_i,
+        \intertext{and}
+        Y_i^{*} &= \hat g(X_i) + \varepsilon_i^{*}.
       \end{align*}
     \item Calculate $\hat\mu_+^*(h)$ and $\hat\mu_-^*(h)$ by estimating the
-      local linear model on the bootstrap data set:\footnote{%
-        Note that the indices of summation are chosen to correspond to the
-        indices of the variables generated in the previous step.} %
+      local linear model on the bootstrap data set
       \begin{align*}
         \hat\mu_-^*(h)
-        &= \argmin_{\mu} \min_{\beta} \ssum[-]{i}{h}
-          (Y_i^* - \mu - \beta X_i^*)^2 \\
+        &= \argmin_{\mu} \min_{\beta} \sum_{i \in I_{-}}
+          (Y_i^* - \mu - \beta X_i)^2 K_{h}(X_{i}) \\
         \hat\mu_+^*(h)
-        &= \argmin_{\mu} \min_{\beta} \ssum[+]{i}{h}
-          (Y_i^* - \mu - \beta X_i^*)^2.
+        &= \argmin_{\mu} \min_{\beta} \sum_{i \in I_{+}}
+          (Y_i^* - \mu - \beta X_i)^2 K_{h}(X_{i}).
       \end{align*}
     \item Save $\hat\tau^*_k(h) = \hat\mu_+^*(h) - \hat\mu_-^*(h)$.
     \end{enumerate}
@@ -540,39 +536,32 @@ and Theorem~\ref{T2} establishes its theoretical properties.
 \begin{algorithm}[Confidence intervals]\label{Alg2}
   Define the same notation as in Algorithm~\ref{Alg1}.
   \begin{enumerate}
-  \item Estimate $\hat{g}_{+}$ and $\hat{g}_{-}$ and generate the residuals
-    $\hat\varepsilon_i$ just as in Algorithm~\ref{Alg1}.
+  \item Estimate $\hat{g}_{+}$ and $\hat{g}_{-}$ and generate $\hat g(\cdot)$
+    and the residuals $\hat\varepsilon_i$ just as in Algorithm~\ref{Alg1}.
   \item Repeat the following steps $B_{2}$ times to produce the
     bootstrap estimates
     $\hat\tau_1^{\prime*}(h,b), \dots, \hat\tau_{B_{2}}^{\prime*}(h,b)$. For the
     $k$th value:
     \begin{enumerate}
-    \item Draw an i.i.d. sample of size $M_-(b)$ from
-      $\{\hat\varepsilon_i : i \in I_-(b)\}$ and one of size $M_+(b)$ from
-      $\{\hat\varepsilon_i : i \in I_+(b)\}$. Let $\varepsilon_{-,i}^{*}$ and
-      $\varepsilon_{+,i}^{*}$ denote the $i$th element of each sample and
+    \item Draw i.i.d.\ random variables $e_i^{*}$ with mean zero, variance one,
+      and bounded fourth moments independent of the original data and
       construct
       \begin{align*}
-        Y_{-,m_-(b,i)}^* &= \hat g_-(X_{m_-(b,i)}) + \varepsilon_{-,i}^{*} &
-        Y_{+,m_+(b,i)}^* &= \hat g_+(X_{m_{+}(b,i)}) + \varepsilon_{+,i}^{*}.
+        \varepsilon_i^{*} &= \hat{\varepsilon}_i e^{*}_i,
+        \intertext{and}
+        Y_i^{*} &= \hat g(X_i) + \varepsilon_i^{*}.
       \end{align*}
     \item Calculate $\hat\mu_+^*(h)$ and $\hat\mu_-^*(h)$ by estimating the
       local linear model on the bootstrap data set:
       \begin{align*}
         \hat\mu_-^*(h)
-        &= \argmin_{\mu} \min_{\beta} \ssum[-]{i}{h}
-          (Y_i^* - \mu - \beta X_i^*)^2 \\
+        &= \argmin_{\mu} \min_{\beta} \sum_{i \in I_{-}}
+          (Y_{i}^{*} - \mu - \beta X_{i})^{2}K_{h}(X_{i}) \\
         \hat\mu_+^*(h)
-        &= \argmin_{\mu} \min_{\beta} \ssum[+]{i}{h}
-          (Y_i^* - \mu - \beta X_i^*)^2.
+        &= \argmin_{\mu} \min_{\beta} \sum_{i \in I_{+}}
+          (Y_{i}^{*} - \mu - \beta X_{i})^{2}K_{h}(X_{i}).
       \end{align*}
-    \item Apply Algorithm~\ref{Alg1} to the bootstrapped data set,
-      \begin{multline*}
-        (Y_{-,m_-(b,1)}^{*}, X_{-,m_-(b,1)}),\dots,
-        (Y_{-,m_-(b,M_-(b))}^{*},X_{-,m_-(b,M_-(b))}), \\
-        (Y_{+,m_+(b,1)}^{*}, X_{+,m_+(b,1)}),\dots,
-        (Y_{+,m_+(b,M_+(b))}^{*},X_{+,m_+(b,M_+(b))})
-      \end{multline*}
+    \item Apply Algorithm~\ref{Alg1} to the bootstrapped data set
       using the same bandwidths $h$ and $b$ that are used in the rest of this
       algorithm but reestimating all of the local polynomials on the bootstrap
       data. Generate $B_1$ new bootstrap samples and let $\Delta^{**}(h,b)$
