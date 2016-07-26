@@ -278,16 +278,8 @@ regression.\footnote{%
   higher order polynomials discontinuities in the derivatives of the conditional
   expectation, like ``Kink RD'' design \citep{card2009b}.} %
 
-Assumption~\ref{A3} specifies the properties of the kernel functions, which are usually assumed by in the literature (see CCT).
-\begin{assumption}[Kernel]\label{A3}
-  For some $\kappa>0$, the kernel function $k(\cdot):[0, \kappa]\mapsto \mathbb{R}$ is bounded and nonnegative, zero outside its support, positive and continuous on $(0, \kappa)$.
-\end{assumption}
-
-This allows for the vast majority kernel functions commonly used by practitioners. Note that different kernel functions could be used for the baseline estimate, say using the linear model, and the higher order estimation used to determine the bias correction, say using a quadratic model. For simplicity, in the following discussion we use the same function for all steps of estimation.
-Potentially different kernel functions could also be used for estimation below and above the cutoff. We follow CCT's notation in setting $K(\cdot)=k(-u)\1[u<0]+k(u)\1[u \geq 0]$.
-
-For this model, if $h$ represents a bandwidth parameter, the estimator of
-$\tau$, $\hat\tau(h)$, is defined as
+For this model, if $h$ represents a bandwidth parameter and $K(\cdot)$ a density
+function, the estimator of $\tau$, $\hat\tau(h)$, is defined as
 \begin{equation*}
   \hat{\tau}(h) = \hat {\mu}_{+}(h) -\hat{\mu}_{-}(h)
 \end{equation*}
@@ -295,13 +287,12 @@ with
 \begin{align*}
   \hat {\mu}_{+}(h)
   &= \argmin_{\beta_0} \min_{\beta_1} \sum_{i=1}^{n}
-  \1\{X_{i} \geq 0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2} K_{h}(X_{i})
+  \1\{X_{i} \geq 0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2} \tfrac{1}{h}K(X_{i}/h)
 \intertext{and}
   \hat {\mu}_{-}(h)
   &= \argmin_{\beta_0} \min_{\beta_1} \sum_{i=1}^{n}
-  \1\{X_{i}<0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2} K_{h}(X_{i}).
+  \1\{X_{i}<0\} (Y_{i} - \beta_0 - X_{i} \beta_1)^{2} \tfrac{1}{h} K_{h}(X_{i}/h).
 \end{align*}
-where $ K_{h}(u)=\frac{1}{h}K\left( \frac{u}{h}\right)$ with $K(\cdot)$ a kernel function.
 
 Conventional (naive) confidence intervals can be calculated by using an
 asymptotic approximation for $\hat\tau(h)$. In particular, if
@@ -377,22 +368,39 @@ instead of~\eqref{eq:1} to construct ``bandwidth robust'' confidence intervals,
 and CCT provide simulation evidence that their intervals perform well in finite
 samples even when the naive interval performs badly.
 
-Assumption~\ref{A2} specifies the bandwidth conditions assumed by CCT, which we
-will also use in this paper.
-\begin{assumption}[Bandwidth]\label{A2}
+Assumption~\ref{A2} specifies the bandwidth and kernel conditions assumed in this
+paper, which are standard in this literature.
+
+\begin{assumption}[Bandwidth and kernel]\label{A2}
   Let $h$ be the bandwidth used to estimate the local linear model and let
   $b$ be the bandwidth used to estimate a second local quadratic model. Then
   $n h \to \infty$, $n b \to \infty$, $n h^{5} b^{2} \to 0$, and
-  $n b^{5} h^{2} \to 0$ as $n \to \infty$.\footnote{Unless otherwise stated, all limits in this paper are assumed to hold as
+  $n b^{5} h^{2} \to 0$ as $n \to \infty$.\footnote{%
+    Unless otherwise stated, all limits in this paper are assumed to hold as
     $n \to \infty$.}
- 
+  The kernel function $K$ is positive and continuous on the interval
+  $[-\kappa,~\kappa]$ and zero outside that interval.
 \end{assumption}
+To simplify notation, define the scaled kernel functions
+\begin{align*}
+  K_h(x) &= \tfrac{1}{h} K(x/h)
+\intertext{and}
+  K_b(x) &= \tfrac{1}{b} K(x/b).
+\end{align*}
+Assumption~\ref{A2} allows for the vast majority kernel functions commonly used
+in practice.  Note that different kernel functions could be used for the
+treatment effect estimator and the higher order approximation used for the
+bootstrap.  For simplicity, though, we use the same function for all steps of
+estimation in this paper.  Potentially different kernel functions and bandwidths
+could also be used for estimation below and above the cutoff, but we again focus
+on the simpler case here.
 
 In the next section, we build upon the insight provided by CCT bias-corrected
 estimator and propose a simple bootstrap procedure that can directly construct
 the robust CIs without requiring the derivation of analytical formulas and
 direct estimators for the bias, variance and covariance terms, while relying on
-the same first-order bias correction approximation. Assumption~\ref{A2} requirements are identical to CCT.
+the same first-order bias correction approximation. Assumption~\ref{A2}
+requirements are identical to CCT.
 
 \section{Bootstrap Bias Correction}\label{boot}
 
@@ -499,7 +507,7 @@ larger, the approximate DGP mimics the unknown real DGP more closely, and the
 population parameter values in the bootstrap DGP can become accurate estimates
 of the true parameter values in the real DGP.
 
-Under Assumptions~\ref{A1}--\ref{A3} the procedure described by
+Under Assumptions~\ref{A1} and~\ref{A2} the procedure described by
 Algorithm~\ref{Alg1} provides a consistent estimator of the bias component that
 converges fast enough in probability that it can be be used as a correction. As
 is standard in the bootstrap literature, we will assume that the number of
@@ -507,7 +515,7 @@ bootstrap replications, $B_{1}$, is large enough that the simulation error can
 be ignored. Theorem~\ref{T1} presents the result formally.
 
 \begin{theorem}\label{T1}
-  Under Assumptions~\ref{A1}--\ref{A3},
+  Under Assumptions~\ref{A1} and~\ref{A2},
 \begin{equation}
   \label{eq:4}
   \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V'(h, b)^{1/2}}
@@ -586,7 +594,7 @@ Algorithm~\ref{Alg1} and justifies this second algorithm.  As before, we assume
 that $B_1$ and $B_2$ are large enough that simulation error can be ignored.
 
 \begin{theorem}\label{T2}
-  Under Assumptions~\ref{A1}--\ref{A3},
+  Under Assumptions~\ref{A1} and~\ref{A2},
   \begin{gather*}
     \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V'(h,b) \to^p 1
   \intertext{and}
