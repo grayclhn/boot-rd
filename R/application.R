@@ -34,7 +34,7 @@ robust <- function(dta) {
   t1  <- cct$coef[3]
   ci1 <- cct$ci[3, ]
 
-  boot <- rdboot(dta$t, dta$x, 1 - level, N.bc, residual_bootstrap, N.ci,
+  boot <- rdboot(dta$t, dta$x, 1 - level, N.bc, wild_bootstrap, N.ci,
     type = "basic", kernel = "uniform")
   t2 <- boot[1]
   ci2 <- boot[2:3]

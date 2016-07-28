@@ -30,31 +30,34 @@ simulation.1 <- function(model.id, nsims) {
 
   simu <- function() {
     dta <- generate.data(model.id)
-    rdboot(dta$y, dta$x, a, N.bc, residual_bootstrap, nboot2 = N.ci,
+    rdboot(dta$y, dta$x, a, N.bc, wild_bootstrap, nboot2 = N.ci,
       p = 1, q = 2, type = "basic", kernel = "tri", bwselect = "CCT")
   }
-  
+
   cl <- makeCluster(N.core)
   registerDoParallel(cl)
-  export.obj <- c("N.ci", "N.bc", "level", "generate.data", "kweight", "rd.estimate", "lpreg", "rd.ci")
-  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng% 
+  export.obj <- c("N.ci", "N.bc", "level", "generate.data", "kweight",
+    "rd.estimate", "lpreg", "rd.ci", "wild_bootstrap", "rdboot",
+    "basic_estimator", "boot_estimator", "wild_values", "wild_weights",
+    "boot_interval", "boot_ci_basic")
+  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng%
     simu()
   stopCluster(cl)
-  
+
   t.true    <- ifelse(model.id ==2, -3.45, 0.04)
   bias      <- t.true - mean(collect.simu[ , 1])
   SD        <- sd(collect.simu[ , 1])
   MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
   coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
   length    <- mean(collect.simu[ , 3] - collect.simu[ , 2])
-  
+
   return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
 }
 
 ## simulation 2: coverage of CI from CCT(2004)
 
 simulation.2 <- function(model.id, p, q, kernel) {
-  
+
   simu <- function() {
     dta   <- generate.data(model.id)
     results <- rdrobust(dta$y, dta$x, p = p, q = q, kernel = kernel, bwselect = "CCT", level = 100*level)
@@ -62,21 +65,21 @@ simulation.2 <- function(model.id, p, q, kernel) {
     ci    <- results$ci[3, ]
     return(c(t, ci))
   }
-  
+
   cl <- makeCluster(N.core)
   registerDoParallel(cl)
   export.obj <- c("generate.data", "level")
-  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng% 
+  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng%
     simu()
   stopCluster(cl)
-  
+
   t.true    <- ifelse(model.id ==2, -3.45, 0.04)
   bias      <- t.true - mean(collect.simu[ , 1])
   SD        <- sd(collect.simu[ , 1])
   MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
   coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
   length    <- mean(collect.simu[ , 3] - collect.simu[ , 2])
-  
+
   return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
 }
 
@@ -88,7 +91,7 @@ gen.table <- function(model.id, p, q){
   rownames(table) <- c("cct.tri", "cct.uni", "boot.uni", "boot.uni(uncorrected)")
 
   try(environment(slackr) <- environment(), T)
-  
+
   table[1, ] <- simulation.2(model.id, p, q, "tri")
   try(slackr(print(table[1,])), T)
   table[2, ] <- simulation.2(model.id, p, q, "uni")
@@ -97,7 +100,7 @@ gen.table <- function(model.id, p, q){
   try(slackr(print(table[3,])), T)
   table[4, ] <- simulation.1(model.id, p, q, "uni", F)
   try(slackr(print(table[4,])), T)
-  
+
   table
 }
 
