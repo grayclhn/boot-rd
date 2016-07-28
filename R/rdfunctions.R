@@ -1,7 +1,7 @@
 ## Copyright (c) 2016, Otávio Bartalotti, Gray Calhoun, and Yang He.
 ## Available under the MIT "Expat" License, see README.md
 
-kweight <- rdrobust::kweight
+kweight <- rdrobust:::rdrobust_kweight
 
 generate.data <- function(model.id) {
   x <- 2*rbeta(500, 2, 4) - 1
