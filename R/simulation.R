@@ -8,7 +8,7 @@ library(doRNG)
 library(xtable)
 try(source("slackrISE.R"), T)
 
-source("RDfunctions.R")
+source("rdfunctions.R")
 
 #### for testing in my computer ####
 # N.ci <- 20
@@ -19,24 +19,19 @@ source("RDfunctions.R")
 
 #### to run in servor ####
 N.ci <- 999
-level <- 0.95
+a <- 0.05
 N.simu <- 5000
 N.core <- 15
 N.bc <- 500
 
 ## simulation 1: coverage of CI from bootstrap
 
-simulation.1 <- function(model.id, p, q, kernel, bc) {
-  
+simulation.1 <- function(model.id, nsims) {
+
   simu <- function() {
-    dta   <- generate.data(model.id)
-    # CCT bandwidth from Calonico package
-    bw    <- rdbwselect(dta$y, dta$x, p = p, q = q, kernel = kernel, bwselect = "CCT")
-    bw.p  <- bw$bws[1,1]
-    bw.q  <- bw$bws[1,2]
-    t     <- rd.estimate(dta, p, q, bw.p, bw.q, N.bc, kernel, bc)
-    ci    <- rd.ci(dta, p, q, bw.p, bw.q, N.bc, N.ci, level, kernel, bc)$ci
-    return(c(t, ci))
+    dta <- generate.data(model.id)
+    rdboot(dta$y, dta$x, a, N.bc, residual_bootstrap, nboot2 = N.ci,
+      p = 1, q = 2, type = "basic", kernel = "tri", bwselect = "CCT")
   }
   
   cl <- makeCluster(N.core)

@@ -3,7 +3,7 @@
 
 library(rdrobust)
 library(xtable)
-source("RDfunctions.R")
+source("rdfunctions.R")
 
 ## Load Ludwig and Miller's (2007) dataset
 
@@ -31,14 +31,13 @@ original <- function(dta, bw) {
 
 robust <- function(dta) {
   cct <- rdrobust(dta$y, dta$x, kernel = "uni")
-  bws <- cct$bws
-  
   t1  <- cct$coef[3]
   ci1 <- cct$ci[3, ]
-  
-  t2  <- rd.estimate(dta, 1, 2, bws[1], bws[2], N.bc, "uni", T)
-  ci2 <- rd.ci(dta, 1, 2, bws[1], bws[2], N.bc, N.ci, level, "uni", T)$ci
-  
+
+  boot <- rdboot(dta$t, dta$x, 1 - level, N.bc, residual_bootstrap, N.ci,
+    type = "basic", kernel = "uniform")
+  t2 <- boot[1]
+  ci2 <- boot[2:3]
   return(matrix(c(t1, ci1, NA, bws,
                   t2, ci2, NA, bws), nrow = 2, byrow = T))
 }
