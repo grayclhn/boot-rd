@@ -31,7 +31,7 @@ simulation.1 <- function(model.id, nsims) {
   simu <- function() {
     dta <- generate.data(model.id)
     rdboot(dta$y, dta$x, a, N.bc, wild_bootstrap, nboot2 = N.ci,
-      p = 1, q = 2, type = "basic", kernel = "tri", bwselect = "CCT")
+      p = 1, q = 2, type = "basic", kernel = "tri")
   }
 
   cl <- makeCluster(N.core)
@@ -59,10 +59,12 @@ simulation.1 <- function(model.id, nsims) {
 simulation.2 <- function(model.id, p, q, kernel) {
 
   simu <- function() {
-    dta   <- generate.data(model.id)
-    results <- rdrobust(dta$y, dta$x, p = p, q = q, kernel = kernel, bwselect = "CCT", level = 100*level)
-    t     <- results$coef[3]
-    ci    <- results$ci[3, ]
+    dta <- generate.data(model.id)
+    bws <- rdbandwidth_2014(dta$y, dta$x, p = p, q = q, kernel = kernel)$bws
+    results <- rdrobust(dta$y, dta$x, p = p, q = q, kernel = kernel,
+      h = bws[1], b = bws[2], level = 100 * (1-a))
+    t <- results$coef[3]
+    ci <- results$ci[3, ]
     return(c(t, ci))
   }
 

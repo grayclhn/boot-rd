@@ -162,7 +162,7 @@ rdboot <- function(y, x, a, nboot, bootfn, nboot2 = nboot,
 
   type <- match.arg(type)
   kernel <- match.arg(kernel)
-  bw <- rdbwselect(y, x, p=p, q=q, kernel=kernel,...)$bws
+  bw <- rdbwselect_2014(y, x, p=p, q=q, kernel=kernel,...)$bws
   wp <- kweight(x, 0, bw[1], kernel)
   wq <- kweight(x, 0, bw[2], kernel)
 
