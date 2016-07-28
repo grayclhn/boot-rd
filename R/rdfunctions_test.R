@@ -45,3 +45,17 @@ test_that("Bias-corrected point estimates give the same result as our original v
 
   expect_equivalent(new_estimate, old_estimate)
   expect_equivalent(new_interval, old_interval$ci)})
+
+"%isin%" <- function(x, y)
+  all(sapply(x, function(xval)
+    any(sapply(y, function(yval)
+      isTRUE(all.equal(xval, yval, check.attributes = FALSE))))))
+
+test_that("We didn't screw up the weights for the wild bootstrap", {
+  expect_equal(sum(wild_weights), 1)
+  expect_equal(sum(wild_weights * wild_values), 0)
+
+  ## basic check that the wild bootstrap 'works'
+  d <- data.frame(x = rep(c(0, 1), 4), y = rep(c(0, 1), each = 4))
+  w <- wild_bootstrap(lm(y ~ x, data = d), d$y, d$x)
+  expect_true(w %isin% c(.5 * (1 - wild_values), .5 * (1 + wild_values)))})

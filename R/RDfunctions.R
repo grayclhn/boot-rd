@@ -22,6 +22,16 @@ residual_bootstrap <- function(m, y, x) {
     sample(resid(m), size = length(y), replace = TRUE, prob = weights(m))
 }
 
+wild_values <- c(1 - sqrt(5), 1 + sqrt(5)) / 2
+wild_weights <- c(sqrt(5) + 1, sqrt(5) - 1) / (2 * sqrt(5))
+
+wild_bootstrap <- function(m, y, x) {
+  yhat <- predict(m, data.frame(y = NA, x = x))
+  ehat <- y - yhat
+  yhat + (ehat * sample(wild_values, size = length(ehat),
+    replace = TRUE, prob = wild_weights))
+}
+
 # Simple RD estimator of the treatment effect.
 
 basic_estimator <- function(y, x, w, p = 1,
