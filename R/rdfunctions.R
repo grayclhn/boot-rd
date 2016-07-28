@@ -52,7 +52,7 @@ basic_estimator <- function(y, x, w, p = 1,
 # wp, wq: explicit weights imposed by the kernel near the cutoff
 # a:      size of the implicit hypothesis test. The interval will have level 1-a
 # nboot:  number of bootstrap replications used for debiasing
-# bootfn: a function that generates new values of the depnedent model,
+# bootfn: a function that generates new values of the dependent model,
 #         given an estimated local polynomial
 # p, q: polynomial degree for the estimated model (p1) and the conditional
 #         expectation used to implement the bootstrap (p2)
@@ -166,7 +166,7 @@ rdboot <- function(y, x, a, nboot, bootfn, nboot2 = nboot,
   wp <- kweight(x, 0, bw[1], kernel)
   wq <- kweight(x, 0, bw[2], kernel)
 
-  estimate <- basic_estimator(y, x, wp, p)
+  estimate <- boot_estimator(y, x, wp, wq, p, q, nboot, bootfn)
   names(estimate) <- "estimate"
 
   ci <- boot_interval(y, x, wp, wq, a, p, q, nboot, bootfn, nboot2, type)
