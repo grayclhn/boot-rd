@@ -929,26 +929,28 @@ everywhere else. Define the following additional notation:\footnote{%
 $r_p(x) = (1,\ x,\dots,\ x^p)'$,
 \begin{align*}
   (\hat{\mu}_{+,p}(h),\ \hat{\mu}_{+,p}^{(1)}(h),\dots,\ \hat\mu_{+,p}^{(p)}(h))'
-  &= \argmin_{\beta} \ssum[+]{i}{h} (Y_i - r_p(X_i/h)'\beta)^2 \\
+  &= \argmin_{\beta} \sum_{i=1}^n (Y_i - r_p(X_i/h)'\beta)^2 K_{+,h}(X_i) \\
   (\hat{\mu}_{-,p}(h),\ \hat{\mu}_{-,p}^{(1)}(h),\dots,\ \hat\mu_{-,p}^{(p)}(h))'
-  &= \argmin_{\beta} \ssum[-]{i}{h} (Y_i - r_p(X_i/h)'\beta)^2
+  &= \argmin_{\beta} \sum_{i=1}^n (Y_i - r_p(X_i/h)'\beta)^2 K_{-,h}(X_i)
 \end{align*}
 and
 \begin{align*}
-  \Gamma_{+,p}(h) &= \tfrac{1}{nh} \ssum[+]{i}{h} r_p(X_i/h) r_p(X_i/h)' \\
-  \Gamma_{-,p}(h) &= \tfrac{1}{nh} \ssum[-]{i}{h} r_p(X_i/h) r_p(X_i/h)' \\
+  \Gamma_{+,p}(h)
+  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_p(X_i/h)' K_{+,h}(X_i)\\
+  \Gamma_{-,p}(h)
+  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_p(X_i/h)' K_{-,h}(X_i) \\
   \Psi_{+,p,q}(h,b)
-  &= \tfrac{1}{nhb} \ssum[+]{i}{\min(h,b)} r_p(X_i/h) r_q(X_i/b)'
-    \V(Y_i \mid X_i) \\
+  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_q(X_i/b)'
+     K_{+,h}(X_i) K_{+,b}(X_i) \V(Y_i \mid X_i) \\
   \Psi_{-,p,q}(h,b)
-  &= \tfrac{1}{nhb} \ssum[-]{i}{\min(h,b)} r_p(X_i/h) r_q(X_i/b)'
-    \V(Y_i \mid X_i) \\
+  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_q(X_i/b)'
+     K_{-,h}(X_i) K_{-,b}(X_i) \V(Y_i \mid X_i) \\
   \Bf_+(h)
   & = e_0' \Gamma_{+,1}^{-1}(h)
-    \ssum[+]{i}{h} r_1(X_i/h) \; X_i^2 / h^2, \\
+    \sum_{i=1}^n (X_i / h)^2 r_1(X_i/h) K_{+,h}(X_i), \\
   \Bf_-(h)
   & = e_0' \Gamma_{-,1}^{-1}(h)
-    \ssum[-]{i}{h} r_1(X_i/h) \; X_i^2 / h^2.
+    \sum_{i=1}^n (X_i / h)^2 r_1(X_i/h) K_{-,h}(X_i).
 \end{align*}
 
 Also, for reference, define the variance terms
