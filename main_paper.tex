@@ -381,16 +381,22 @@ paper, which are standard in this literature.
   The kernel function $K$ is positive and continuous on the interval
   $[-\kappa,~\kappa]$ and zero outside that interval.
 \end{assumption}
-To simplify notation, define the scaled kernel functions
+To simplify notation, define the scaled and truncated kernel functions
 \begin{align*}
-  K_h(x) &= \tfrac{1}{h} K(x/h)
+  K_{+,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x > 0\} &
+  K_{-,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x \leq 0\}
 \intertext{and}
-  K_b(x) &= \tfrac{1}{b} K(x/b).
+  K_{+,b}(x) &= \tfrac{1}{b} K(x/b) \1\{x > 0\} &
+  K_{-,b}(x) &= \tfrac{1}{b} K(x/b) \1\{x \leq 0\}.
 \end{align*}
 Assumption~\ref{A2} allows for the vast majority kernel functions commonly used
-in practice.  Note that different kernel functions could be used for the
+in practice. Note that different kernel functions could be used for the
 treatment effect estimator and the higher order approximation used for the
-bootstrap.  For simplicity, though, we use the same function for all steps of
+bootstrap.\footnote{%
+  It would be a slight abuse of notation for $K_{+,h}$, $K_{-,h}$,
+  $K_{+,b}$, and $K_{-,b}$ to all use different underlying kernels but
+  would not affect our proofs.} %
+For simplicity, however, we use the same function for all steps of
 estimation in this paper.  Potentially different kernel functions and bandwidths
 could also be used for estimation below and above the cutoff, but we again focus
 on the simpler case here.
@@ -430,18 +436,10 @@ measure corresponds to a secondary bootstrap distribution.
 Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
 
 \begin{algorithm}[Bias estimation]\label{Alg1}
-  Assume $h$ and $b$ are bandwidths as defined by Assumption~\ref{A2} and define
-  \begin{align*}
-    I_{-} &= \{i : X_i < 0 \}, &
-    I_{+} &= \{i : X_i > 0 \}.
-  \end{align*}
-  Also define $M_{-}$ and $M_{+}$ to be the number of elements in $I_{-}$ and
-  $I_{+}$ respectively, and $m_{-}(1),\dots,m_{-}(M_{-})$ and
-  $m_{+}(1),\dots,m_{+}(M_+)$ to be subsequences of $1,\dots,n$ that index
-  $I_-$ and $I_+$, respectively.
+  Assume $h$ and $b$ are bandwidths as defined by Assumption~\ref{A2}.
   \begin{enumerate}
-  \item Estimate local second order polynomials $\hat g_{-}$ and $\hat g_{+}$ using
-    the observations in $I_-$ and $I_+$ and the kernel $K_{b}(X_{i})$:
+  \item Estimate local second order polynomials $\hat g_{-}$ and $\hat g_{+}$
+    with least squares using $K_{-,b}$ and $K_{+,b}$ for weights:
     \begin{align}
       \label{eq:2}
       \hat g_{-}(x)
@@ -451,10 +449,10 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
     \end{align}
     with
     \begin{align*}
-      \hat\beta_{-} &= \argmin_\beta \sum_{i \in I_-}
-      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{b}(X_{i}) \\
-      \hat\beta_{+} &= \argmin_\beta \sum_{i \in I_+}
-      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{b}(X_{i}).
+      \hat\beta_{-} &= \argmin_\beta \sum_{i = 1}^n
+      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{+,b}(X_{i}) \\
+      \hat\beta_{+} &= \argmin_\beta \sum_{i = 1}^n
+      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{-,b}(X_{i}).
     \end{align*}
     Let
     \[
@@ -478,14 +476,15 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
       \end{align*}
       for all $i$.
     \item Calculate $\hat\mu_+^*(h)$ and $\hat\mu_-^*(h)$ by estimating the
-      local linear model on the bootstrap data set
+      local linear model on the bootstrap data set using $K_{+,h}$ and $K_{-,h}$ for
+      weights:
       \begin{align*}
         \hat\mu_-^*(h)
-        &= \argmin_{\mu} \min_{\beta} \sum_{i \in I_{-}}
-          (Y_i^* - \mu - \beta X_i)^2 K_{h}(X_{i}) \\
+        &= \argmin_{\mu} \min_{\beta} \sum_{i =1}^n
+          (Y_i^* - \mu - \beta X_i)^2 K_{-,h}(X_{i}) \\
         \hat\mu_+^*(h)
-        &= \argmin_{\mu} \min_{\beta} \sum_{i \in I_{+}}
-          (Y_i^* - \mu - \beta X_i)^2 K_{h}(X_{i}).
+        &= \argmin_{\mu} \min_{\beta} \sum_{i = 1}^n
+          (Y_i^* - \mu - \beta X_i)^2 K_{+,h}(X_{i}).
       \end{align*}
     \item Save $\hat\tau^*_k(h) = \hat\mu_+^*(h) - \hat\mu_-^*(h)$.
     \end{enumerate}
@@ -555,14 +554,15 @@ and Theorem~\ref{T2} establishes its theoretical properties.
       \end{align*}
       for all $i = 1,\dots,n$.
     \item Calculate $\hat\mu_+^*(h)$ and $\hat\mu_-^*(h)$ by estimating the
-      local linear model on the bootstrap data set:
+      local linear model on the bootstrap data set using $K_{+,h}$ and $K_{-,h}$
+      for weights:
       \begin{align*}
         \hat\mu_-^*(h)
-        &= \argmin_{\mu} \min_{\beta} \sum_{i \in I_{-}}
-          (Y_{i}^{*} - \mu - \beta X_{i})^{2}K_{h}(X_{i}) \\
+        &= \argmin_{\mu} \min_{\beta} \sum_{i = 1}^n
+          (Y_{i}^{*} - \mu - \beta X_{i})^{2}K_{-,h}(X_{i}), \\
         \hat\mu_+^*(h)
-        &= \argmin_{\mu} \min_{\beta} \sum_{i \in I_{+}}
-          (Y_{i}^{*} - \mu - \beta X_{i})^{2}K_{h}(X_{i}).
+        &= \argmin_{\mu} \min_{\beta} \sum_{i = 1}^n
+          (Y_{i}^{*} - \mu - \beta X_{i})^{2}K_{+,h}(X_{i}).
       \end{align*}
     \item Apply Algorithm~\ref{Alg1} to the bootstrapped data set
       $(Y_1^*,\, X_1),\dots,(Y_n^*,\, X_n)$ set using the same bandwidths
@@ -981,11 +981,11 @@ We have
 By construction,
 \begin{align*}
   \hat\beta^*_{+,p} - \beta^*_{+,p}
-  & = \Big(\sum_{i\in I_+} K_h(X_i) r_p(X_i) r_p(X_i)'\Big)^{-1}
-  \sum_{i \in I_+} K_h(X_i) r_p(X_i) \hat\varepsilon_i e_i^* \\
+  & = \Big(\sum_{i = 1}^n r_p(X_i) r_p(X_i)' K_{+,h}(X_i) \Big)^{-1}
+  \sum_{i = 1}^n r_p(X_i) K_{+,h}(X_i) \hat\varepsilon_i e_i^* \\
   \hat\beta^*_{-,p} - \beta^*_{-,p}
-  &= \Big(\sum_{i\in I_-} K_h(X_i) r_p(X_i) r_p(X_i)'\Big)^{-1}
-  \sum_{i \in I_-} K_h(X_i) r_p(X_i) \hat\varepsilon_i e_i^*
+  &= \Big(\sum_{i = 1}^n r_p(X_i) r_p(X_i)' K_{-,h}(X_i)\Big)^{-1}
+  \sum_{i = 1}^n r_p(X_i) K_{-,h}(X_i) \hat\varepsilon_i e_i^*
 \end{align*}
 ensuring that
 \begin{align*}
