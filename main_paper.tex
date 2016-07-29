@@ -463,10 +463,10 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
         \hat g_+(x) & \otherwise
       \end{cases}
     \]
-    and calculate the residuals $\hat\varepsilon_{i} = Y_i - \hat g(X_i)$.
+    and calculate the residuals $\hat\varepsilon_{i} = Y_i - \hat g(X_i)$ for all $i$.
   \item Repeat the following steps $B_{1}$ times to produce the
     bootstrap estimates $\hat{\tau}_{1}^{*}(h),\dots,\hat\tau_{B_{1}}^{*}(h)$. For the
-    $k$th value:
+    $k$th replication:
     \begin{enumerate}
     \item Draw i.i.d.\ random variables $e_i^{*}$ with mean zero, variance one,
       and bounded fourth moments independent of the original data and
@@ -474,8 +474,9 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
       \begin{align*}
         \varepsilon_i^{*} &= \hat{\varepsilon}_i e^{*}_i,
         \intertext{and}
-        Y_i^{*} &= \hat g(X_i) + \varepsilon_i^{*}.
+        Y_i^{*} &= \hat g(X_i) + \varepsilon_i^{*}
       \end{align*}
+      for all $i$.
     \item Calculate $\hat\mu_+^*(h)$ and $\hat\mu_-^*(h)$ by estimating the
       local linear model on the bootstrap data set
       \begin{align*}
@@ -534,14 +535,15 @@ the same wild bootstrap method used in Algorithm~\ref{Alg1}. Algorithm~\ref{Alg2
 and Theorem~\ref{T2} establishes its theoretical properties.
 
 \begin{algorithm}[Confidence intervals]\label{Alg2}
-  Define the same notation as in Algorithm~\ref{Alg1}.
+  Assume $h$ and $b$ are bandwidths as defined by Assumption~\ref{A2} and
+  Algorithm~\ref{Alg1}.
   \begin{enumerate}
   \item Estimate $\hat{g}_{+}$ and $\hat{g}_{-}$ and generate $\hat g(\cdot)$
     and the residuals $\hat\varepsilon_i$ just as in Algorithm~\ref{Alg1}.
   \item Repeat the following steps $B_{2}$ times to produce the
     bootstrap estimates
     $\hat\tau_1^{\prime*}(h,b), \dots, \hat\tau_{B_{2}}^{\prime*}(h,b)$. For the
-    $k$th value:
+    $k$th replication:
     \begin{enumerate}
     \item Draw i.i.d.\ random variables $e_i^{*}$ with mean zero, variance one,
       and bounded fourth moments independent of the original data and
@@ -551,6 +553,7 @@ and Theorem~\ref{T2} establishes its theoretical properties.
         \intertext{and}
         Y_i^{*} &= \hat g(X_i) + \varepsilon_i^{*}.
       \end{align*}
+      for all $i = 1,\dots,n$.
     \item Calculate $\hat\mu_+^*(h)$ and $\hat\mu_-^*(h)$ by estimating the
       local linear model on the bootstrap data set:
       \begin{align*}
@@ -562,17 +565,18 @@ and Theorem~\ref{T2} establishes its theoretical properties.
           (Y_{i}^{*} - \mu - \beta X_{i})^{2}K_{h}(X_{i}).
       \end{align*}
     \item Apply Algorithm~\ref{Alg1} to the bootstrapped data set
-      using the same bandwidths $h$ and $b$ that are used in the rest of this
+      $(Y_1^*,\, X_1),\dots,(Y_n^*,\, X_n)$ set using the same bandwidths
+      $h$ and $b$ that are used in the rest of this
       algorithm but reestimating all of the local polynomials on the bootstrap
       data. Generate $B_1$ new bootstrap samples and let $\Delta^{**}(h,b)$
       represent the bias estimator returned by Algorithm~\ref{Alg1}.
     \item Save the bias-corrected estimator
-      $\hat\tau_k^{\prime*}(h,b) = \hat\mu_+^*(h) - \hat\mu_i^*(h)
+      $\hat\tau_k^{\prime*}(h,b) = \hat\mu_+^*(h) - \hat\mu_-^*(h)
       - \Delta^{**}(h,b)$.
     \end{enumerate}
-  \item Use the empirical CDF of
-    $\hat\tau_1^{\prime*}(h,b),\dots \hat\tau_{B_2}^{\prime*}(h,b)$ to
-    construct confidence intervals, etc.
+  \item Define $\tau^* = \hat g_+(0) - \hat g_-(0)$ and use the empirical CDF of
+    $\hat\tau_1^{\prime*}(h,b) - \tau^*,\dots, \hat\tau_{B_2}^{\prime*}(h,b) - \tau^*$
+    as the sampling distribution of $\hat \tau' - \tau$.
   \end{enumerate}
 \end{algorithm}
 
