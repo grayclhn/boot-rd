@@ -7,6 +7,7 @@ source("rdfunctions.R")
 source("rdfunctions_ForMc.R")
 
 ## Load Ludwig and Miller's (2007) dataset
+set.seed(798)
 
 cutoff <- 59.1984
 census2 <- read.csv("./LM2007data/census2.csv")
