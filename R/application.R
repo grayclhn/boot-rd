@@ -4,6 +4,7 @@
 library(rdrobust)
 library(xtable)
 source("rdfunctions.R")
+source("rdfunctions_ForMc.R")
 
 ## Load Ludwig and Miller's (2007) dataset
 
@@ -17,8 +18,8 @@ census_2000 <- read.csv("./LM2007data/census_2000.csv")
 
 ## Set parameterizations and functions for the analysis
 
-N.bc <- 500
-N.ci <- 999
+N.bc <- 50
+N.ci <- 99
 level <- 0.95
 set.seed(555)
 
@@ -35,8 +36,8 @@ robust <- function(dta) {
   t1  <- cct$coef[3]
   ci1 <- cct$ci[3, ]
 
-  boot <- rdboot(dta$y, dta$x, 1 - level, N.bc, wild_bootstrap, N.ci,
-    type = "basic", kernel = "uniform")
+  boot <- rdboot_ForMc(dta$y, dta$x, 1 - level, N.bc, N.ci,
+          bootstrap = "wild", kernel = "uniform")
   t2 <- boot[1]
   ci2 <- boot[2:3]
   return(matrix(c(t1, ci1, NA, bws,
