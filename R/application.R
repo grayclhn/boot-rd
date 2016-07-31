@@ -19,8 +19,8 @@ census_2000 <- read.csv("./LM2007data/census_2000.csv")
 
 ## Set parameterizations and functions for the analysis
 
-N.bc <- 50
-N.ci <- 99
+N.bc <- 500
+N.ci <- 999
 level <- 0.95
 set.seed(555)
 
