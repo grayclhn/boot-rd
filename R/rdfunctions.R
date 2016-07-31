@@ -94,9 +94,9 @@ boot_estimator <- function(y, x, wp, wq, p = 1, q = p + 1, nboot, bootfn,
 # x: running variable
 # wp, wq: explicit weights imposed by the kernel near the cutoff
 # a: size of the implicit hypothesis test. The interval will have level 1-a
-# nboot: number of bootstrap  replications for the "outer" bootstrap that
+# nboot2: number of bootstrap  replications for the "outer" bootstrap that
 #         generates draws for the confidence interval construction
-# nboot2: number of bootstrap replications used for debiasing
+# nboot:  number of bootstrap replications used for debiasing
 # bootfn: a function that generates new values of the depnedent model,
 #         given an estimated local polynomial
 # p1, p2: polynomial degree for the estimated model (p1) and the conditional
