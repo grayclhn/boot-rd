@@ -125,11 +125,11 @@ boot_interval <- function(y, x, wp, wq, a, p = 1, q = p + 1,
 
   switch(type,
     basic = boot_ci_basic(boot_estimator(y, x, wp, wq, p, q, nboot2, bootfn),
-      quantile(boots, c(1 - a/2, a/2)), basic_estimator(y, x, wq, q)),
+            boots, basic_estimator(y, x, wq, q), a),
     percentile = quantile(boots, c(a/2, 1-a/2)),
     both = rbind(
       basic = boot_ci_basic(boot_estimator(y, x, wp, wq, p, q, nboot2, bootfn),
-        quantile(boots, c(1 - a/2, a/2)), basic_estimator(y, x, wq, q)),
+            boots, basic_estimator(y, x, wq, q), a),
       percentile = quantile(boots, c(a/2, 1-a/2))),
     stop("The listed interval type is not supported."))
 }
