@@ -55,6 +55,7 @@ test_that("Convenient version of interval constructions runs and matches explici
     bw <- rdbwselect_2014(y, x)$bws
     wp <- kweight(x, 0, bw[1], "tri")
     wq <- kweight(x, 0, bw[2], "tri")
+    estimate <- boot_estimator(y, x, wp, wq, 1, 2, 17, residual_bootstrap)
     boot_interval(y, x, wp, wq, a = 0.1, p = 1, q = 2,
       17, residual_bootstrap, 19, type = "percentile")})
   set.seed(common.seed)
