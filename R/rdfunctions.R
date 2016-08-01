@@ -15,6 +15,33 @@ generate.data <- function(model.id) {
                   0.52 +  0.84*x - 0.1*3.00*x^2 - 0.3*7.99*x^3 - 0.1*9.01*x^4 + 3.56*x^5))
   return(data.frame(y = y, x = x))}
 
+## this function calculate average bandwidth in the homoskedastic case
+
+average_bw <- function(model.id, kernel) {
+  mean(replicate(500, {
+    dta <- generate.data(model.id)
+    max(rdbwselect_2014(dta$y, dta$x, kernel=kernel)$bws)
+  }))
+}
+
+## this function generate data with heteroskedasticity
+# standard error is firstly set to the square of expected outcome
+# rescale all standard error by a common factor 
+# so that they are on average 0.1295 within avebw
+
+generate.data.h <- function(model.id, avebw) {
+  x <- 2*rbeta(500, 2, 4) - 1
+  y <- switch(model.id,
+              ifelse(x < 0, 0.48 +  1.27*x +  7.18*x^2 + 20.21*x^3 + 21.54*x^4 + 7.33*x^5,
+                     0.52 +  0.84*x -  3.00*x^2 +  7.99*x^3 -  9.01*x^4 + 3.56*x^5),
+              ifelse(x < 0, 3.71 +  2.30*x +  3.28*x^2 +  1.45*x^3 +  0.23*x^4 + 0.03*x^5,
+                     0.26 + 18.49*x - 54.81*x^2 + 74.30*x^3 - 45.02*x^4 + 9.83*x^5),
+              ifelse(x < 0, 0.48 +  1.27*x - 0.5*7.18*x^2 + 0.7*20.21*x^3 + 1.1*21.54*x^4 + 1.5*7.33*x^5,
+                     0.52 +  0.84*x - 0.1*3.00*x^2 - 0.3*7.99*x^3 - 0.1*9.01*x^4 + 3.56*x^5))
+  se <- y^2/mean(y[abs(x) < avebw]^2)*0.1295
+  return(data.frame(y = y + rnorm(500, 0, se), x = x))
+}
+
 # Functions that implement the residual and wild bootstraps.
 
 residual_bootstrap <- function(m, y, x) {
