@@ -9,132 +9,115 @@ library(xtable)
 try(source("slackrISE.R"), T)
 
 source("rdfunctions.R")
+source("rdfunctions_ForMc.R")
 
-#### for testing in my computer ####
-# N.ci <- 20
-# level <- 0.95
-# N.simu <- 20
-# N.core <- 2
-# N.bc <- 20
-
-#### to run in servor ####
 N.ci <- 999
 a <- 0.05
 N.simu <- 5000
-N.core <- 15
+N.core <- 35
 N.bc <- 500
 
-## simulation 1: coverage of CI from bootstrap
+## simulation 1: coverage of CI from bootstrap (basic CI)
 
-simulation.1 <- function(model.id, nsims) {
-
-  simu <- function() {
-    dta <- generate.data(model.id)
-    rdboot(dta$y, dta$x, a, N.bc, wild_bootstrap, nboot2 = N.ci,
-      p = 1, q = 2, type = "basic", kernel = "tri")
+simulation.1 <- function(model.id, kernel, heteroskedasticity = F) {
+  
+  if (heteroskedasticity == T) {
+    avebw <- average_bw(model.id, kernel)
+    gen_data <- function() generate.data.h(model.id, avebw)
+  } else {
+    gen_data <- function() generate.data(model.id)
   }
-
+  
+  simu <- function() {
+    dta <- gen_data()
+    rdboot_ForMc(dta$y, dta$x, a, N.bc, N.ci, 1, 2, "wild", kernel)[1, ]
+  }
+  
   cl <- makeCluster(N.core)
   registerDoParallel(cl)
-  export.obj <- c("N.ci", "N.bc", "level", "generate.data", "kweight",
-    "rd.estimate", "lpreg", "rd.ci", "wild_bootstrap", "rdboot",
-    "basic_estimator", "boot_estimator", "wild_values", "wild_weights",
-    "boot_interval", "boot_ci_basic")
+  export.obj <- c("N.ci", "N.bc", "a", "generate.data", "kweight", "rdboot_ForMc",
+                  "wild_values", "wild_weights", "boot_estimator_ForMc", "boot_dist_ForMc",
+                  "boot_ci_basic", "generate.data.h")
   collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng%
     simu()
   stopCluster(cl)
-
+  
   t.true    <- ifelse(model.id ==2, -3.45, 0.04)
   bias      <- t.true - mean(collect.simu[ , 1])
   SD        <- sd(collect.simu[ , 1])
   MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
   coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
   length    <- mean(collect.simu[ , 3] - collect.simu[ , 2])
-
+  
   return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
 }
 
 ## simulation 2: coverage of CI from CCT(2004)
 
-simulation.2 <- function(model.id, p, q, kernel) {
-
+simulation.2 <- function(model.id, kernel, heteroskedasticity = F) {
+  
+  if (heteroskedasticity == T) {
+    avebw <- average_bw(model.id, kernel)
+    gen_data <- function() generate.data.h(model.id, avebw)
+  } else {
+    gen_data <- function() generate.data(model.id)
+  }
+  
   simu <- function() {
-    dta <- generate.data(model.id)
-    bws <- rdbandwidth_2014(dta$y, dta$x, p = p, q = q, kernel = kernel)$bws
-    results <- rdrobust(dta$y, dta$x, p = p, q = q, kernel = kernel,
-      h = bws[1], b = bws[2], level = 100 * (1-a))
+    dta <- gen_data()
+    bws <- rdbwselect_2014(dta$y, dta$x, kernel = kernel)$bws
+    results <- rdrobust(dta$y, dta$x, kernel = kernel,
+                        h = bws[1], b = bws[2], level = 100 * (1-a))
     t <- results$coef[3]
     ci <- results$ci[3, ]
     return(c(t, ci))
   }
-
+  
   cl <- makeCluster(N.core)
   registerDoParallel(cl)
-  export.obj <- c("generate.data", "level")
+  export.obj <- c("generate.data", "generate.data.h", "a")
   collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng%
     simu()
   stopCluster(cl)
-
+  
   t.true    <- ifelse(model.id ==2, -3.45, 0.04)
   bias      <- t.true - mean(collect.simu[ , 1])
   SD        <- sd(collect.simu[ , 1])
   MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
   coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
   length    <- mean(collect.simu[ , 3] - collect.simu[ , 2])
-
+  
   return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
 }
 
 ## generate tables
 
-gen.table <- function(model.id, p, q){
-  table <- matrix(0, nrow = 4, ncol = 6)
-  colnames(table) <- c("true", "bias", "SD", "MSE", "coverage", "length")
-  rownames(table) <- c("cct.tri", "cct.uni", "boot.uni", "boot.uni(uncorrected)")
+models <- c(1, 2, 3)
+kernels <- c("uniform")
+heteroskedasticity <- c(F, T)
+rnames <- c("m1.uni", "m1.uni.h", "m2.uni", "m2.uni.h","m3.uni", "m3.uni.h")
 
-  try(environment(slackr) <- environment(), T)
-
-  table[1, ] <- simulation.2(model.id, p, q, "tri")
-  try(slackr(print(table[1,])), T)
-  table[2, ] <- simulation.2(model.id, p, q, "uni")
-  try(slackr(print(table[2,])), T)
-  table[3, ] <- simulation.1(model.id, p, q, "uni", T)
-  try(slackr(print(table[3,])), T)
-  table[4, ] <- simulation.1(model.id, p, q, "uni", F)
-  try(slackr(print(table[4,])), T)
-
-  table
+i <- 1
+boot.results <- matrix(0, nrow = 6, ncol = 6)
+rownames(boot.results) <- rnames
+cct.results <- matrix(0, nrow = 6, ncol = 6)
+rownames(cct.results) <- rnames
+for (m in models) {
+  for (k in kernels) {
+    for (h in heteroskedasticity) {
+      set.seed(798)
+      boot.results[i, ] <- simulation.1(m, k, h)
+      try(slackr(print(boot.results)), T)
+      
+      set.seed(798)
+      cct.results[i, ] <- simulation.2(m, k, h)
+      try(slackr(print(cct.results)), T)
+      i <- i + 1
+    }
+  }
 }
 
-set.seed(798)
-table.112 <- gen.table(1, 1, 2)
-try(slackr("table.112 done 1/6"), T)
-
-table.212 <- gen.table(2, 1, 2)
-try(slackr("table.212 done 2/6"), T)
-
-table.312 <- gen.table(3, 1, 2)
-try(slackr("table.312 done 3/6"), T)
-
-table.123 <- gen.table(1, 2, 3)
-try(slackr("table.123 done 4/6"), T)
-
-table.223 <- gen.table(2, 2, 3)
-try(slackr("table.223 done 5/6"), T)
-
-table.323 <- gen.table(3, 2, 3)
-try(slackr("table.323 done 6/6"), T)
-
-## table 1: p = 1, q = 2
-
-table.1 <- rbind(table.112, table.212, table.312)
-print(xtable(table.1, digits = 3), include.rownames = F, type = "latex", file = "output/simu_table_1.tex")
-
-## table 2: p = 2, q = 3
-
-table.2 <- rbind(table.123, table.223, table.323)
-print(xtable(table.2, digits = 3), include.rownames = F, type = "latex", file = "output/simu_table_2.tex")
-
-
-
-
+print(xtable(boot.results, digits = 3), include.rownames = F, type = "latex", 
+      file = "output/boot_results.tex")
+print(xtable(cct.results, digits = 3), include.rownames = F, type = "latex", 
+      file = "output/cct_results.tex")
