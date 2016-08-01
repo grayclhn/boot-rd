@@ -46,7 +46,6 @@ test_that("rdfunctions_ForMc.R gives the same results as rdfunctions_old.R in re
   expect_equivalent(old_epa, new_epa)})
 
 
-
 test_that("rdfunctions_ForMc.R gives the same results as rdfunctions.R in wild bootstrap.",{
   
   # rdfunctions.R take random draws for all observations in original data set,
@@ -86,27 +85,40 @@ test_that("rdfunctions_ForMc.R gives the same results as rdfunctions.R in wild b
   ypr <- y[x >= 0 & x < h]
   xpr <- x[x >= 0 & x < h]
   
-  wpl <- kweight(xpl, 0, h, kernel)
-  wpr <- kweight(xpr, 0, h, kernel)
+  # a vector of weight for residual bootstrap
   wql <- kweight(xql, 0, b, kernel)
   wqr <- kweight(xqr, 0, b, kernel)
+  wpl <- kweight(xpl, 0, b, kernel)
+  wpr <- kweight(xpr, 0, b, kernel)
   
-  Xpl <- cbind(1, poly(xpl, p, raw = T))
-  Xpr <- cbind(1, poly(xpr, p, raw = T))
-  Xql <- cbind(1, poly(xql, q, raw = T))
-  Xqr <- cbind(1, poly(xqr, q, raw = T))
+  # orthogonal polynomials
+  xql.poly <- poly(xql, q)
+  xqr.poly <- poly(xqr, q)
+  xpl.poly <- poly(xpl, p)
+  xpr.poly <- poly(xpr, p)
   
-  Wpl <- diag(wpl)
-  Wpr <- diag(wpr)
-  Wql <- diag(wql)
-  Wqr <- diag(wqr)
+  # design matrix
+  Xql <- cbind(1, poly(xql, q))
+  Xqr <- cbind(1, poly(xqr, q))
+  Xpl <- cbind(1, poly(xpl, p))
+  Xpr <- cbind(1, poly(xpr, p))
   
-  fit.ql <- Xql %*% solve(t(Xql) %*% Wql %*% Xql) %*% t(Xql) %*% Wql
-  fit.qr <- Xqr %*% solve(t(Xqr) %*% Wqr %*% Xqr) %*% t(Xqr) %*% Wqr
-  coef.ql <- t(c(1, rep(0, q))) %*% solve(t(Xql) %*% Wql %*% Xql) %*% t(Xql) %*% Wql
-  coef.qr <- t(c(1, rep(0, q))) %*% solve(t(Xqr) %*% Wqr %*% Xqr) %*% t(Xqr) %*% Wqr
-  coef.pl <- t(c(1, rep(0, p))) %*% solve(t(Xpl) %*% Wpl %*% Xpl) %*% t(Xpl) %*% Wpl
-  coef.pr <- t(c(1, rep(0, p))) %*% solve(t(Xpr) %*% Wpr %*% Xpr) %*% t(Xpr) %*% Wpr
+  KXql <- kweight(xql, 0, b, kernel) * Xql
+  KXqr <- kweight(xqr, 0, b, kernel) * Xqr
+  KXpl <- kweight(xpl, 0, h, kernel) * Xpl
+  KXpr <- kweight(xpr, 0, h, kernel) * Xpr
+  
+  # parameter maker
+  WXql <- t(solve(crossprod(Xql, KXql), t(KXql)))
+  WXqr <- t(solve(crossprod(Xqr, KXqr), t(KXqr)))
+  WXpl <- t(solve(crossprod(Xpl, KXpl), t(KXpl)))
+  WXpr <- t(solve(crossprod(Xpr, KXpr), t(KXpr)))
+  
+  # intercept maker
+  coef.ql <- tcrossprod(c(1, predict(xql.poly, 0)), WXql)
+  coef.qr <- tcrossprod(c(1, predict(xqr.poly, 0)), WXqr)
+  coef.pl <- tcrossprod(c(1, predict(xpl.poly, 0)), WXpl)
+  coef.pr <- tcrossprod(c(1, predict(xpr.poly, 0)), WXpr)
   
   # second, generate boot_dist from boot_interval
   boot_dist <- function(y, x, wp, wq, a, p = 1, q = p + 1,
@@ -131,13 +143,17 @@ test_that("rdfunctions_ForMc.R gives the same results as rdfunctions.R in wild b
   
   # now we can compare
   set.seed(798)
-  new_estimate <- boot_estimator_ForMc(ypl, ypr, yql, yqr, fit.ql, fit.qr, 
-                                 coef.qr, coef.ql, coef.pr, coef.pl,
-                                 wqr, wql, ihr, ihl, 50, "wild")
+  new_estimate <- boot_estimator_ForMc(ypl, ypr, yql, yqr,
+                                       coef.ql, coef.qr, coef.pl, coef.pr,
+                                       Xql, Xqr, Xpl, Xpr,
+                                       WXql, WXqr,
+                                       wqr, wql, ihr, ihl, 50, bootstrap = "wild")
   
-  new_dist <- boot_dist_ForMc(ypl, ypr, yql, yqr, fit.ql, fit.qr, 
-                                 coef.qr, coef.ql, coef.pr, coef.pl,
-                                 wqr, wql, ihr, ihl, 10, 10, bootstrap = "wild")
+  new_dist <- boot_dist_ForMc(ypl, ypr, yql, yqr,
+                              coef.ql, coef.qr, coef.pl, coef.pr,
+                              Xql, Xqr, Xpl, Xpr,
+                              WXql, WXqr,
+                              wqr, wql, ihr, ihl, 10, 10, bootstrap = "wild")
   
   set.seed(798)
   old_estimate <- boot_estimator(c(yql, yqr), c(xql, xqr), c(wpl, wpr), c(wql, wqr),
@@ -148,5 +164,7 @@ test_that("rdfunctions_ForMc.R gives the same results as rdfunctions.R in wild b
   
   expect_equivalent(new_estimate, old_estimate)
   expect_equivalent(new_dist, old_dist)})
+
+
 
 
