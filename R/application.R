@@ -38,7 +38,7 @@ robust <- function(dta) {
   ci1 <- cct$ci[3, ]
 
   boot <- rdboot_ForMc(dta$y, dta$x, 1 - level, N.bc, N.ci,
-          bootstrap = "wild", kernel = "uniform")
+          bootstrap = "wild", kernel = "uniform")[1, ]
   t2 <- boot[1]
   ci2 <- boot[2:3]
   return(matrix(c(t1, ci1, NA, bws,
