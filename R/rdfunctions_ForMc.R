@@ -13,16 +13,22 @@
 
 
 ## this function generates bias-corrected estimator
-boot_estimator_ForMc <- function(ypl, ypr, yql, yqr, fit.ql, fit.qr, 
-                           coef.qr, coef.ql, coef.pr, coef.pl,
-                           wqr, wql, ihr, ihl, Nbc, bootstrap = "wild") {
+boot_estimator_ForMc <- function(ypl, ypr, yql, yqr, 
+                                 coef.ql, coef.qr, coef.pl, coef.pr,
+                                 Xql, Xqr, Xpl, Xpr,
+                                 WXql, WXqr,
+                                 wqr, wql, ihr, ihl, Nbc, bootstrap = "wild") {
   
-  fitted.l <- fit.ql %*% yql
-  fitted.r <- fit.qr %*% yqr
+  b.ql       <- crossprod(WXql, yql)
+  fitted.l   <- Xql %*% b.ql
   residual.l <- yql - fitted.l
+  
+  b.qr       <- crossprod(WXqr, yqr)
+  fitted.r   <- Xqr %*% b.qr
   residual.r <- yqr - fitted.r
+  
   boot_parameter <- coef.qr %*% yqr - coef.ql %*% yql
-  estimate <- coef.pr %*% ypr - coef.pl %*% ypl
+  estimate       <- coef.pr %*% ypr - coef.pl %*% ypl
 
   if (bootstrap == "residual") {
     boots <- replicate(Nbc,
@@ -40,30 +46,39 @@ boot_estimator_ForMc <- function(ypl, ypr, yql, yqr, fit.ql, fit.qr,
 }
 
 ## this function generates bootstrap distribution of bias-corrected estimator
-boot_dist_ForMc <- function(ypl, ypr, yql, yqr, fit.ql, fit.qr, 
-                      coef.qr, coef.ql, coef.pr, coef.pl,
-                      wqr, wql, ihr, ihl, Nbc, Nci, bootstrap = "wild"){
+boot_dist_ForMc <- function(ypl, ypr, yql, yqr, 
+                            coef.ql, coef.qr, coef.pl, coef.pr,
+                            Xql, Xqr, Xpl, Xpr,
+                            WXql, WXqr,
+                            wqr, wql, ihr, ihl, Nbc, Nci, bootstrap = "wild"){
   
-  fitted.l <- fit.ql %*% yql
-  fitted.r <- fit.qr %*% yqr
+  b.ql       <- crossprod(WXql, yql)
+  fitted.l   <- Xql %*% b.ql
   residual.l <- yql - fitted.l
+  
+  b.qr       <- crossprod(WXqr, yqr)
+  fitted.r   <- Xqr %*% b.qr
   residual.r <- yqr - fitted.r
   
   if (bootstrap == "residual"){
     boots <- replicate(Nci, {
       newyqr <- fitted.r + sample(residual.r, length(yqr), T, wqr)
       newyql <- fitted.l + sample(residual.l, length(yql), T, wql)
-      boot_estimator_ForMc(newyql[ihl], newyqr[ihr], newyql, newyqr, fit.ql, fit.qr, 
-                     coef.qr, coef.ql, coef.pr, coef.pl,
-                     wqr, wql, ihr, ihl, Nbc, bootstrap)})
+      boot_estimator_ForMc(newyql[ihl], newyqr[ihr], newyql, newyqr,
+                           coef.ql, coef.qr, coef.pl, coef.pr,
+                           Xql, Xqr, Xpl, Xpr,
+                           WXql, WXqr,
+                           wqr, wql, ihr, ihl, Nbc, bootstrap)})
   }
   if (bootstrap == "wild"){
     boots <- replicate(Nci, {
       newyqr <- fitted.r + residual.r*sample(wild_values, length(yqr), T, wild_weights)
       newyql <- fitted.l + residual.l*sample(wild_values, length(yql), T, wild_weights)
-      boot_estimator_ForMc(newyql[ihl], newyqr[ihr], newyql, newyqr, fit.ql, fit.qr, 
-                     coef.qr, coef.ql, coef.pr, coef.pl,
-                     wqr, wql, ihr, ihl, Nbc, bootstrap)})
+      boot_estimator_ForMc(newyql[ihl], newyqr[ihr], newyql, newyqr,
+                           coef.ql, coef.qr, coef.pl, coef.pr,
+                           Xql, Xqr, Xpl, Xpr,
+                           WXql, WXqr,
+                           wqr, wql, ihr, ihl, Nbc, bootstrap)})
   }
   
   return(boots)
@@ -71,8 +86,13 @@ boot_dist_ForMc <- function(ypl, ypr, yql, yqr, fit.ql, fit.qr,
 
 ## a wrapper for both point and interval estimator
 rdboot_ForMc <- function(y, x, a = 0.05, Nbc = 500, Nci = 999, p = 1, q = 2, 
-                   bootstrap = "residual", kernel = "uniform"){
+                         bootstrap = "residual", kernel = "uniform"){
   
+  # to improve speed, (1) create all necessary objects only once and pass
+  # them into functions for double bootstrap. (2) avoid multiplication of
+  # matrix with large size.
+  
+  # drop all observations beyound max[h, b]
   bw <- rdbwselect_2014(y, x, p=p, q=q, kernel=kernel)$bws
   h <- bw[1]
   b <- bw[2]
@@ -90,35 +110,50 @@ rdboot_ForMc <- function(y, x, a = 0.05, Nbc = 500, Nci = 999, p = 1, q = 2,
   ypr <- y[x >= 0 & x < h]
   xpr <- x[x >= 0 & x < h]
   
-  wpl <- kweight(xpl, 0, h, kernel)
-  wpr <- kweight(xpr, 0, h, kernel)
+  # a vector of weight for residual bootstrap
   wql <- kweight(xql, 0, b, kernel)
   wqr <- kweight(xqr, 0, b, kernel)
   
-  Xpl <- cbind(1, poly(xpl, p, raw = T))
-  Xpr <- cbind(1, poly(xpr, p, raw = T))
-  Xql <- cbind(1, poly(xql, q, raw = T))
-  Xqr <- cbind(1, poly(xqr, q, raw = T))
+  # orthogonal polynomials
+  xql.poly <- poly(xql, q)
+  xqr.poly <- poly(xqr, q)
+  xpl.poly <- poly(xpl, p)
+  xpr.poly <- poly(xpr, p)
   
-  Wpl <- diag(wpl)
-  Wpr <- diag(wpr)
-  Wql <- diag(wql)
-  Wqr <- diag(wqr)
+  # design matrix
+  Xql <- cbind(1, poly(xql, q))
+  Xqr <- cbind(1, poly(xqr, q))
+  Xpl <- cbind(1, poly(xpl, p))
+  Xpr <- cbind(1, poly(xpr, p))
   
-  fit.ql <- Xql %*% solve(t(Xql) %*% Wql %*% Xql) %*% t(Xql) %*% Wql
-  fit.qr <- Xqr %*% solve(t(Xqr) %*% Wqr %*% Xqr) %*% t(Xqr) %*% Wqr
-  coef.ql <- t(c(1, rep(0, q))) %*% solve(t(Xql) %*% Wql %*% Xql) %*% t(Xql) %*% Wql
-  coef.qr <- t(c(1, rep(0, q))) %*% solve(t(Xqr) %*% Wqr %*% Xqr) %*% t(Xqr) %*% Wqr
-  coef.pl <- t(c(1, rep(0, p))) %*% solve(t(Xpl) %*% Wpl %*% Xpl) %*% t(Xpl) %*% Wpl
-  coef.pr <- t(c(1, rep(0, p))) %*% solve(t(Xpr) %*% Wpr %*% Xpr) %*% t(Xpr) %*% Wpr
+  KXql <- kweight(xql, 0, b, kernel) * Xql
+  KXqr <- kweight(xqr, 0, b, kernel) * Xqr
+  KXpl <- kweight(xpl, 0, h, kernel) * Xpl
+  KXpr <- kweight(xpr, 0, h, kernel) * Xpr
   
-  estimate <- boot_estimator_ForMc(ypl, ypr, yql, yqr, fit.ql, fit.qr, 
-                             coef.qr, coef.ql, coef.pr, coef.pl,
-                             wqr, wql, ihr, ihl, Nbc, bootstrap)
+  # parameter maker
+  WXql <- t(solve(crossprod(Xql, KXql), t(KXql)))
+  WXqr <- t(solve(crossprod(Xqr, KXqr), t(KXqr)))
+  WXpl <- t(solve(crossprod(Xpl, KXpl), t(KXpl)))
+  WXpr <- t(solve(crossprod(Xpr, KXpr), t(KXpr)))
   
-  boots <- boot_dist_ForMc(ypl, ypr, yql, yqr, fit.ql, fit.qr, 
-                     coef.qr, coef.ql, coef.pr, coef.pl,
-                     wqr, wql, ihr, ihl, Nbc, Nci, bootstrap)
+  # intercept maker
+  coef.ql <- tcrossprod(c(1, predict(xql.poly, 0)), WXql)
+  coef.qr <- tcrossprod(c(1, predict(xqr.poly, 0)), WXqr)
+  coef.pl <- tcrossprod(c(1, predict(xpl.poly, 0)), WXpl)
+  coef.pr <- tcrossprod(c(1, predict(xpr.poly, 0)), WXpr)
+  
+  estimate <- boot_estimator_ForMc(ypl, ypr, yql, yqr, 
+                                   coef.ql, coef.qr, coef.pl, coef.pr,
+                                   Xql, Xqr, Xpl, Xpr,
+                                   WXql, WXqr,
+                                   wqr, wql, ihr, ihl, Nbc, bootstrap)
+  
+  boots <- boot_dist_ForMc(ypl, ypr, yql, yqr, 
+                           coef.ql, coef.qr, coef.pl, coef.pr,
+                           Xql, Xqr, Xpl, Xpr,
+                           WXql, WXqr,
+                           wqr, wql, ihr, ihl, Nbc, Nci, bootstrap)
   
   boot_parameter <- coef.qr %*% yqr - coef.ql %*% yql
   
