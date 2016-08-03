@@ -1016,20 +1016,18 @@ We have
   (\E \hat \tau(h) - \tau) - (\E^* \hat \tau^*(h) - \tau^*).
 \end{equation*}
 By construction,
+\begin{equation*}
+  Y_i^* =
+  \begin{cases}
+    r_2(X_i/h)'H_2 \beta_{+,2}^* + \varepsilon_i^* & X_i > 0 \\
+    r_2(X_i/h)'H_2 \beta_{-,2}^* + \varepsilon_i^* & X_i \leq 0
+  \end{cases}
+\end{equation*}
+which, along with the definitions at the beginning of the appendix,
+ensures that
 \begin{align*}
-  \hat\beta^*_{+,p} - \beta^*_{+,p}
-  & = \Big(\sum_{i = 1}^n r_p(X_i) r_p(X_i)' K_{+,h}(X_i) \Big)^{-1}
-  \sum_{i = 1}^n r_p(X_i) K_{+,h}(X_i) \hat\varepsilon_i e_i^* \\
-  \hat\beta^*_{-,p} - \beta^*_{-,p}
-  &= \Big(\sum_{i = 1}^n r_p(X_i) r_p(X_i)' K_{-,h}(X_i)\Big)^{-1}
-  \sum_{i = 1}^n r_p(X_i) K_{-,h}(X_i) \hat\varepsilon_i e_i^*
-\end{align*}
-ensuring that
-\begin{align*}
-  \E^* \hat\mu_{+,1}^*(h) - \mu_{+}^{*}
-  &= h^{2} \mu_{+}^{*(2)} \Bf_{+}(h)/2,
-  &\E^* \hat\mu_{-,1}^*(h) - \mu_{-}^{*}
-  &= h^{2} \mu_{-}^{*(2)} \Bf_{-}(h)/2,
+  \E^* \hat\mu_{\bullet,1}^*(h) - \mu_{\bullet}^{*}
+  = h^{2} \mu_{\bullet}^{*(2)} \Bf_{\bullet}(h)/2
 \end{align*}
 almost surely and, consequently,
 \begin{equation*}
