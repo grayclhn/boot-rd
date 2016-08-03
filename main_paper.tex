@@ -923,56 +923,91 @@ is the subject of ongoing research.
 \appendix
 \section{Mathematical appendix}
 Let $e_p$ be the selection vector with 1 in element $p+1$ and 0
-everywhere else. Define the following additional notation:\footnote{%
+everywhere else. Much of the theory in this appendix applies to both
+sides of the cutoff symmetrially, so we will use a ``$\bullet$'' as a
+placeholder for either $+$ or $-$ in equations; i.e.\ the equation
+\[
+  \hat\mu_\bullet(h) = \argmin_{\mu} \min_{\beta} \sum_{i=1}^n
+  (Y_i - \mu - \beta X_i)^2 K_{\bullet,h}(X_i)
+\]
+would define both $\hat\mu_+(h)$ and $\hat\mu_-(h)$ as
+\begin{align*}
+  \hat\mu_+(h) &= \argmin_{\mu} \min_{\beta} \sum_{i=1}^n
+  (Y_i - \mu - \beta X_i)^2 K_{+,h}(X_i) \\
+  \hat\mu_-(h) &= \argmin_{\mu} \min_{\beta} \sum_{i=1}^n
+  (Y_i - \mu - \beta X_i)^2 K_{-,h}(X_i).
+\end{align*}
+Define the following additional notation:\footnote{%
   As we mention in Section~\ref{background}, we have adopted CCT's
   notation where possible and these terms originate in that paper.} %
-$r_p(x) = (1,\ x,\dots,\ x^p)'$,
+$r_p(x) = (1,\ x,\dots,\ x^p)'$, $\1_+(x) = \1\{x > 0\}$, $\1_-(x) = \1\{x \leq 0\}$,
 \begin{align*}
-  (\hat{\mu}_{+,p}(h),\ \hat{\mu}_{+,p}^{(1)}(h),\dots,\ \hat\mu_{+,p}^{(p)}(h))'
-  &= \argmin_{\beta} \sum_{i=1}^n (Y_i - r_p(X_i/h)'\beta)^2 K_{+,h}(X_i) \\
-  (\hat{\mu}_{-,p}(h),\ \hat{\mu}_{-,p}^{(1)}(h),\dots,\ \hat\mu_{-,p}^{(p)}(h))'
-  &= \argmin_{\beta} \sum_{i=1}^n (Y_i - r_p(X_i/h)'\beta)^2 K_{-,h}(X_i)
+  \Gamma_{\bullet,p}(h)
+  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_p(X_i/h)' K_{\bullet,h}(X_i) \\
+  \Bf_\bullet(h)
+  & = e_0' \big(\Gamma_{\bullet,1}(h)\big)^{-1}
+    \tfrac{1}{n} \sum_{i=1}^n (X_i / h)^2 r_1(X_i/h) K_{\bullet,h}(X_i) \\
+  \Psi_{\bullet,p,q}(h,b)
+  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_q(X_i/b)'
+     K_{\bullet,h}(X_i) K_{\bullet,b}(X_i) \V(Y_i \mid X_i)
 \end{align*}
-and
+as well as their population counterparts,
 \begin{align*}
-  \Gamma_{+,p}(h)
-  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_p(X_i/h)' K_{+,h}(X_i)\\
-  \Gamma_{-,p}(h)
-  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_p(X_i/h)' K_{-,h}(X_i) \\
-  \Psi_{+,p,q}(h,b)
-  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_q(X_i/b)'
-     K_{+,h}(X_i) K_{+,b}(X_i) \V(Y_i \mid X_i) \\
-  \Psi_{-,p,q}(h,b)
-  &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_q(X_i/b)'
-     K_{-,h}(X_i) K_{-,b}(X_i) \V(Y_i \mid X_i) \\
-  \Bf_+(h)
-  & = e_0' \Gamma_{+,1}^{-1}(h)
-    \sum_{i=1}^n (X_i / h)^2 r_1(X_i/h) K_{+,h}(X_i), \\
-  \Bf_-(h)
-  & = e_0' \Gamma_{-,1}^{-1}(h)
-    \sum_{i=1}^n (X_i / h)^2 r_1(X_i/h) K_{-,h}(X_i).
+  \Gammat_{\bullet,p}(h) &= \int_{-\infty}^\infty   r_p(u) r_p(u)' K(u) f(h u) \1_\bullet(u) du \\
+  \Gamma_{\bullet,p} &= \int_{-\infty}^\infty   r_p(u) r_p(u)' K(u) \1_\bullet(u) du \\
+  \Psit_{\bullet,p,q}(h,b) &= \int_{-\infty}^\infty
+     r_p(\tfrac{m}{h} u) r_q(\tfrac{m}{b} u)' K(\tfrac{m}{b} u) K(\tfrac{m}{h} u)
+     \V(Y_i \mid X_i = um) f(um) \1_\bullet(u) du \\
+  \Psi_{\bullet,p} &= \int_{-\infty}^\infty
+     r_p(u) r_p(u)' K(u)^2 \1_\bullet(u) du
 \end{align*}
+Remember that $f$ is the pdf of the running variable and $m = \min(h,b)$. Lemmas
+SA1 and SA2 of CCT imply that all of these terms have well-defined limits under
+Assumptions~\ref{A1} and~\ref{A2} (for some, after normalization), namely that
+the following relationships hold:
+\begin{align}
+  \Gamma_{\bullet,p}(h) & = \Gammat_{\bullet,p}(h) + o_p(1) &
+  \Gammat_{\bullet,p}(h) &= f(0) \, \Gamma_{\bullet,p} + o(1) \label{eq:10} \\
+  \tfrac{hb}{m} \Psi_{\bullet,p,q}(h, b) &= \Psit_{\bullet,p,q}(h,b) + o_p(1) &
+  \Psit_{\bullet,p,p}(h,h) &= f(0) \, \sigma^2_{\bullet}(0) \, \Psi_{\bullet,p} + o(1) \label{eq:12}
+\end{align}
+Implicitly the right column of equations holds as $h \to 0$.
 
-Also, for reference, define the variance terms
+Also let $\hat\beta_{\bullet,p}(h)$ be the coefficient
+estimators from the weighted regression of $Y_i$ on $r_p(X_i)$. As in CCT, this
+implies that
+\begin{align*}
+  \hat\beta_{\bullet,p}(h) &= H_p \big(\Gammat_{\bullet,p}(h)\big)^{-1}
+    \sum_{i=1}^n r_p(X_i/h) Y_i K_{\bullet,h}(X_i)
+\end{align*}
+with $H_p(h) = \diag(1, h^{-1}, \dots, h^{-p})$.
+These coefficients are related to the quantities of interest by
+\begin{equation*}
+  \hat{\mu}_{\bullet,p}^{(\nu)}(h) = \nu! e_\nu' \hat\beta_{\bullet,p}(h).
+\end{equation*}
+for $\nu = 0,\dots,p$.
+
+For reference, define the variance terms
 \begin{equation*}
   V(h)
-  = e_0' \Big(\tfrac{1}{n} \Gamma_{-,1}^{-1} \Psi_{-,1} \Gamma_{-,1}^{-1}
-  + \tfrac{1}{n} \Gamma_{+,1}^{-1} \Psi_{+,1} \Gamma_{+,1}^{-1}\Big) e_0
+  = \tfrac{1}{n} e_0' \big(\Gamma_{-,1}(h)^{-1} \Psi_{-,1,1}(h,h)
+    \Gamma_{-,1}(h)^{-1}
+  + \Gamma_{+,1}(h)^{-1} \Psi_{+,1,1}(h,h) \Gamma_{+,1}(h)^{-1} \big) e_0
 \end{equation*}
 and
 \begin{multline*}
   C(h,b) =
-  n^{-1} e_2' \Big[
-    \Gamma_{+,2}^{-1}(b) \Psi_{+,2,2}(b,b) \Gamma_{+,2}^{-1}(b) \Bf^2_+(h) +
-    \Gamma_{-,2}^{-1}(b) \Psi_{-,2,2}(b,b) \Gamma_{-,2}^{-1}(b) \Bf^2_-(h)
-    \Big] e_2 \\
-  - 2 h^2 n^{-1} b^{-2}
+  \tfrac{1}{n} \, e_2' \big[
+    \Gamma_{+,2}(b)^{-1} \Psi_{+,2,2}(b,b) \Gamma_{+,2}(b)^{-1} \Bf_+(h)^2 +
+    \Gamma_{-,2}(b)^{-1} \Psi_{-,2,2}(b,b) \Gamma_{-,2}(b)^{-1} \Bf_-(h)^2
+  \big] e_2 \\
+  - \tfrac{2 h^2}{n b^{2}}
     e_0' \Big[
-    \Gamma^{-1}_{+,1}(h) \Psi_{+,1,2}(h,b) \Gamma_{+,2}^{-1}(b) \Bf_+(h) +
-    \Gamma^{-1}_{-,1}(h) \Psi_{-,1,2}(h,b) \Gamma_{-,2}^{-1}(b) \Bf_-(h)
+    \Gamma_{+,1}(h)^{-1} \Psi_{+,1,2}(h,b) \Gamma_{+,2}(b)^{-1} \Bf_+(h) +
+    \Gamma_{-,1}(h)^{-1} \Psi_{-,1,2}(h,b) \Gamma_{-,2}(b)^{-1} \Bf_-(h)
     \Big] e_2.
 \end{multline*}
-See CCT for the motivation and derivation of these formulas.
+See CCT for more on the motivation and derivation of these formulas.
 
 \subsection{Proof of Theorem~\ref{T1}}
 We have
@@ -1020,11 +1055,9 @@ as well, giving
    + O_p(h^{3})}
 \end{align}
 The second equality holds because
-$\mu_+^{*(2)} = \hat\mu_{+,2}^{(2)}(b)$ and
-$\mu_-^{*(2)} = \hat\mu_{-,2}^{(2)}(b)$ almost surely. Asymptotic
-normality then follows from normality of $\hat\tau(h) - \E\hat\tau(h)$,
-$\hat\mu_{+,2}^{(2)}(b) - \mu_+^{(2)}$, and
-$\hat\mu_{-,2}^{(2)}(b) - \mu_-^{(2)}$ using similar arguments to
+$\mu_\bullet^{*(2)} = \hat\mu_{\bullet,2}^{(2)}(b)$ almost surely. Asymptotic
+normality then follows from normality of $\hat\tau(h) - \E\hat\tau(h)$ and
+$\hat\mu_{\bullet,2}^{(2)}(b) - \mu_\bullet^{(2)}$ using similar arguments to
 CCT's Lemma SA4.D.\qed
 
 \subsection{Proof of Theorem~\ref{T2}}
@@ -1040,52 +1073,44 @@ the iterated bootstrap to get
   &= \Omega_{+}(h,b)' \epb_{+}^{*} - \Omega_{-}(h,b)' \epb_{-}^{*},
 \end{align*}
 where
-$\epb_{+}^{*} =
-(\varepsilon_{+,1}^{*},\dots,\varepsilon_{+,M_+(b)}^{*})'$ and
-$\Omega_+(h,b)$ is an $M_+(b)$-dimensional vector with $i$th element
-$\Omega_{+,1i}(h,b) - \Omega_{+,2i}(h,b)$, which are defined as
+$\epb_{\bullet}^{*} =
+(\varepsilon_{\bullet,1}^{*},\dots,\varepsilon_{\bullet,M_\bullet(b)}^{*})'$ and
+$\Omega_\bullet(h,b)$ is an $M_\bullet(b)$-dimensional vector with $i$th element
+$\Omega_{\bullet,1i}(h,b) - \Omega_{\bullet,2i}(h,b)$, which are defined as
 \begin{align*}
-  \Omega_{+,1i}(h,b) &=
+  \Omega_{\bullet,1i}(h,b) &=
   (1\quad 0)
-  \Big(\ssum[+]{j}{h} r_1(X_j / h) r_1(X_j / h)' \Big)^{-1}
-    r_1(X_{m_+(b,i)} / h) \1\{h > X_{m_+(b,i)} \geq 0\}
+  \Big(\ssum[\bullet]{j}{h} r_1(X_j / h) r_1(X_j / h)' \Big)^{-1}
+    r_1(X_{m_\bullet(b,i)} / h) \1\{h > X_{m_\bullet(b,i)} \geq 0\}
 \intertext{and}
-  \Omega_{+,2i}(h,b) &= (0\quad 0 \quad h^2)
-  \Big(\ssum[+]{j}{b} r_2(X_j / b) r_2(X_j / b)' \Big)^{-1}
-    r_2(X_{m_+(b,i)} / b).
+  \Omega_{\bullet,2i}(h,b) &= (0\quad 0 \quad h^2)
+  \Big(\ssum[\bullet]{j}{b} r_2(X_j / b) r_2(X_j / b)' \Big)^{-1}
+    r_2(X_{m_\bullet(b,i)} / b).
 \end{align*}
-The definitions of $\epb_{-}^{*}$ and $\Omega_-(h,b)$ have the same
-definitions as $\epb_{+}^{*}$ and $\Omega_+(h,b)$ after making the
-obvious substitutions of ``$-$'' for ``$+$.''
 
 Notice that~\eqref{eq:6} implies that
 \begin{equation*}
   \hat\tau(h) - \Delta^*(h,b) - \tau
   =^d \Omega_{+}(h,b)' \epb_{+} - \Omega_{-}(h,b)' \epb_{-} + O_p(h^3),
 \end{equation*}
-with $\epb_+$ an i.i.d. random vector of length $M_+(b)$, the $i$th
+with $\epb_\bullet$ an i.i.d. random vector of length $M_\bullet(b)$, the $i$th
 element of which is distributed as
 \[
-  \varepsilon_{+,i} =^d
+  \varepsilon_{\bullet,i} =^d
   \begin{cases}
-    Y_{m_+(1,b)} - \E(Y_{m_+(1,b)} \mid X_{m_+(1,b)})
-    & \text{with probability\ } 1/M_+(b) \\
+    Y_{m_\bullet(1,b)} - \E(Y_{m_\bullet(1,b)} \mid X_{m_\bullet(1,b)})
+    & \text{with probability\ } 1/M_\bullet(b) \\
     \vdots \\
-    Y_{m_+(M_+(b),b)} - \E(Y_{m_+(M_+(b),b)} \mid X_{m_+(M_+(b),b)})
-    & \text{with probability\ } 1/M_+(b),
+    Y_{m_\bullet(M_\bullet(b),b)} - \E(Y_{m_\bullet(M_\bullet(b),b)} \mid X_{m_\bullet(M_\bullet(b),b)})
+    & \text{with probability\ } 1/M_\bullet(b).
   \end{cases}
 \]
-and $\epb_-$ the corresponding quantity after replacing ``+'' with
-``--.''  Consequently, it suffices to prove that
-\begin{gather}
+Consequently, it suffices to prove that
+\begin{equation}
   \label{eq:7}
-  \rho(V'(h,b)^{-1/2} \Omega_+(h,b)'\epb_{+}^{*},\
-    V'(h,b)^{-1/2}\Omega_+(h,b)'\epb_{+}) \to^p 0
-  \intertext{and}
-  \label{eq:8}
-  \rho(V'(h,b)^{-1/2}\Omega_-(b)'\epb_{-}^{*},\
-    V'(h,b)^{-1/2}\Omega_-(b)'\epb_{-}) \to^p 0
-\end{gather}
+  \rho(V'(h,b)^{-1/2} \Omega_\bullet(h,b)'\epb_{\bullet}^{*},\
+    V'(h,b)^{-1/2}\Omega_\bullet(h,b)'\epb_{\bullet}) \to^p 0
+\end{equation}
 with $\rho$ the ``Mallows metric'' used by
 \citet{bickel1981}.\footnote{%
   For two random vectors $u$ and $v$ with finite 2nd moments,
@@ -1097,35 +1122,34 @@ with $\rho$ the ``Mallows metric'' used by
 Convergence in $\rho$ is equivalent to convergence in both distribution
 and second moments. \citep[Lemma 8.3.]{bickel1981}
 
-We will only prove~\eqref{eq:7} since the proof of~\eqref{eq:8} is
-identical. By Theorem 2.1 of \cite{freedman1981}, we have
+By Theorem 2.1 of \cite{freedman1981}, we have
 \begin{align*}
-  \rho(V'(h,b)^{-1/2} \Omega_+(h,b)'\epb_{+}^{*},\
-  &V'(h,b)^{-1/2} \Omega_+(h,b)'\epb_{+}) \\
-  &\leq \rho(\varepsilon_{+,1}^{*}, \varepsilon_{+,1}) \times
-    \tr(V'(h,b)^{-1/2} \Omega_+(h,b)' \Omega_+(h,b)V'(h,b)^{-1/2}) \\
-  &= \rho(\varepsilon_{+,1}^{*}, \varepsilon_{+,1}) \times O_{p^{*}}(1),
+  \rho(V'(h,b)^{-1/2} \Omega_\bullet(h,b)'\epb_{\bullet}^{*},\
+  &V'(h,b)^{-1/2} \Omega_\bullet(h,b)'\epb_{\bullet}) \\
+  &\leq \rho(\varepsilon_{\bullet,1}^{*}, \varepsilon_{\bullet,1}) \times
+    \tr(V'(h,b)^{-1/2} \Omega_\bullet(h,b)' \Omega_\bullet(h,b)V'(h,b)^{-1/2}) \\
+  &= \rho(\varepsilon_{\bullet,1}^{*}, \varepsilon_{\bullet,1}) \times O_{p^{*}}(1),
 \end{align*}
 the second line holding as a consequence of CCT's Lemma SA1. So it suffices
-to show that $\rho(\varepsilon_{+,1}^{*}, \varepsilon_{+,1}) \to^{p^{*}} 0$. Let
+to show that $\rho(\varepsilon_{\bullet,1}^{*}, \varepsilon_{\bullet,1}) \to^{p^{*}} 0$. Let
 $\varepsilon^\circ_i$ be an i.i.d. sequence randomly drawn from the
-realized values of $\epb_+$ with replacement and let
-$\bar{\varepsilon}^\circ = (1/M_+(b)) \osum[+]{i}{b} \varepsilon^\circ_i$. Then,
+realized values of $\epb_\bullet$ with replacement and let
+$\bar{\varepsilon}^\circ = (1/M_\bullet(b)) \osum[\bullet]{i}{b} \varepsilon^\circ_i$. Then,
 using the same arguments as \cite{freedman1981}, we have the upper bound
 \begin{equation*}
-  \rho(\varepsilon_{+,1}^*, \varepsilon_{+,1})
+  \rho(\varepsilon_{\bullet,1}^*, \varepsilon_{\bullet,1})
   \leq
   \Big((\bar\varepsilon^{\circ})^2 +
-  (2/M_+(b)) \osum[+]{i}{b} (\hat\varepsilon_i - \varepsilon_i)^2\Big)^{1/2}
-  + \rho(\varepsilon^\circ_1,\ \varepsilon_{+,1}).
+  (2/M_\bullet(b)) \osum[\bullet]{i}{b} (\hat\varepsilon_i - \varepsilon_i)^2\Big)^{1/2}
+  + \rho(\varepsilon^\circ_1,\ \varepsilon_{\bullet,1}).
 \end{equation*}
 But $(\bar\varepsilon^{\circ})^2 \to^p 0$ by the LLN,
 \[
-  (1/M_+(b)) \osum[+]{i}{b}
+  (1/M_\bullet(b)) \osum[\bullet]{i}{b}
   \E((\hat\varepsilon_i - \varepsilon_i)^2 \mid X_i) \to 0
 \]
 by CCT's Lemma SA1, and
-$\rho(\varepsilon_1^\circ,\ \varepsilon_{+,1}) \to^p 0$ by Lemma~8.4 of
+$\rho(\varepsilon_1^\circ,\ \varepsilon_{\bullet,1}) \to^p 0$ by Lemma~8.4 of
 \cite{bickel1981}.\qed
 
 \clearpage
