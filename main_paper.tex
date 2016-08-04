@@ -955,6 +955,9 @@ as well as their population counterparts,
 \begin{align*}
   \Gammat_{\bullet,p}(h) &= \int_{-\infty}^\infty   r_p(u) r_p(u)' K(u) f(h u) \1_\bullet(u) du \\
   \Gamma_{\bullet,p} &= \int_{-\infty}^\infty   r_p(u) r_p(u)' K(u) \1_\bullet(u) du \\
+  \Bft_\bullet(h) & = e_0' \big(\Gammat_{\bullet,1}(h)\big)^{-1}
+    \int_{-\infty}^\infty r_1(u) u^2 K(u) f(h u) \1_\bullet(u) du \\
+  \Bf_\bullet & = e_0' \Gamma_{\bullet,1}^{-1} \int_{-\infty}^\infty r_1(u) u^2 K(u) \1_\bullet(u) du \\
   \Psit_{\bullet,p,q}(h,b) &= \int_{-\infty}^\infty
      r_p(\tfrac{m}{h} u) r_q(\tfrac{m}{b} u)' K(\tfrac{m}{b} u) K(\tfrac{m}{h} u)
      \V(Y_i \mid X_i = um) f(um) \1_\bullet(u) du \\
@@ -968,6 +971,8 @@ the following relationships hold:
 \begin{align}
   \Gamma_{\bullet,p}(h) & = \Gammat_{\bullet,p}(h) + o_p(1) &
   \Gammat_{\bullet,p}(h) &= f(0) \, \Gamma_{\bullet,p} + o(1) \label{eq:10} \\
+  \Bf_{\bullet}(h) &= \Bft_{\bullet}(h) + o_p(1) &
+  \Bft_{\bullet}(h) &= \Bf_{\bullet} + o_p(1) \label{eq:11} \\
   \tfrac{hb}{m} \Psi_{\bullet,p,q}(h, b) &= \Psit_{\bullet,p,q}(h,b) + o_p(1) &
   \Psit_{\bullet,p,p}(h,h) &= f(0) \, \sigma^2_{\bullet}(0) \, \Psi_{\bullet,p} + o(1) \label{eq:12}
 \end{align}
