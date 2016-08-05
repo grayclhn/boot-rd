@@ -1094,12 +1094,13 @@ We will prove convergence of the variance first, then prove asymptotic
 normality.
 
 To prove convergence in probability of the bootstrap variance, note that the
-wild bootstrap ensures that, for any function $z(\cdot)$,
+wild bootstrap ensures
 \begin{equation*}
-  \V^*\Big(\sum_{i=1}^n z(X_i) \varepsilon_i^*\Big)
-  = \sum_{i=1}^n z(X_i)^2 \hat\varepsilon_i^2.
+  \V^*\Big(\sum_{i=1}^n R(X_i) \varepsilon_i^*\Big)
+  = \sum_{i=1}^n R(X_i)^2 \hat\varepsilon_i^2.
 \end{equation*}
-So, given this expression for the iterated bootstrap and the formula for the
+for any measurable function $R(\cdot)$.
+Given this expression for the iterated bootstrap and the formula for the
 variance conditional on $X$ presented at the end of the introduction to this
 appendix, it suffices to show that
 \begin{gather}
@@ -1107,45 +1108,39 @@ appendix, it suffices to show that
   \hat\varepsilon_i^2 = \tfrac{1}{h} \Psit_{\bullet,1,1}(h,h) + o_p(\tfrac{1}{h})
   \label{eq:3} \\
   \tfrac{1}{n} \sum_{i=1}^n r_1(X_i/h) r_2(X_i/b)' K_{\bullet,h}(X_i)
-  K_{\bullet,b}(X_i) \hat\varepsilon_i^2 = \tfrac{1}{m'} \Psit_{\bullet,1,2}(h,b)
-  + o_p(\tfrac{1}{m'})
+  K_{\bullet,b}(X_i) \hat\varepsilon_i^2 = \tfrac{1}{b^2} \Psit_{\bullet,1,2}(h,b)
+  + o_p(\tfrac{1}{b^2})
   \label{eq:5} \\
   \tfrac{1}{n} \sum_{i=1}^n r_2(X_i/b) r_2(X_i/b)' K_{\bullet,b}(X_i)^2
   \hat\varepsilon_i^2 = \tfrac{1}{b} \Psit_{\bullet,2,2}(b,b) + o_p(\tfrac{1}{b}).
   \label{eq:7}
 \end{gather}
 But these convergence results follow from CCT's results on
-$\hat\mu_{\bullet,p}^{(\nu)}$, Lemma SA3 in particular.
+$\hat\mu_{\bullet,p}^{(\nu)}$, Lemmas SA3 and SA4 in particular,
+and standard arguments on the convergence of residuals to
+the population error term.
 
-By Theorem 2.1 of \cite{freedman1981}, we have
-\begin{align*}
-  \rho(V'(h,b)^{-1/2} \Omega_\bullet(h,b)'\epb_{\bullet}^{*},\
-  &V'(h,b)^{-1/2} \Omega_\bullet(h,b)'\epb_{\bullet}) \\
-  &\leq \rho(\varepsilon_{\bullet,1}^{*}, \varepsilon_{\bullet,1}) \times
-    \tr(V'(h,b)^{-1/2} \Omega_\bullet(h,b)' \Omega_\bullet(h,b)V'(h,b)^{-1/2}) \\
-  &= \rho(\varepsilon_{\bullet,1}^{*}, \varepsilon_{\bullet,1}) \times O_{p^{*}}(1),
-\end{align*}
-the second line holding as a consequence of CCT's Lemma SA1. So it suffices
-to show that $\rho(\varepsilon_{\bullet,1}^{*}, \varepsilon_{\bullet,1}) \to^{p^{*}} 0$. Let
-$\varepsilon^\circ_i$ be an i.i.d. sequence randomly drawn from the
-realized values of $\epb_\bullet$ with replacement and let
-$\bar{\varepsilon}^\circ = (1/M_\bullet(b)) \osum[\bullet]{i}{b} \varepsilon^\circ_i$. Then,
-using the same arguments as \cite{freedman1981}, we have the upper bound
+Normality also follows standard arguments for the Wild
+bootstrap. Conditional on the regressors and residuals,
+$\{R(X_i) \hat\varepsilon_i e_i^* \}$ is a sequence of independent and
+mean zero random variables for any measurable function $R$, each with
+$p$th absolute moment
+$\lvert R(X_i) \hat\varepsilon_i \rvert^p \E \lvert e_i^*
+\rvert^{p}$.
+The result then holds as a consequence of the Lindeberg-Feller CLT if
+we establish that Liapunov's condition holds in probability, specifically that
+\begin{equation}\label{eq:17}
+  (\tfrac{m}{n})^{1+\delta/2} \sum_{i} \lvert (R_+(X_i) - R_-(X_i))
+  \hat\varepsilon_i \rvert^{2+\delta} \to^{p} 0.
+\end{equation}
+with
 \begin{equation*}
-  \rho(\varepsilon_{\bullet,1}^*, \varepsilon_{\bullet,1})
-  \leq
-  \Big((\bar\varepsilon^{\circ})^2 +
-  (2/M_\bullet(b)) \osum[\bullet]{i}{b} (\hat\varepsilon_i - \varepsilon_i)^2\Big)^{1/2}
-  + \rho(\varepsilon^\circ_1,\ \varepsilon_{\bullet,1}).
+  R_\bullet(X_i) = \gamma_1 r_1(X_i/h) K_{\bullet,h}(X_i) + h^2 \gamma_2 r_2(X_i/b) K_{\bullet,b}(X_i)
 \end{equation*}
-But $(\bar\varepsilon^{\circ})^2 \to^p 0$ by the LLN,
-\[
-  (1/M_\bullet(b)) \osum[\bullet]{i}{b}
-  \E((\hat\varepsilon_i - \varepsilon_i)^2 \mid X_i) \to 0
-\]
-by CCT's Lemma SA1, and
-$\rho(\varepsilon_1^\circ,\ \varepsilon_{\bullet,1}) \to^p 0$ by Lemma~8.4 of
-\cite{bickel1981}.\qed
+for arbitrary nonzero vectors $\gamma_1'$ and $\gamma_2$.
+\citep[See, for example,][Proposition 2.27 and Theorem 23.4.]{VDV00}
+But similar arguments to those used for the variance establish~\eqref{eq:17}
+and complete the proof. \qed
 
 \clearpage
 \bibliographystyle{jpe}
