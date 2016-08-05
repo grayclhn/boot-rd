@@ -589,13 +589,17 @@ that $B_1$ and $B_2$ are large enough that simulation error can be ignored.
 
 \begin{theorem}\label{T2}
   Under Assumptions~\ref{A1} and~\ref{A2},
-  \begin{gather*}
+  \begin{equation*}
     \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V'(h,b) \to^p 1
-  \intertext{and}
+  \end{equation*}
+  and
+  \begin{multline*}
     \sup_{x,\tau}
-    \Big\rvert \Pr^*[\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^* \leq x ]
-    - \Pr[\hat\tau(h) - \Delta^*(h,b) - \tau \leq x] \Big\lvert \to^p 0.
-  \end{gather*}
+    \Big\rvert \Pr^*\big[ \sqrt{nh}
+    (\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^*) \leq x \big] \\
+    - \Pr\big[ \sqrt{nh}
+    (\hat\tau(h) - \Delta^*(h,b) - \tau) \leq x \big] \Big\lvert \to^p 0.
+  \end{multline*}
 \end{theorem}
 
 Evidence of the usefulness of the procedures proposed above and their relative performance to the analytical bias correction proposed in CCT are presented in a series of Monte Carlo simulations in Section \ref{sim}.
