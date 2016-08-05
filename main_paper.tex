@@ -988,7 +988,7 @@ estimators from the weighted regression of $Y_i$ on $r_p(X_i)$. As in CCT, this
 implies that
 \begin{align*}
   \hat\beta_{\bullet,p}(h) &= H_p(h) \Gamma_{\bullet,p}(h)^{-1}
-    \sum_{i=1}^n r_p(X_i/h) Y_i K_{\bullet,h}(X_i)
+  \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) Y_i K_{\bullet,h}(X_i)
 \end{align*}
 with $H_p(h) = \diag(1, h^{-1}, \dots, h^{-p})$.
 These coefficients are related to the quantities of interest by
