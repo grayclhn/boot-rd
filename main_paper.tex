@@ -783,8 +783,8 @@ their AMSE-optimal bandwidths as well.
     LM (2007)         & --1.895 & (--3.930                    & 0.139)   & 9   &      &       & 0.036 \\
     LM (2007)         & --1.198 & (--2.561                    & 0.165)   & 18  &      &       & 0.081 \\
     LM (2007)         & --1.114 & (--2.138                    & --0.090) & 36  &      &       & 0.027 \\
-    CCT               & --3.795 & (--7.037                    & --0.554) & 3   & .888 & 6.807 &       \\
-    Resid.\ bootstrap & --3.792 & (--6.512                    & --0.262) & 3   & .888 & 6.807 &       \\
+    CCT               & --3.795 & (--7.040                    & --0.551) & 3   & .888 & 6.807 &       \\ 
+    Wild bootstrap    & --3.800 & (--6.738                    & --0.450) & 3   & .888 & 6.807 &       \\
     \bottomrule
   \end{tabular}
   \caption{The effect of Head Start assistance on mortality. The first three
@@ -821,7 +821,7 @@ confidence interval is used, which includes zero for bandwidth 9 and 18.
 
 Results from the two robust procedures are similar to each other but greatly
 differ from the original estimates. The estimated ATEs are as high as --3.795
-from CCT and --3.792 from the bootstrap. Both are significantly different from
+from CCT and --3.800 from the bootstrap. Both are significantly different from
 zero, though the confidence intervals are also very wide, which is likely to be
 due to the much smaller bandwidths used relative to the other estimators
 ($h=3.888$, $b=6.807$).
@@ -837,7 +837,7 @@ and the conventional analytical confidence interval.
 
 The two robust procedures are again very similar to each other and give slightly
 larger point estimates in both panels. In Panel A, the ATE increases from 0.030
-to 0.055 (CCT) and 0.054 (bootstrap). In Panel B, the ATE increases from 0.037
+to 0.055 (CCT and bootstrap). In Panel B, the ATE increases from 0.037
 to 0.051 (CCT) and 0.052 (bootstrap). The confidence intervals tend to shift up
 as well.  In contrast to the striking differences between the conventional
 estimates bias-corrected procedures for the mortality estimates, the differences
@@ -847,18 +847,18 @@ in Table~\ref{tbl:3} are much smaller.
   \centering
   \begin{tabular}{lrr@{, }rr@{}rrr}
     \toprule
-              & ATE   & \multicolumn{2}{r}{95\% CI} & & $h$     & $b$ & p-value     \\
+                   & ATE   & \multicolumn{2}{r}{95\% CI} & & $h$     & $b$ & p-value     \\
     \midrule                                                                          \\
     \multicolumn{5}{l}{Fraction ``high school or more'' (Panel A)}                    \\
     \midrule
-    LM (2007) & 0.030 & (0.003                      & 0.057) & 7&     &  & 0.032    \\
-    CCT       & 0.055 & (0.014                      & 0.096) & 3&.671 & 8.618       \\
-    Bootstrap & 0.054 & (0.013                      & 0.096) & 3&.671 & 8.618       \\\\
+    LM (2007)      & 0.030 & (0.003                      & 0.057) & 7&     &  & 0.032    \\
+    CCT            & 0.055 & (0.014                      & 0.096) & 3&.671 & 8.618       \\
+    Wild bootstrap & 0.055 & (0.010                      & 0.096) & 3&.671 & 8.618       \\\\
     \multicolumn{5}{l}{Fraction ``some college or more'' (Panel B)}                   \\
     \midrule
-    LM (2007) & 0.037 & (0.002                      & 0.073) & 7&     &  & 0.032 \T \\
-    CCT       & 0.051 & (0.004                      & 0.099) & 5&.076 & 10.251      \\
-    Bootstrap & 0.052 & (0.001                      & 0.094) & 5&.076 & 10.251      \\
+    LM (2007)      & 0.037 & (0.002                      & 0.073) & 7&     &  & 0.032 \T \\
+    CCT            & 0.051 & (0.004                      & 0.099) & 5&.076 & 10.251      \\
+    Wild bootstrap & 0.052 & (0.007                      & 0.091) & 5&.076 & 10.251      \\
     \bottomrule
   \end{tabular}
   \caption{The effect of Head Start assistance on education for cohort
