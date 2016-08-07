@@ -694,23 +694,25 @@ distribution are used as the lower and upper bound of the confidence interval.
   \centering
   \begin{tabular}{rlrrrrrrr}
     \toprule
-    DGP & Method     & Bias   & SD    & RMSE   & CI Coverage (\%) & CI Length \\
+    DGP & Method       & Bias    & SD    & RMSE  & CI Coverage (\%) & CI Length \\
+    \midrule                                                     \\
+    \multicolumn{7}{l}{Homoskedastic data with $\gamma = 0$ (Panel A)}  \\
     \midrule
-    1   & \bootuni   & --0.014 & 0.067 & 0.069 & 93.4       & 0.242     \\
-        & \bootnaive & --0.040 & 0.042 & 0.058 & 89.0       & 0.182     \\
-        & \cctuni    & --0.014 & 0.067 & 0.069 & 92.5       & 0.246     \\
-        & \ccttri    & --0.011 & 0.067 & 0.068 & 91.4       & 0.239     \\
-        & \naiveuni  & --0.040 & 0.042 & 0.058 & 81.5       & 0.156     \\\\
-    2   & \bootuni   & --0.011 & 0.088 & 0.089 & 95.3       & 0.323     \\
-        & \bootnaive & --0.151 & 0.067 & 0.165 & 35.4       & 0.269     \\
-        & \cctuni    & --0.011 & 0.088 & 0.089 & 93.7       & 0.353     \\
-        & \ccttri    & --0.008 & 0.086 & 0.086 & 93.2       & 0.346     \\
-        & \naiveuni  & --0.151 & 0.067 & 0.165 & 29.5       & 0.230     \\\\
-    3   & \bootuni   & --0.004 & 0.065 & 0.065 & 95.9       & 0.247     \\
-        & \bootnaive &   0.033 & 0.052 & 0.062 & 91.3       & 0.215     \\
-        & \cctuni    & --0.004 & 0.065 & 0.065 & 93.8       & 0.251     \\
-        & \ccttri    & --0.005 & 0.065 & 0.065 & 93.4       & 0.244     \\
-        & \naiveuni  &   0.033 & 0.052 & 0.062 & 86.1       & 0.191     \\
+    1 & Wild bootstrap & --0.014 & 0.067 & 0.069 & 0.917 & 0.237 \\ 
+      & CCT            & --0.014 & 0.067 & 0.069 & 0.924 & 0.246 \\ 
+    2 & Wild bootstrap & --0.011 & 0.088 & 0.089 & 0.917 & 0.310 \\ 
+      & CCT            & --0.011 & 0.088 & 0.089 & 0.935 & 0.351 \\
+    3 & Wild bootstrap & --0.004 & 0.065 & 0.065 & 0.933 & 0.242 \\
+      & CCT            & --0.004 & 0.065 & 0.065 & 0.938 & 0.251 \\ 
+    \midrule                                                     \\
+    \multicolumn{7}{l}{Heteroskedastic data with $\gamma = 2$ (Panel B)}  \\
+    \midrule
+    1 & Wild bootstrap & --0.011 & 0.081 & 0.081 & 0.924 & 0.289 \\
+      & CCT            & --0.011 & 0.081 & 0.081 & 0.931 & 0.301 \\ 
+    2 & Wild bootstrap & --0.011 & 0.097 & 0.098 & 0.912 & 0.334 \\ 
+      & CCT            & --0.011 & 0.097 & 0.097 & 0.931 & 0.379 \\
+    3 & Wild bootstrap &   0.000 & 0.116 & 0.116 & 0.923 & 0.409 \\ 
+      & CCT            &   0.000 & 0.116 & 0.116 & 0.935 & 0.432 \\
     \bottomrule
   \end{tabular}
   \caption{%
