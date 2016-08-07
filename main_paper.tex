@@ -670,25 +670,12 @@ it a natural test case for both their analytical corrections and our bootstrap.
 
 To estimate the finite-sample coverage of our new bootstrap based confidence interval, we
 simulate 5000 samples from each of the three DGPs and calculate nominal 95\%
-two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
+two-sided confidence intervals.\footnote{The bootstrap principle ensures that $\hat\tau^{\prime*}(h,b) - \big[\hat g_+(0) - \hat g_-(0)\big]$ approximates the distribution of $\hat\tau^{\prime}(h,b) - \tau$, so the confidence interval of level 0.95 is constructed as$(\hat\tau^{\prime}(h,b) + \big[\hat g_+(0) - \hat g_-(0)\big] - \hat\tau^{\prime*}(h,b)_{0.975}, \hat\tau^{\prime}(h,b) + \big[\hat g_+(0) - \hat g_-(0)\big] - \hat\tau^{\prime*}(h,b)_{0.025})$, where $\hat\tau^{\prime*}(h,b)_{0.975}$ and $\hat\tau^{\prime*}(h,b)_{0.025}$ are the 97.5 and 2.5 percentiles of bootstrap distribution of bias-corrected estimator.} We use 999 bootstrap replications ($B_2$) to
 calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
-the bias. We use the $0.025$ and $0.975$ quantiles of the bootstrap distribution
-as the lower and upper bound of the interval, and the bandwidths, $h$ and $b$,
-are chosen using the AMSE-optimal rule proposed by CCT.
-
-We include several other procedures for comparison: CCT's bias-corrected
-interval using two different kernels, a ``naive'' uncorrected estimator and
-a bootstrapped version of the naive estimator, using 999 bootstrap replications.
-We estimate CCT's bias corrected procedure with AMSE-optimal bandwidths for both
-the uniform kernel and the triangular kernel. The uniform kernel provides a
-direct comparison with our bootstrap, while the triangular kernel may be more
-appealing to practitioners. The ``naive'' uncorrected interval
-estimator uses the uniform kernel, again with the optimal bandwidth $h$ proposed by
-\cite{IK}. And for the naive bootstrapped interval, we resample the data with
-equal weights, find optimal bandwidth for each bootstrapped sample and calculate
-the uncorrected point estimate. The $0.025$ and $0.975$ quantiles of the bootstrap
-distribution are used as the lower and upper bound of the confidence interval.
+the bias. The bandwidths, $h$ and $b$,
+are chosen using the AMSE-optimal rule proposed by CCT. We also estimate CCT's bias corrected procedure with AMSE-optimal bandwidths and
+the uniform kernel for direct comparison.
 
 \begin{table}[t]
   \centering
@@ -723,32 +710,22 @@ distribution are used as the lower and upper bound of the confidence interval.
   \label{tbl:1}
 \end{table}
 
-Table~\ref{tbl:1} presents the results of these simulations. The row labeled
-``\bootuni'' shows results for our proposed bootstrap interval; ``\bootnaive''
-shows results for the naive bootstrap interval; ``\cctuni'' and ``\ccttri'' show
-results for the analytically-corrected intervals; and ``\naiveuni'' shows results
-for the analytically-uncorrected interval. The first three columns give the bias,
+Table~\ref{tbl:1} presents the results of these simulations. It consists of two panels, with results for homoskedastic data in Panel A and heteroskedastic data in Panel B. The row labeled
+``Wild bootstrap'' shows results for our proposed bootstrap interval and ``CCT'' shows
+results for the analytically-corrected interval. The first three columns give the bias,
 standard deviation, and Root-MSE of the point
-estimators corresponding to each confidence interval.  As expected, the three
-bias corrected estimators (``\bootuni'', ``\cctuni'' and ``\ccttri'') have
+estimators corresponding to each confidence interval.  As expected, both
+bias corrected estimators have
 bias close to zero, with their standard deviation largely
 determining the estimators' RMSE. Moreover, as Theorem~\ref{T1} suggests, the
 bootstrap and analytically-corrected estimators have essentially the same
 standard deviation across all of the DGPs.
 
 The column ``CI Coverage'' lists the experimental coverage of each interval.
-All of the intervals from three robust estimators are reasonably close to their nominal coverage, although
-the analytically corrected estimators seem to persistently under-cover the true
-ATE (especially the one using triangular kernel). Our proposed bootstrap
-procedure consistently performs well, as it is about a percentage point closer
-to nominal coverage than the other interval estimators in DGPs 1 and 2, and is
-slightly conservative (95.9\% coverage) in DGP 3. The uncorrected intervals
-preform substantially worse---the naive analytical interval has coverage as
-bad as 30\% (in the second DGP) and never higher than 86\%, and the bootstrap
-version performs slightly better but still poorly. The final column, ``CI Length,''
-indicates that all three of the bias-corrected procedures generate intervals that are
-approximately the same length on average, but the uncorrected estimators produce
-much shorter intervals on average.
+In Panel A, all of the intervals from both robust estimators are reasonably close to their nominal coverage, although
+our proposed bootstrap procedure has coverages about one percentage lower than the CCT's analytical counterpart. In Panel B, the coverages are very similar to those in Panel A, showing that both procedures are robust to heteroskedasticity. 
+The final column, ``CI Length,'' 
+indicates that our proposed bootstrap procedure consistently generates narrower intervals.
 
 These are DGPs where the naive confidence intervals are known to perform poorly,
 and this set of simulation results indicates that our proposed bootstrap approach
