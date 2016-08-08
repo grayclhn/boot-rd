@@ -620,12 +620,12 @@ generate 500 i.i.d.\ observations from the DGP
 \begin{align*}
 Y_{i}           &= \mu_{j}(X_{i}) + \varepsilon_{i} \\
 X_{i}           &\sim  2 \times \betarv(2,4) - 1 \\
-\varepsilon_{i} &\sim N(0, 0.1295^2),
+\varepsilon_{i} &\sim N(0, \sigma_i^2) \\
+\sigma_i &= z(\gamma) \mu_{j}(X_{i})^\gamma ,
 \end{align*}
 where $j$ will index the specific DGP. This is the experimental design used by
-\citet{IK} and CCT, which we adopt here to make our simulation results directly
-comparable with theirs and with the rest of the literature. We
-will use the same three functional forms for $\mu_{j}$ as CCT as well.
+\citet{IK} and CCT, which we adopt here with adaptation to make our simulation results directly
+comparable with theirs and with the rest of the literature. They use this experimental design with a constant $\sigma_i = 0.1295$. We follow \cite{mackinnon2013thirty} to use a parameter $\gamma$ and a function $z(\gamma)$ to control the degree of heteroskedasticity. When $\gamma = 0$, we set $z(\gamma) = 0.1295$ such that our DGP is exactly the same as \citet{IK} and CCT. When $\gamma > 0$, we set the value of $z(\gamma)$ such that the average $\sigma_i$ for those units actually used ($-\max[h, b] \le X_i \le \max[h, b]$) in our estimation procedure is 0.1295.\footnote{In practice, the optimal $h$ and $b$ are usually data driven, so $h$, $b$ and $\sigma_i$ are simultaneously determined. For simplicity, we use the following steps to find $z(\gamma)$: (1) generate homoskedastic data and obtain $\max[h, b]$ using CCT's optimal bandwidth selector, (2) repeat (1) for 500 times and obtain the average $\overline{\max[h, b]}$ and (3) define $z(\gamma) = \frac{0.1295}{ \sum_{\lvert X_i \rvert \le \overline{\max[h, b]}} \mu_{j}(X_{i})^\gamma}$.} We will use $\gamma = 2$ and the same three functional forms for $\mu_{j}$ as CCT.
 
 \nocite{lee2008rand}%
 The first DGP is designed to match features of Lee's (2008) analysis of U.S.\
@@ -682,44 +682,33 @@ simulate 5000 samples from each of the three DGPs and calculate nominal 95\%
 two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
 calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
-the bias. We use the $0.025$ and $0.975$ quantiles of the bootstrap distribution
-as the lower and upper bound of the interval, and the bandwidths, $h$ and $b$,
-are chosen using the AMSE-optimal rule proposed by CCT.
-
-We include several other procedures for comparison: CCT's bias-corrected
-interval using two different kernels, a ``naive'' uncorrected estimator and
-a bootstrapped version of the naive estimator, using 999 bootstrap replications.
-We estimate CCT's bias corrected procedure with AMSE-optimal bandwidths for both
-the uniform kernel and the triangular kernel. The uniform kernel provides a
-direct comparison with our bootstrap, while the triangular kernel may be more
-appealing to practitioners. The ``naive'' uncorrected interval
-estimator uses the uniform kernel, again with the optimal bandwidth $h$ proposed by
-\cite{IK}. And for the naive bootstrapped interval, we resample the data with
-equal weights, find optimal bandwidth for each bootstrapped sample and calculate
-the uncorrected point estimate. The $0.025$ and $0.975$ quantiles of the bootstrap
-distribution are used as the lower and upper bound of the confidence interval.
+the bias. The bandwidths, $h$ and $b$,
+are chosen using the AMSE-optimal rule proposed by CCT. We also estimate CCT's bias corrected procedure with AMSE-optimal bandwidths and
+the uniform kernel for direct comparison.
 
 \begin{table}[t]
   \centering
   \begin{tabular}{rlrrrrrrr}
     \toprule
-    DGP & Method     & Bias   & SD    & RMSE   & CI Coverage (\%) & CI Length \\
+    DGP & Method       & Bias    & SD    & RMSE  & CI Coverage (\%) & CI Length \\
+    \midrule                                                     \\
+    \multicolumn{7}{l}{Homoskedastic data with $\gamma = 0$ (Panel A)}  \\
     \midrule
-    1   & \bootuni   & --0.014 & 0.067 & 0.069 & 93.4       & 0.242     \\
-        & \bootnaive & --0.040 & 0.042 & 0.058 & 89.0       & 0.182     \\
-        & \cctuni    & --0.014 & 0.067 & 0.069 & 92.5       & 0.246     \\
-        & \ccttri    & --0.011 & 0.067 & 0.068 & 91.4       & 0.239     \\
-        & \naiveuni  & --0.040 & 0.042 & 0.058 & 81.5       & 0.156     \\\\
-    2   & \bootuni   & --0.011 & 0.088 & 0.089 & 95.3       & 0.323     \\
-        & \bootnaive & --0.151 & 0.067 & 0.165 & 35.4       & 0.269     \\
-        & \cctuni    & --0.011 & 0.088 & 0.089 & 93.7       & 0.353     \\
-        & \ccttri    & --0.008 & 0.086 & 0.086 & 93.2       & 0.346     \\
-        & \naiveuni  & --0.151 & 0.067 & 0.165 & 29.5       & 0.230     \\\\
-    3   & \bootuni   & --0.004 & 0.065 & 0.065 & 95.9       & 0.247     \\
-        & \bootnaive &   0.033 & 0.052 & 0.062 & 91.3       & 0.215     \\
-        & \cctuni    & --0.004 & 0.065 & 0.065 & 93.8       & 0.251     \\
-        & \ccttri    & --0.005 & 0.065 & 0.065 & 93.4       & 0.244     \\
-        & \naiveuni  &   0.033 & 0.052 & 0.062 & 86.1       & 0.191     \\
+    1 & Wild bootstrap & --0.014 & 0.067 & 0.069 & 0.917 & 0.237 \\ 
+      & CCT            & --0.014 & 0.067 & 0.069 & 0.924 & 0.246 \\ 
+    2 & Wild bootstrap & --0.011 & 0.088 & 0.089 & 0.917 & 0.310 \\ 
+      & CCT            & --0.011 & 0.088 & 0.089 & 0.935 & 0.351 \\
+    3 & Wild bootstrap & --0.004 & 0.065 & 0.065 & 0.933 & 0.242 \\
+      & CCT            & --0.004 & 0.065 & 0.065 & 0.938 & 0.251 \\ 
+    \midrule                                                     \\
+    \multicolumn{7}{l}{Heteroskedastic data with $\gamma = 2$ (Panel B)}  \\
+    \midrule
+    1 & Wild bootstrap & --0.011 & 0.081 & 0.081 & 0.924 & 0.289 \\
+      & CCT            & --0.011 & 0.081 & 0.081 & 0.931 & 0.301 \\ 
+    2 & Wild bootstrap & --0.011 & 0.097 & 0.098 & 0.912 & 0.334 \\ 
+      & CCT            & --0.011 & 0.097 & 0.097 & 0.931 & 0.379 \\
+    3 & Wild bootstrap &   0.000 & 0.116 & 0.116 & 0.923 & 0.409 \\ 
+      & CCT            &   0.000 & 0.116 & 0.116 & 0.935 & 0.432 \\
     \bottomrule
   \end{tabular}
   \caption{%
@@ -730,32 +719,22 @@ distribution are used as the lower and upper bound of the confidence interval.
   \label{tbl:1}
 \end{table}
 
-Table~\ref{tbl:1} presents the results of these simulations. The row labeled
-``\bootuni'' shows results for our proposed bootstrap interval; ``\bootnaive''
-shows results for the naive bootstrap interval; ``\cctuni'' and ``\ccttri'' show
-results for the analytically-corrected intervals; and ``\naiveuni'' shows results
-for the analytically-uncorrected interval. The first three columns give the bias,
+Table~\ref{tbl:1} presents the results of these simulations. It consists of two panels, with results for homoskedastic data in Panel A and heteroskedastic data in Panel B. The row labeled
+``Wild bootstrap'' shows results for our proposed bootstrap interval and ``CCT'' shows
+results for the analytically-corrected interval. The first three columns give the bias,
 standard deviation, and Root-MSE of the point
-estimators corresponding to each confidence interval.  As expected, the three
-bias corrected estimators (``\bootuni'', ``\cctuni'' and ``\ccttri'') have
+estimators corresponding to each confidence interval.  As expected, both
+bias corrected estimators have
 bias close to zero, with their standard deviation largely
 determining the estimators' RMSE. Moreover, as Theorem~\ref{T1} suggests, the
 bootstrap and analytically-corrected estimators have essentially the same
 standard deviation across all of the DGPs.
 
 The column ``CI Coverage'' lists the experimental coverage of each interval.
-All of the intervals from three robust estimators are reasonably close to their nominal coverage, although
-the analytically corrected estimators seem to persistently under-cover the true
-ATE (especially the one using triangular kernel). Our proposed bootstrap
-procedure consistently performs well, as it is about a percentage point closer
-to nominal coverage than the other interval estimators in DGPs 1 and 2, and is
-slightly conservative (95.9\% coverage) in DGP 3. The uncorrected intervals
-preform substantially worse---the naive analytical interval has coverage as
-bad as 30\% (in the second DGP) and never higher than 86\%, and the bootstrap
-version performs slightly better but still poorly. The final column, ``CI Length,''
-indicates that all three of the bias-corrected procedures generate intervals that are
-approximately the same length on average, but the uncorrected estimators produce
-much shorter intervals on average.
+In Panel A, all of the intervals from both robust estimators are reasonably close to their nominal coverage, although
+our proposed bootstrap procedure has coverages about one percentage lower than the CCT's analytical counterpart. In Panel B, the coverages are very similar to those in Panel A, showing that both procedures are robust to heteroskedasticity. 
+The final column, ``CI Length,'' 
+indicates that our proposed bootstrap procedure consistently generates narrower intervals.
 
 These are DGPs where the naive confidence intervals are known to perform poorly,
 and this set of simulation results indicates that our proposed bootstrap approach
@@ -813,8 +792,8 @@ their AMSE-optimal bandwidths as well.
     LM (2007)         & --1.895 & (--3.930                    & 0.139)   & 9   &      &       & 0.036 \\
     LM (2007)         & --1.198 & (--2.561                    & 0.165)   & 18  &      &       & 0.081 \\
     LM (2007)         & --1.114 & (--2.138                    & --0.090) & 36  &      &       & 0.027 \\
-    CCT               & --3.795 & (--7.037                    & --0.554) & 3   & .888 & 6.807 &       \\
-    Resid.\ bootstrap & --3.792 & (--6.512                    & --0.262) & 3   & .888 & 6.807 &       \\
+    CCT               & --3.795 & (--7.040                    & --0.551) & 3   & .888 & 6.807 &       \\ 
+    Wild bootstrap    & --3.800 & (--6.738                    & --0.450) & 3   & .888 & 6.807 &       \\
     \bottomrule
   \end{tabular}
   \caption{The effect of Head Start assistance on mortality. The first three
@@ -851,7 +830,7 @@ confidence interval is used, which includes zero for bandwidth 9 and 18.
 
 Results from the two robust procedures are similar to each other but greatly
 differ from the original estimates. The estimated ATEs are as high as --3.795
-from CCT and --3.792 from the bootstrap. Both are significantly different from
+from CCT and --3.800 from the bootstrap. Both are significantly different from
 zero, though the confidence intervals are also very wide, which is likely to be
 due to the much smaller bandwidths used relative to the other estimators
 ($h=3.888$, $b=6.807$).
@@ -867,7 +846,7 @@ and the conventional analytical confidence interval.
 
 The two robust procedures are again very similar to each other and give slightly
 larger point estimates in both panels. In Panel A, the ATE increases from 0.030
-to 0.055 (CCT) and 0.054 (bootstrap). In Panel B, the ATE increases from 0.037
+to 0.055 (CCT and bootstrap). In Panel B, the ATE increases from 0.037
 to 0.051 (CCT) and 0.052 (bootstrap). The confidence intervals tend to shift up
 as well.  In contrast to the striking differences between the conventional
 estimates bias-corrected procedures for the mortality estimates, the differences
@@ -877,18 +856,18 @@ in Table~\ref{tbl:3} are much smaller.
   \centering
   \begin{tabular}{lrr@{, }rr@{}rrr}
     \toprule
-              & ATE   & \multicolumn{2}{r}{95\% CI} & & $h$     & $b$ & p-value     \\
+                   & ATE   & \multicolumn{2}{r}{95\% CI} & & $h$     & $b$ & p-value     \\
     \midrule                                                                          \\
     \multicolumn{5}{l}{Fraction ``high school or more'' (Panel A)}                    \\
     \midrule
-    LM (2007) & 0.030 & (0.003                      & 0.057) & 7&     &  & 0.032    \\
-    CCT       & 0.055 & (0.014                      & 0.096) & 3&.671 & 8.618       \\
-    Bootstrap & 0.054 & (0.013                      & 0.096) & 3&.671 & 8.618       \\\\
+    LM (2007)      & 0.030 & (0.003                      & 0.057) & 7&     &  & 0.032    \\
+    CCT            & 0.055 & (0.014                      & 0.096) & 3&.671 & 8.618       \\
+    Wild bootstrap & 0.055 & (0.010                      & 0.096) & 3&.671 & 8.618       \\\\
     \multicolumn{5}{l}{Fraction ``some college or more'' (Panel B)}                   \\
     \midrule
-    LM (2007) & 0.037 & (0.002                      & 0.073) & 7&     &  & 0.032 \T \\
-    CCT       & 0.051 & (0.004                      & 0.099) & 5&.076 & 10.251      \\
-    Bootstrap & 0.052 & (0.001                      & 0.094) & 5&.076 & 10.251      \\
+    LM (2007)      & 0.037 & (0.002                      & 0.073) & 7&     &  & 0.032 \T \\
+    CCT            & 0.051 & (0.004                      & 0.099) & 5&.076 & 10.251      \\
+    Wild bootstrap & 0.052 & (0.007                      & 0.091) & 5&.076 & 10.251      \\
     \bottomrule
   \end{tabular}
   \caption{The effect of Head Start assistance on education for cohort

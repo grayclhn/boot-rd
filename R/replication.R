@@ -3,7 +3,7 @@
 
 library(rdrobust)
 library(testthat)
-source("RDfunctions.R")
+source("rdfunctions.R")
 
 ## Load Ludwig and Miller's (2007) dataset
 
