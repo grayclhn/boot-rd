@@ -581,6 +581,32 @@ and Theorem~\ref{T2} establishes its theoretical properties.
   \end{enumerate}
 \end{algorithm}
 
+One brief remark on implementing these algorithms. Many of the matrix operations
+required to estimate the local polynomials only involve the regressors and,
+therefore, only need to be computed once. For example, the parameter estimates
+for the linear model on the treated group are equal to
+\[
+\hat\beta_{+,1} = \underbrace{(\mathbf{X}' \mathbf{K}_+ \mathbf{X})^{-1} \mathbf{X}' \mathbf{K}_+}_{\mathbf{W}_{+,1}} \mathbf{Y}
+\]
+where
+\begin{align*}
+\mathbf{X} &= \begin{pmatrix*} 1 & X_1 \\ 1 & X_2 \\ \vdots & \vdots \\ 1 & X_n \end{pmatrix*} &
+\mathbf{Y} &= \begin{pmatrix*} Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{pmatrix*} &
+\mathbf{K}_+ &= \begin{pmatrix*}
+  K_{+,h}(X_1) & 0 & \cdots & 0 \\
+  0 & K_{+,h}(X_2) & \cdots & 0 \\
+  0 & 0 & \ddots & 0 \\
+  0 & 0 & \cdots & K_{+,h}(X_n) \end{pmatrix*}.
+\end{align*}
+The matrix $\mathbf{W}_{+,1}$ is not affected by the bootstrap so it can be
+computed once initially and reused in the bootstrap calculations and each
+bootstrap replication just requires a single matrix-vector multiplication. The
+other parameter estimates have this property as well. Consequently, the
+computational burden of this iterated bootstrap is much lower than might
+appear.\footnote{%
+  An open-source implementation of this algorithm written in R, which was used
+  for the empirical and Monte Carlo components of this paper, is available
+  online at \url{https://github.com/grayclhn/boot-rd}.} %
 
 Theorem~\ref{T2} establishes that this iterated bootstrap approximates the
 asymptotic distribution of the bias-corrected statistic proposed by

@@ -40,8 +40,14 @@ First, we thank the reviewer for providing detailed and helpful comments, which 
 
 \item \textit{``...the need of a computationally intensive iterated bootstrap for distributional approximations...''}
 
-   We share the reviewer's concern about the computing power demands an iterative bootstrap procedure imposes. Even though it would certainly be desirable to obtain an alternative implementation method that could achieve similar outcomes with a lesser burden on computational resources, it is not immediately obvious to the authors what that approach would be, and that was not the focus of the advances being proposed currently in this paper. Additionally, the simulation and computational work developed in this study seem to indicate that, in practice, the iterated bootstrap procedure proposed is not excessivelly burdensome for most applications faced by practitioners using standard computing resources widely available. Clearly, while we embrace the merit and usefulness of developing less intensive methods, we believe that even a demanding procedure like ours can be easily implemented by practitioners.
-\end{enumerate}
+This is much less
+of an issue than it appears, because many of the matrix calculations can be
+computed once and then reused in the bootstrap replications. (Any calculation
+that does not involve $Y$ can be reused.) Each bootstrap replication only
+requires a small number of matrix-vector multiplications which can be completed
+very quickly. We have added a short section after Algorithm 2 that explains
+this implementation detail, and we have also provided open source R code that
+implements the procedure efficiently.
 
 \section{Specific Comments}
 
