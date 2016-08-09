@@ -37,9 +37,12 @@ test_that("rdfunctions_ForMc.R gives the same results as rdfunctions_old.R in re
   old_epa <- old_estimator_wrapper(dta$y, dta$x, Nbc = 50, Nci = 50, kernel = "epanechnikov")
   
   set.seed(798)
-  new_uni <- rdboot_ForMc(dta$y, dta$x, Nbc = 50, Nci = 50, bootstrap = "residual", kernel = "uniform")[2, ]
-  new_tri <- rdboot_ForMc(dta$y, dta$x, Nbc = 50, Nci = 50, bootstrap = "residual", kernel = "triangular")[2, ]
-  new_epa <- rdboot_ForMc(dta$y, dta$x, Nbc = 50, Nci = 50, bootstrap = "residual", kernel = "epanechnikov")[2, ]
+  new_uni <- rdboot_ForMc(dta$y, dta$x, Nbc = 50, Nci = 50, bootstrap = "residual", 
+                          kernel = "uniform", residual = "HC0")[2, ]
+  new_tri <- rdboot_ForMc(dta$y, dta$x, Nbc = 50, Nci = 50, bootstrap = "residual", 
+                          kernel = "triangular", residual = "HC0")[2, ]
+  new_epa <- rdboot_ForMc(dta$y, dta$x, Nbc = 50, Nci = 50, bootstrap = "residual", 
+                          kernel = "epanechnikov", residual = "HC0")[2, ]
   
   expect_equivalent(old_uni, new_uni)
   expect_equivalent(old_tri, new_tri)
@@ -146,13 +149,13 @@ test_that("rdfunctions_ForMc.R gives the same results as rdfunctions.R in wild b
   new_estimate <- boot_estimator_ForMc(ypl, ypr, yql, yqr,
                                        coef.ql, coef.qr, coef.pl, coef.pr,
                                        Xql, Xqr, Xpl, Xpr,
-                                       WXql, WXqr,
+                                       WXql, WXqr, 1, 1, 
                                        wqr, wql, ihr, ihl, 50, bootstrap = "wild")
   
   new_dist <- boot_dist_ForMc(ypl, ypr, yql, yqr,
                               coef.ql, coef.qr, coef.pl, coef.pr,
                               Xql, Xqr, Xpl, Xpr,
-                              WXql, WXqr,
+                              WXql, WXqr, 1, 1,
                               wqr, wql, ihr, ihl, 10, 10, bootstrap = "wild")
   
   set.seed(798)
