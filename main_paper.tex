@@ -384,11 +384,11 @@ paper, which are standard in this literature.
 To simplify notation, let $m = \min(h,b)$, $m' = \max(h,b)$, and
 define the scaled and truncated kernel functions
 \begin{align*}
-  K_{+,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x > 0\} &
-  K_{-,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x \leq 0\}
+  K_{+,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x \geq 0\} &
+  K_{-,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x < 0\}
 \intertext{and}
-  K_{+,b}(x) &= \tfrac{1}{b} K(x/b) \1\{x > 0\} &
-  K_{-,b}(x) &= \tfrac{1}{b} K(x/b) \1\{x \leq 0\}.
+  K_{+,b}(x) &= \tfrac{1}{b} K(x/b) \1\{x \geq 0\} &
+  K_{-,b}(x) &= \tfrac{1}{b} K(x/b) \1\{x < 0\}.
 \end{align*}
 Assumption~\ref{A2} allows for the vast majority kernel functions commonly used
 in practice. Note that different kernel functions could be used for the
@@ -949,7 +949,7 @@ would define both $\hat\mu_+(h)$ and $\hat\mu_-(h)$ as
 Define the following additional notation:\footnote{%
   As we mention in Section~\ref{background}, we have adopted CCT's
   notation where possible and these terms originate in that paper.} %
-$r_p(x) = (1,\ x,\dots,\ x^p)'$, $\1_+(x) = \1\{x > 0\}$, $\1_-(x) = \1\{x \leq 0\}$,
+$r_p(x) = (1,\ x,\dots,\ x^p)'$, $\1_+(x) = \1\{x \geq 0\}$, $\1_-(x) = \1\{x < 0\}$,
 \begin{align*}
   \Gamma_{\bullet,p}(h)
   &= \tfrac{1}{n} \sum_{i=1}^n r_p(X_i/h) r_p(X_i/h)' K_{\bullet,h}(X_i) \\
