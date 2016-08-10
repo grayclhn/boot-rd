@@ -194,6 +194,8 @@ cct.results <- matrix(0, nrow = 6, ncol = 6)
 rownames(cct.results) <- rnames
 naiveboot.results <- matrix(0, nrow = 6, ncol = 6)
 rownames(naiveboot.results) <- rnames
+traditional.results <- matrix(0, nrow = 6, ncol = 6)
+rownames(traditional.results) <- rnames
 
 i <- 1
 for (m in models) {
@@ -210,6 +212,10 @@ for (m in models) {
     naiveboot.results[i, ] <- simulation.3(m, kernel, h)
     try(slackr(print(naiveboot.results)), T)
     
+    set.seed(798)
+    traditional.results[i, ] <- simulation.4(m, kernel, h)
+    try(slackr(print(traditional.results)), T)
+    
     i <- i + 1
   }
 }
@@ -220,3 +226,5 @@ print(xtable(cct.results, digits = 3), include.rownames = F, type = "latex",
       file = paste("output/cct_results_", kernel, ".tex", sep = ""))
 print(xtable(naiveboot.results, digits = 3), include.rownames = F, type = "latex", 
       file = paste("output/naiveboot_results_", kernel, ".tex", sep = ""))
+print(xtable(traditional.results, digits = 3), include.rownames = F, type = "latex", 
+      file = paste("output/traditional_results_", kernel, ".tex", sep = ""))
