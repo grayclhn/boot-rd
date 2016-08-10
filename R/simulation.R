@@ -145,32 +145,40 @@ simulation.3 <- function(model.id, kernel, heteroskedasticity = F) {
 
 ## generate tables
 
+kernel <- "uni"
 models <- c(1, 2, 3)
-kernels <- c("uniform")
 heteroskedasticity <- c(F, T)
-rnames <- c("m1.uni", "m1.uni.h", "m2.uni", "m2.uni.h","m3.uni", "m3.uni.h")
 
-i <- 1
+rnames <- paste(c("m1", "h.m1", "m2", "h.m2","m3", "h.m3"), kernel, sep = ".")
 boot.results <- matrix(0, nrow = 6, ncol = 6)
 rownames(boot.results) <- rnames
 cct.results <- matrix(0, nrow = 6, ncol = 6)
 rownames(cct.results) <- rnames
+naiveboot.results <- matrix(0, nrow = 6, ncol = 6)
+rownames(naiveboot.results) <- rnames
+
+i <- 1
 for (m in models) {
-  for (k in kernels) {
-    for (h in heteroskedasticity) {
-      set.seed(798)
-      boot.results[i, ] <- simulation.1(m, k, h)
-      try(slackr(print(boot.results)), T)
-      
-      set.seed(798)
-      cct.results[i, ] <- simulation.2(m, k, h)
-      try(slackr(print(cct.results)), T)
-      i <- i + 1
-    }
+  for (h in heteroskedasticity) {
+    set.seed(798)
+    boot.results[i, ] <- simulation.1(m, kernel, h)
+    try(slackr(print(boot.results)), T)
+    
+    set.seed(798)
+    cct.results[i, ] <- simulation.2(m, kernel, h)
+    try(slackr(print(cct.results)), T)
+    
+    set.seed(798)
+    naiveboot.results[i, ] <- simulation.3(m, kernel, h)
+    try(slackr(print(naiveboot.results)), T)
+    
+    i <- i + 1
   }
 }
 
 print(xtable(boot.results, digits = 3), include.rownames = F, type = "latex", 
-      file = "output/boot_results.tex")
+      file = paste("output/boot_results_", kernel, ".tex", sep = ""))
 print(xtable(cct.results, digits = 3), include.rownames = F, type = "latex", 
-      file = "output/cct_results.tex")
+      file = paste("output/cct_results_", kernel, ".tex", sep = ""))
+print(xtable(naiveboot.results, digits = 3), include.rownames = F, type = "latex", 
+      file = paste("output/naiveboot_results_", kernel, ".tex", sep = ""))
