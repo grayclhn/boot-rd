@@ -86,7 +86,7 @@ simulation.2 <- function(model.id, kernel, heteroskedasticity = F) {
     dta <- gen_data()
     bws <- rdbwselect_2014(dta$y, dta$x, kernel = kernel)$bws
     results <- rdrobust(dta$y, dta$x, kernel = kernel,
-                        h = bws[1], b = bws[2], level = 100 * (1-a))
+                        h = bws[1], b = bws[2], level = 100 * (1-a), vce = "hc3")
     t <- results$coef[3]
     ci <- results$ci[3, ]
     return(c(t, ci))
