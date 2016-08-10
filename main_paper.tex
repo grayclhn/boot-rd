@@ -918,7 +918,15 @@ This paper proposes a novel bootstrap procedure to obtain robust bias-corrected
 confidence intervals in sharp regression discontinuity designs. The approach proposed builds upon the developments and intuition
 advanced by CCT and is based on a first-order bias correction. We exploit CCT's
 theoretical insight through a new wild bootstrap. In particular, we propose
-estimating the local linear model as usual, then estimating a local second order polynomial and generating bootstrap datasets based on that polynomial. This bootstrap allows the bias of the linear model to be estimated and removed, and the bootstrap can be repeated to accurately estimate the sampling distribution of the bias-corrected estimator. These results demonstrate that there are bootstrap procedures that can generate asymptotically valid confidence intervals in the same settings as CCT's.
+estimating the local linear model as usual, then estimating a local second order
+polynomial and generating bootstrap datasets based on that
+polynomial. This bootstrap allows the bias of the linear model to be estimated
+and removed, and the bootstrap can be repeated to accurately estimate the
+sampling distribution of the bias-corrected estimator. These results demonstrate
+that there are bootstrap procedures that can generate asymptotically valid
+confidence intervals in the same settings as CCT's. The current implementation
+of this bootstrap is somewhat specialized, however, and relaxing its limitations
+is the subject of ongoing research.
 
 \appendix
 \section{Mathematical appendix}
