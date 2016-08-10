@@ -268,7 +268,12 @@ CCT.)
  \end{enumerate}
 \end{assumption}
 
-Since the conditions for identification only need to hold in a neighborhood
+ The first part of Assumption \ref{A1} requires that the running variable be continuously distributed around the cutoff, and guarantees the presence of observations close to the threshold in large samples.
+ Next, this assumption imposes the existence of moments necessary for estimation and inference.
+ Part 3 imposes the traditional smoothness conditions on the expected potential outcomes and its derivatives around the cutoff which is crucial for identification of the parameters of interest and bias correction terms.
+ Finally, the last part of Assumption \ref{A1} describes the standard restrictions on the conditional variance of the observed $Y_{i}$ around the cutoff, allowing for different values on each side of the threshold.
+
+ Since the conditions for identification only need to hold in a neighborhood
 around the cutoff, $\mu_+$ and $\mu_-$ can be estimated by extrapolating from a
 local polynomial regression.  We will focus here on local linear
 regression.\footnote{%
