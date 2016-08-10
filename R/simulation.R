@@ -143,6 +143,44 @@ simulation.3 <- function(model.id, kernel, heteroskedasticity = F) {
   return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
 }
 
+## simulation 4: coverage of traditional approach
+
+simulation.4 <- function(model.id, kernel, heteroskedasticity = F) {
+  
+  if (heteroskedasticity == T) {
+    avebw <- average_bw(model.id, kernel)
+    gen_data <- function() generate.data.h(model.id, avebw)
+  } else {
+    gen_data <- function() generate.data(model.id)
+  }
+  
+  simu <- function() {
+    dta <- gen_data()
+    bws <- rdbwselect_2014(dta$y, dta$x, kernel=kernel, bwselect = "IK")$bws[1]
+    results <- rdrobust(dta$y, dta$x, kernel = kernel,
+                        h = bws, b = bws, level = 100 * (1-a), vce = "hc3")
+    t <- results$coef[1]
+    ci <- results$ci[1, ]
+    return(c(t, ci))
+  }
+  
+  cl <- makeCluster(N.core)
+  registerDoParallel(cl)
+  export.obj <- c("generate.data", "generate.data.h", "a")
+  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng%
+    simu()
+  stopCluster(cl)
+  
+  t.true    <- ifelse(model.id ==2, -3.45, 0.04)
+  bias      <- t.true - mean(collect.simu[ , 1])
+  SD        <- sd(collect.simu[ , 1])
+  MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
+  coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
+  length    <- mean(collect.simu[ , 3] - collect.simu[ , 2])
+  
+  return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
+}
+
 ## generate tables
 
 kernel <- "uni"
