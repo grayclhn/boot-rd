@@ -8,6 +8,7 @@ library(doRNG)
 library(xtable)
 try(source("slackrISE.R"), T)
 
+source("rdfunctions_old.R")
 source("rdfunctions.R")
 source("rdfunctions_ForMc.R")
 
@@ -16,6 +17,24 @@ a <- 0.05
 N.simu <- 5000
 N.core <- 35
 N.bc <- 500
+
+## naive bootstrap estimator
+naiveboot <- function(y, x, kernel, Nci = 999) {
+  
+  ## point estimate
+  h <- rdbwselect_2014(y, x, kernel=kernel, bwselect = "IK")$bws[1]
+  tau <- rd.estimate(data.frame(y, x), 1, 2, h, h, 500, kernel, F)
+
+  ## bootstrap
+  Btau <- replicate(Nci, {
+    i <- sample.int(length(y), length(y), replace = T)
+    h <- rdbwselect_2014(y[i], x[i], kernel=kernel, bwselect = "IK")$bws[1]
+    rd.estimate(data.frame(y[i], x[i]), 1, 2, h, h, 500, kernel, F)
+  })
+  
+  return(c(tau, quantile(Btau, c(0.025, 0.975))))
+}
+
 
 ## simulation 1: coverage of CI from bootstrap (basic CI)
 
