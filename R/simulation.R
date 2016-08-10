@@ -109,6 +109,40 @@ simulation.2 <- function(model.id, kernel, heteroskedasticity = F) {
   return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
 }
 
+## simulation 3: coverage of CI from naive bootstrap
+
+simulation.3 <- function(model.id, kernel, heteroskedasticity = F) {
+  
+  if (heteroskedasticity == T) {
+    avebw <- average_bw(model.id, kernel)
+    gen_data <- function() generate.data.h(model.id, avebw)
+  } else {
+    gen_data <- function() generate.data(model.id)
+  }
+  
+  simu <- function() {
+    dta <- gen_data()
+    naiveboot(dta$y, dta$x, kernel, N.ci)
+  }
+  
+  cl <- makeCluster(N.core)
+  registerDoParallel(cl)
+  export.obj <- c("N.ci", "a", "generate.data", "kweight", "generate.data.h",
+                  "local_polynomial_regression", "naiveboot", "rd.estimate")
+  collect.simu <- foreach(i=1:N.simu, .combine="rbind", .packages="rdrobust", .export=export.obj, .inorder=F) %dorng%
+    simu()
+  stopCluster(cl)
+  
+  t.true    <- ifelse(model.id ==2, -3.45, 0.04)
+  bias      <- t.true - mean(collect.simu[ , 1])
+  SD        <- sd(collect.simu[ , 1])
+  MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
+  coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
+  length    <- mean(collect.simu[ , 3] - collect.simu[ , 2])
+  
+  return(c(true = t.true, bias = bias, SD = SD, MSE = MSE, coverage = coverage, length = length))
+}
+
 ## generate tables
 
 models <- c(1, 2, 3)
