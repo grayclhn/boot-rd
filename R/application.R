@@ -33,7 +33,7 @@ original <- function(dta, bw) {
 
 robust <- function(dta) {
   bws <- rdbwselect_2014(dta$y, dta$x, kernel = "uni")$bws
-  cct <- rdrobust(dta$y, dta$x, kernel = "uni", h = bws[1], b = bws[2])
+  cct <- rdrobust(dta$y, dta$x, kernel = "uni", h = bws[1], b = bws[2], vce = "hc3")
   t1  <- cct$coef[3]
   ci1 <- cct$ci[3, ]
 
