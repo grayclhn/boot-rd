@@ -1,0 +1,63 @@
+\documentclass[12pt,fleqn]{article}
+
+% Add commit information from Git to the pdf. It is automatically
+% generated with the R script 'tex/git and can be run from
+% the command line in the project's top directory via:
+%
+% $ tex/git
+%
+% If VERSION.tex does not exist we can't add information from
+% Git, so we'll use today's date as a fallback.
+
+\IfFileExists{./VERSION.tex}{\input{VERSION}}{%
+\providecommand\VERSION{\today}}
+
+\input{tex/setup}
+\input{tex/macros}
+
+\begin{document}
+
+\noindent%
+Hi Matias,
+
+Thank you for your helpful comments. We have made the requested changes. Overall,
+for this version of the paper, we have changed the bootstrap method from the
+residual bootstrap to the wild bootstrap. We have also updated the simulations
+to include DGPs featuring heteroskedasticity. We believe that the residual
+bootstrap used in the previous version is theoretically correct even under
+heteroskedastcity as long as the conditional variance is assumed to be smooth in
+a neighorbood around the cutoff point, since the residual bootstrap we initially
+proposed only resampled from that neighborhood, but we agree that in practice
+the wild bootstrap is likely to be more accurate and can accomodate forms of
+conditional heteroskedasticity that the residual bootstrap can not.
+
+We have also relaxed the ``uniform kernel'' requirement and allow other kernels
+that are popular in practice. The title of the paper has been updated to reflect
+that change.
+
+The first referee expressed concern about the possible computational complexity of
+using an iterated bootstrap to produce confidence intervals. This is much less
+of an issue than it appears, because many of the matrix calculations can be
+computed once and then reused in the bootstrap replications. (Any calculation
+that does not involve $Y$ can be reused.) Each bootstrap replication only
+requires a small number of matrix-vector multiplications which can be completed
+very quickly. We have added a short section after Algorithm 2 that explains
+this implementation detail, and we have also provided open source R code that
+implements the procedure efficiently.
+
+Finally, the mathematical appendix defines more notation explicitly and
+summarizes several convergence results from Calonico, Cattaneo, and Titiunik
+(2014) that are referenced in the proofs and we have made some small additional
+changes that the referees suggested.
+
+The replies to the referees give more details on some of the specific
+changes made to the paper. Thank you for giving us the opportunity to revise
+the paper.
+
+\noindent%
+Best,
+
+\noindent%
+Ot\'avio Bartalotti, Gray Calhoun, and Yang He
+
+\end{document}
