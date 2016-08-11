@@ -175,7 +175,8 @@ analytical methods, the confidence intervals could easily be produced using the
 same methods. Moreover, in this paper we focus on the baseline case of
 sharp RD with a local linear model, however, the results and procedures can be
 easily extended to the general local polynomial and higher order derivatives
-cases (e.g., Regression Kink Designs, see \citealp{CardEtAl1,CardEtAl2}).
+cases (e.g., Regression Kink Designs, see \citealp{card2009b}, and
+\citealp{CardEtAl1,CardEtAl2}).
 
 The paper is organized as follows. Section~\ref{background} describes the basic
 RD approach, its usual implementation, and the explicit analytical bias
@@ -254,11 +255,9 @@ and let
   &\mu^{(\eta)}_{-}
   &= \lim_{x \rightarrow 0^{-}}\mu^{(\eta)}(x),
 \end{align*}
-where the symbol $\V(\cdot)$ represents the variance.  The effect $\tau$ is
-nonparametrically identified because both $\mu_-$ and $\mu_+$ can be estimated
-consistently under Assumption~\ref{A1}, which lists standard conditions in the
-RD literature. (See, in particular, \citealp{HTV2001}, \citealp{Porter03}, and
-CCT.)
+where the symbol $\V(\cdot)$ represents the variance. Assumption~\ref{A1} lists
+standard conditions in the RD literature which ensure that both $\mu_-$ and
+$\mu_+$ can be estimated consistently.
 
 \begin{assumption}[Behavior of the DGP near the cutoff]\label{A1}
   The random variables $Y_i$, $X_i$ form a random sample of size $n$.
@@ -274,12 +273,17 @@ CCT.)
  \end{enumerate}
 \end{assumption}
 
- The first part of Assumption \ref{A1} requires that the running variable be continuously distributed around the cutoff, and guarantees the presence of observations close to the threshold in large samples.
- Next, this assumption imposes the existence of moments necessary for estimation and inference.
- Part 3 imposes the traditional smoothness conditions on the expected potential outcomes and its derivatives around the cutoff which is crucial for identification of the parameters of interest and bias correction terms.
- Finally, the last part of Assumption \ref{A1} describes the standard restrictions on the conditional variance of the observed $Y_{i}$ around the cutoff, allowing for different values on each side of the threshold.
+Part 1 and the continuity component of Part 3 of Assumption~\ref{A1} are crucial
+for identifying $\tau$ --- informally, they ensure that the number of points
+arbitrarily close to the cutoff increases with the sample size and that there is
+a small neighborhood around the cutoff in which the change in the conditional
+expectation can be attributed to the change in treatment status.  (See
+\citealp{HTV2001}, and \citealp{Porter03}, for more detailed discussion of
+identification in RD designs.) The additional smoothness conditions in Part 3
+allow higher order polynomials to be used for estimation and Parts 2 and 4
+ensure that the estimated local polynomials are well behaved.
 
- Since the conditions for identification only need to hold in a neighborhood
+Since these conditions only need to hold in a neighborhood
 around the cutoff, $\mu_+$ and $\mu_-$ can be estimated by extrapolating from a
 local polynomial regression.  We will focus here on local linear
 regression.\footnote{%
@@ -287,8 +291,7 @@ regression.\footnote{%
   the properties of local polynomial regressions for boundary problems. The
   bootstrap algorithm proposed in this paper can be extended to accommodate
   higher order polynomials discontinuities in the derivatives of the conditional
-  expectation, like ``Kink RD'' design \citep{card2009b}.} %
-
+  expectation, at the cost of stronger moment and smoothness assumptions.} %
 For this model, if $h$ represents a bandwidth parameter and $K(\cdot)$ a density
 function, the estimator of $\tau$, $\hat\tau(h)$, is defined as
 \begin{equation*}
