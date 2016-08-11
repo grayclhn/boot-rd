@@ -613,7 +613,7 @@ that $B_1$ and $B_2$ are large enough that simulation error can be ignored.
   \end{equation*}
 \end{theorem}
 
-One brief remark on implementing these algorithms. Many of the matrix operations
+Two brief remarks on implementing these algorithms. First, many of the matrix operations
 required to estimate the local polynomials only involve the regressors and,
 therefore, only need to be computed once. For example, the parameter estimates
 for the linear model on the treated group are equal to
@@ -639,6 +639,18 @@ appear.\footnote{%
   An open-source implementation of this algorithm written in R, which was used
   for the empirical and Monte Carlo components of this paper, is available
   online at \url{https://github.com/grayclhn/boot-rd}.} %
+
+Second, if the error terms have pronounced heteroskedasticity, it can be
+advantageous to transform the residuals before applying the bootstrap, as
+discussed by \citet{DF08} --- these transformations typically do not affect the
+first-order asymptotic properties of the bootstrap distribution but can provide
+improvements in finite samples analagous to alternative
+heteroskedasticity-robust variance estimators. (\citealp{mackinnon1985some}, and
+\citealp{mackinnon2013thirty}.) Since RD estimators rely on a small subset of
+the data available in any application, these finite-sample adjustments can be
+especially effective in improving performance, and we use the ``HC3''
+transformation proposed by \citet{DF08} in this paper's Monte Carlo simulations
+and empirical exercise.
 
 Evidence of the usefulness of the procedures proposed above and their relative performance to the analytical bias correction proposed in CCT are presented in a series of Monte Carlo simulations in Section \ref{sim}.
 
@@ -720,7 +732,9 @@ two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
 calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
 the bias. The bandwidths, $h$ and $b$,
-are chosen using the AMSE-optimal rule proposed by CCT. We also estimate CCT's bias corrected procedure with AMSE-optimal bandwidths and
+are chosen using the AMSE-optimal rule proposed by CCT and the Wild bootstrap
+uses the ``HC3'' transformation of \citet{DF08}. We also estimate CCT's bias
+corrected procedure with AMSE-optimal bandwidths and
 the uniform kernel for direct comparison.
 
 \begin{table}[t]
@@ -814,7 +828,8 @@ effect on schooling from decennial census data.
 We reestimate the ATE on health and schooling with robust procedures. To be
 specific, we apply both the robust procedure proposed by CCT and the bootstrap
 procedure introduced in this paper.  Our bootstrap estimator uses the
-AMSE-optimal bandwidths proposed by CCT and the uniform kernel. In the bootstrap
+AMSE-optimal bandwidths proposed by CCT, the uniform kernel, and the HC3 Wild
+bootstrap from \citet{DF08}. In the bootstrap
 procedure, we use 500 bootstraps for bias correction and 999 to calculate the
 confidence intervals. The analytical estimator using CCT's bias correction and variance estimator use
 their AMSE-optimal bandwidths as well.
