@@ -671,13 +671,14 @@ high curvature and local linear models are likely to exhibit high bias, making
 it a natural test case for both their analytical corrections and our bootstrap.
 
 To estimate the finite-sample coverage of our new bootstrap based confidence interval, we
-simulate 5000 samples from each of the three DGPs and calculate nominal 95\%
+simulate 5000 samples from each of the three DGPs ($\gamma = 0$ and $\gamma = 2$) and calculate nominal 95\%
 two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
 calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
 the bias. The bandwidths, $h$ and $b$,
-are chosen using the AMSE-optimal rule proposed by CCT. We also estimate CCT's bias corrected procedure with AMSE-optimal bandwidths and
-the uniform kernel for direct comparison.
+are chosen using the AMSE-optimal rule proposed by CCT. 
+
+We include two other procedures for comparison: CCT's bias-corrected interval and a ``naive" uncorrected estimator. We estimate CCT's bias corrected procedure with AMSE-optimal bandwidth and estimate the ``naive" uncorrected interval with the optimal bandwidth $h$ proposed by \cite{IK}. The HC3 type variance estimator is used in these two analytical procedures so that they are comparable to our bootstrap procedures. We use triangular kernel through out the three procedures.\footnote{Simulation results for other kernels are similar and available upon request.}
 
 \begin{table}[t]
   \centering
@@ -718,8 +719,8 @@ the uniform kernel for direct comparison.
 \end{table}
 
 Table~\ref{tbl:1} presents the results of these simulations. It consists of two panels, with results for homoskedastic data in Panel A and heteroskedastic data in Panel B. The row labeled
-``Wild bootstrap'' shows results for our proposed bootstrap interval and ``CCT'' shows
-results for the analytically-corrected interval. The first three columns give the bias,
+``Wild bootstrap'' shows results for our proposed bootstrap interval; ``CCT'' shows
+results for the analytically-corrected interval and ``Naive" shows results for analytically-uncorrected interval. The first three columns give the bias,
 standard deviation, and Root-MSE of the point
 estimators corresponding to each confidence interval.  As expected, both
 bias corrected estimators have
@@ -729,10 +730,7 @@ bootstrap and analytically-corrected estimators have essentially the same
 standard deviation across all of the DGPs.
 
 The column ``CI Coverage'' lists the experimental coverage of each interval.
-In Panel A, all of the intervals from both robust estimators are reasonably close to their nominal coverage, although
-our proposed bootstrap procedure has coverages about one percentage lower than the CCT's analytical counterpart. In Panel B, the coverages are very similar to those in Panel A, showing that both procedures are robust to heteroskedasticity. 
-The final column, ``CI Length,'' 
-indicates that our proposed bootstrap procedure consistently generates narrower intervals.
+In Panel A, all of the intervals from two robust estimators are reasonably close to their nominal coverage, although they slightly under cover the true treatment effect. The uncorrected intervals perform substantially worse---the naive analytical interval has coverage as bad as 35\% (in the second DGP) and never higher than 86\%. In Panel B, the coverage does not change too much from Panel A. In presence of heteroskedasticity, the two robust procedures again perform similarly and have coverage close to the nominal level. The final column, ``CI Length,'' indicates that intervals from the two robust procedures have almost the same length on average, while interval from the naive procedure has much shorter length on average. Not surprisingly, the average length of intervals from all three procedures increases when the data is heteroskedastic. 
 
 These are DGPs where the naive confidence intervals are known to perform poorly,
 and this set of simulation results indicates that our proposed bootstrap approach
