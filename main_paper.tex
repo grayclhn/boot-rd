@@ -535,8 +535,7 @@ be ignored. Theorem~\ref{T1} presents the result formally.
 where $\Delta^*(h,b)$ is defined by Equation~\eqref{eq:9}.
 \end{theorem}
 
-Note that the variance component of~\eqref{eq:4} is the same value used by CCT
-and introduced in~\eqref{eq:1}. Theorem~\ref{T1} implies that our bias-corrected
+Theorem~\ref{T1} implies that our bias-corrected
 estimator has the same asymptotic distribution as CCT's. This equivalence should
 be unsurprising; both estimators use a second order polynomial to directly estimate
 the bias of the local linear model, so they should behave very similarly.
@@ -594,6 +593,26 @@ and Theorem~\ref{T2} establishes its theoretical properties.
   \end{enumerate}
 \end{algorithm}
 
+Theorem~\ref{T2} establishes that this iterated bootstrap approximates the
+asymptotic distribution of the bias-corrected statistic proposed by
+Algorithm~\ref{Alg1} and justifies this second algorithm.  As before, we assume
+that $B_1$ and $B_2$ are large enough that simulation error can be ignored.
+
+\begin{theorem}\label{T2}
+  Under Assumptions~\ref{A1} and~\ref{A2},
+  \begin{equation*}
+    \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V^{bc}(h,b) \to^p 1
+  \end{equation*}
+  and
+  \begin{equation*}
+    \sup_{x,\tau}
+    \Big\rvert \Pr^*\big[ \sqrt{nh}
+    (\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^*) \leq x \big]
+    - \Pr\big[ \sqrt{nh}
+    (\hat\tau(h) - \Delta^*(h,b) - \tau) \leq x \big] \Big\lvert \to^p 0.
+  \end{equation*}
+\end{theorem}
+
 One brief remark on implementing these algorithms. Many of the matrix operations
 required to estimate the local polynomials only involve the regressors and,
 therefore, only need to be computed once. For example, the parameter estimates
@@ -620,26 +639,6 @@ appear.\footnote{%
   An open-source implementation of this algorithm written in R, which was used
   for the empirical and Monte Carlo components of this paper, is available
   online at \url{https://github.com/grayclhn/boot-rd}.} %
-
-Theorem~\ref{T2} establishes that this iterated bootstrap approximates the
-asymptotic distribution of the bias-corrected statistic proposed by
-Algorithm~\ref{Alg1} and justifies this second algorithm.  As before, we assume
-that $B_1$ and $B_2$ are large enough that simulation error can be ignored.
-
-\begin{theorem}\label{T2}
-  Under Assumptions~\ref{A1} and~\ref{A2},
-  \begin{equation*}
-    \V^*(\hat\tau^{*}(h) - \Delta^{**}(h,b))/V^{bc}(h,b) \to^p 1
-  \end{equation*}
-  and
-  \begin{multline*}
-    \sup_{x,\tau}
-    \Big\rvert \Pr^*\big[ \sqrt{nh}
-    (\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^*) \leq x \big] \\
-    - \Pr\big[ \sqrt{nh}
-    (\hat\tau(h) - \Delta^*(h,b) - \tau) \leq x \big] \Big\lvert \to^p 0.
-  \end{multline*}
-\end{theorem}
 
 Evidence of the usefulness of the procedures proposed above and their relative performance to the analytical bias correction proposed in CCT are presented in a series of Monte Carlo simulations in Section \ref{sim}.
 
