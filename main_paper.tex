@@ -585,13 +585,12 @@ and Theorem~\ref{T2} establishes its theoretical properties.
       algorithm but reestimating all of the local polynomials on the bootstrap
       data. Generate $B_1$ new bootstrap samples and let $\Delta^{**}(h,b)$
       represent the bias estimator returned by Algorithm~\ref{Alg1}.
-    \item Save the bias-corrected estimator
-      $\hat\tau_k^{bc*}(h,b) = \hat\mu_+^*(h) - \hat\mu_-^*(h)
-      - \Delta^{**}(h,b)$.
+    \item Save the estimator of $\tau$ and its bias,
+      $\hat\tau_k^{*}(h) = \hat\mu_+^*(h) - \hat\mu_-^*(h)$ and $\Delta_k^{**}(h,b)$.
     \end{enumerate}
   \item Define $\tau^* = \hat g_+(0) - \hat g_-(0)$ and use the empirical CDF of
-    $\hat\tau_1^{bc*}(h,b) - \tau^*,\dots, \hat\tau_{B_2}^{bc*}(h,b) - \tau^*$
-    as the sampling distribution of $\hat \tau^{bc} - \tau$.
+    $\hat\tau_1^{*}(h) - \Delta_1^{**}(h,b)- \tau^*,\dots, \hat\tau_{B_2}^{*}(h)  - \Delta_{B_2}^{**}(h,b) - \tau^*$
+    as the sampling distribution of $\hat \tau(h) - \Delta^*(h,b) - \tau$.
   \end{enumerate}
 \end{algorithm}
 
