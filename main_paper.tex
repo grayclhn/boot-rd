@@ -673,12 +673,12 @@ X_{i}           &\sim  2 \times \betarv(2,4) - 1 \\
 \sigma_i &= z(\gamma) \mu_{j}(X_{i})^\gamma ,
 \end{align*}
 where $j$ indexes the specific DGP and $z(\gamma)$ is a scale parameter that
-ensures that the average standard deviation in a neighborhood aroundt the cutoff
+ensures that the average variance in a neighborhood around the cutoff
 equals the unconditional value under homoskedasticity; i.e. $z(\gamma)$
 satisfies
 \[
-  z(\gamma)
-    = \frac{1}{\sum_{i = 1}^n \mu_{j}(X_{i})^{\gamma}
+  z(\gamma)^2
+    = \frac{1}{\sum_{i = 1}^n \mu_{j}(X_{i})^{2 \gamma}
     \frac{\1\{\min(-\bar h, -\bar b) \leq X_i \leq \max(\bar h,\bar b)\}}
     {\#\{X_i : \min(-\bar h, -\bar b) \leq X_i \leq \max(\bar h, \bar b)\}}};
 \]
@@ -692,7 +692,7 @@ This is the experimental design used by \citet{IK} and CCT for homoskedastic
 simulations, which we adopt here to make our simulation results directly
 comparable with theirs and with the rest of the literature.  The form of
 heteroskedasticity is motivated by \cite{mackinnon2013thirty}, and we consider
-$gamma$ equal to 0 and 2 for the simulations.
+$\gamma$ equal to 0 and 2 for the simulations.
 We use the same three functional forms for $\mu_{j}$ as CCT.
 
 \nocite{lee2008rand}%
