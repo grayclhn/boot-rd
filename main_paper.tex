@@ -924,11 +924,13 @@ p-value. The statistical inference changes when conventional analytical
 confidence interval is used, which includes zero for bandwidth 9 and 18.
 
 Results from the two robust procedures are similar to each other but greatly
-differ from the original estimates. The estimated ATEs are as high as --3.795
-from CCT and --3.800 from the bootstrap. Both are significantly different from
-zero, though the confidence intervals are also very wide, which is likely to be
+differ from the original estimates. Both ATE estimates are significantly different from
+zero and indicate a reduction in mortality, although the confidence intervals are
+also very wide, which is likely to be
 due to the much smaller bandwidths used relative to the other estimators
-($h=3.888$, $b=6.807$).
+($h=3.888$, $b=6.807$). The ATE estimate reported are the bias-corrected
+point estimates, and their value indicates that the naive estimates are
+subject to substantial bias.
 
 Table \ref{tbl:3} presents the effect of the program on schooling for the cohort
 aged 18--24 in 1990. The measurement of schooling is the fraction of people with
@@ -939,11 +941,11 @@ school or more by 3\% and the fraction of people with some college or more by
 3.7\%. Both are significantly different from zero based on both their p-value
 and the conventional analytical confidence interval.
 
-The two robust procedures are again very similar to each other and give slightly
-larger point estimates in both panels. In Panel A, the ATE increases from 0.030
-to 0.055 (CCT and bootstrap). In Panel B, the ATE increases from 0.037
-to 0.051 (CCT) and 0.052 (bootstrap). The confidence intervals tend to shift up
-as well.  In contrast to the striking differences between the conventional
+The two robust procedures are again very similar to each other and give
+statistically significant, positve, estimates. The confidence intervals tend to shift
+relative to the original intervals, increasing both the range of effects consistent
+with the data as well as the lower bound on plausible effects.
+In contrast to the striking differences between the conventional
 and bias-corrected procedures for the mortality estimates, the differences
 in Table~\ref{tbl:3} are much smaller.
 
