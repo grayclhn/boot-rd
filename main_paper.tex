@@ -402,8 +402,7 @@ paper, which are standard in this literature.
   The kernel function $K$ is positive, bounded, and continuous on the interval
   $[-\kappa,~\kappa]$ and zero outside that interval for some $\kappa > 0$.
 \end{assumption}
-To simplify notation, let $m = \min(h,b)$, $m' = \max(h,b)$, and
-define the scaled and truncated kernel functions
+To simplify notation, define the scaled and truncated kernel functions
 \begin{align*}
   K_{+,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x \geq 0\} &
   K_{-,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x < 0\}
@@ -1003,7 +1002,9 @@ confidence intervals in the same settings as CCT's.
 \appendix
 \section{Mathematical appendix}
 Let $e_p$ be the selection vector with 1 in element $p+1$ and 0
-everywhere else. Much of the theory in this appendix applies to both
+everywhere else and assume, with some abuse of notation, that the
+dimension of $e_p$ adapts to make matrix and vector operations
+conformable. Much of the theory in this appendix applies to both
 sides of the cutoff symmetrically, so we will use a ``$\bullet$'' as a
 placeholder for either $+$ or $-$ in equations; i.e.\ the equation
 \[
@@ -1044,6 +1045,7 @@ as well as their population counterparts,
   \Psi_{\bullet,p} &= \int_{-\infty}^\infty
      r_p(u) r_p(u)' K(u)^2 \1_\bullet(u) du
 \end{align*}
+with $m = \min(h,b)$.
 Remember that $f$ is the pdf of the running variable. Lemmas
 SA1 and SA2 of CCT imply that all of these terms have well-defined limits under
 Assumptions~\ref{A1} and~\ref{A2} (for some, after normalization), namely that
@@ -1053,7 +1055,7 @@ the following relationships hold:
   \Gammat_{\bullet,p}(h) &= f(0) \, \Gamma_{\bullet,p} + o(1) \label{eq:10} \\
   \Bf_{\bullet}(h) &= \Bft_{\bullet}(h) + o_p(1) &
   \Bft_{\bullet}(h) &= \Bf_{\bullet} + o_p(1) \label{eq:11} \\
-  \max(h,b) \times \Psi_{\bullet,p,q}(h, b) &= \Psit_{\bullet,p,q}(h,b) + o_p(1) &
+  \tfrac{hb}{m} \Psi_{\bullet,p,q}(h, b) &= \Psit_{\bullet,p,q}(h,b) + o_p(1) &
   \Psit_{\bullet,p,p}(h,h) &= f(0) \, \sigma^2_{\bullet}(0) \, \Psi_{\bullet,p} + o(1) \label{eq:12}
 \end{align}
 Implicitly the right column of equations holds as $h \to 0$.
@@ -1075,7 +1077,7 @@ for $\nu = 0,\dots,p$ and similar arguments to those used above imply that
   H_p(h)^{-1}(\hat\beta_{\bullet,p}(h) - \beta_{\bullet,p}(h))= O_p(1/\sqrt{nh}).
 \end{equation*}
 
-For reference, define the variance terms
+Finally, define the variance components
 \begin{equation}\label{eq:8}
   V(h)
   = \tfrac{1}{n} e_0' \big(\Gamma_{-,1}(h)^{-1} \Psi_{-,1,1}(h,h)
@@ -1176,7 +1178,7 @@ wild bootstrap ensures
 \end{equation*}
 for any measurable function $R(\cdot)$.
 Given this expression for the iterated bootstrap and the formula for the
-variance conditional on $X$ presented at the end of the introduction to this
+variance conditional on $X$ presented at the end of the introduction to the
 appendix, it suffices to show that
 \begin{gather}
   \tfrac{1}{n} \sum_{i=1}^n r_1(X_i/h) r_1(X_i/h)' K_{\bullet,h}(X_i)^2
