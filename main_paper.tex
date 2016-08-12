@@ -736,7 +736,7 @@ As described in Section \ref{application}, eligibility to grant-writing assistan
 \end{equation*}
 and the population ATE is $-3.45$ $(= 0.26 - 3.71)$.
 
-Finally, for the third DGP, we use CCT's modification of $\mu_1$, given by
+Finally, for the third DGP, we use CCT's modification of $\mu_1$, given by 
 \begin{equation*}
   \mu_{3}(x) =
   \begin{cases}
@@ -759,13 +759,11 @@ the bias. The bandwidths, $h$ and $b$,
 are chosen using the AMSE-optimal rule proposed by CCT and the wild bootstrap
 uses the ``HC3'' transformation of \citet{DF08}.
 
-We include two other procedures for comparison: CCT's bias-corrected interval
-and a ``naive'' uncorrected estimator. We
-estimate CCT's bias corrected procedure with AMSE-optimal bandwidth and estimate
+We include two other procedures for comparison: CCT's bias-corrected interval and a ``naive'' uncorrected estimator.
+ We estimate CCT's bias corrected procedure with AMSE-optimal bandwidth and estimate
 the ``naive'' uncorrected interval with the optimal bandwidth $h$ proposed by
-\cite{IK}. We use triangular kernel through out all the three procedures to facilitate direct comparisons.\footnote{%
-Simulation results for other kernels and variance estimators are similar and
-available upon request.} %
+\cite{IK}. We use triangular kernel throughout all the three procedures to facilitate direct comparisons.\footnote{%
+Simulation results for other kernels and variance estimators produced similar outcomes.} %
 
 \begin{table}[t]
   \centering
@@ -806,7 +804,7 @@ available upon request.} %
 \end{table}
 
 Table~\ref{tbl:1} presents the results of these simulations. It consists of two panels, with results for homoskedastic data in Panel A and heteroskedastic data in Panel B. The row labeled
-``wild bootstrap'' shows results for our proposed bootstrap interval; ``CCT'' shows
+``Wild bootstrap'' shows results for our proposed bootstrap based interval; ``CCT'' shows
 results for the analytically-corrected interval and ``Naive'' shows results for analytically-uncorrected interval. The first three columns give the bias,
 standard deviation, and Root-MSE of the point
 estimators corresponding to each approach.  As expected, both
@@ -816,10 +814,11 @@ determining the estimators' RMSE. Moreover, as Theorem~\ref{T1} suggests, the
 bootstrap and analytically-corrected estimators have essentially the same
 standard deviation across all of the DGPs.
 
-The column ``CI Coverage'' lists the experimental coverage of each interval.  In
-Panel A, all the intervals from two robust estimators are reasonably close to
-their nominal coverage, although they slightly under cover the true treatment
-effect. Our proposed bootstrap procedure consistently performs well, as it is about a percentage point closer to nominal coverage than the analytically-corrected interval. The uncorrected interval performs substantially worse---the naive
+The column ``CI Coverage'' lists the experimental coverage of each interval.  In 
+Panel A, all the intervals from two robust estimators are reasonably close to 
+their nominal coverage, although they slightly under cover the true treatment effect.
+Our proposed bootstrap procedure consistently performs well, as it is about a percentage point 
+closer to nominal coverage than the analytically-corrected interval. The uncorrected interval performs substantially worse---the naive
 analytical interval has coverage as bad as 31\% (in the second DGP) and never
 higher than 86\%. In Panel B, the coverage does not change too much from Panel
 A. It slightly increases in DGP 1 and decreases in DGP 2 and 3 for all three procedures. In presence of heteroskedasticity, the two robust procedures again perform
