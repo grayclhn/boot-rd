@@ -755,13 +755,12 @@ are chosen using the AMSE-optimal rule proposed by CCT and the Wild bootstrap
 uses the ``HC3'' transformation of \citet{DF08}.
 
 We include two other procedures for comparison: CCT's bias-corrected interval
-and a ``naive'' uncorrected estimator, both using the triangular kernel. We
+and a ``naive'' uncorrected estimator. We
 estimate CCT's bias corrected procedure with AMSE-optimal bandwidth and estimate
 the ``naive'' uncorrected interval with the optimal bandwidth $h$ proposed by
-\cite{IK}, and both use the HC3 variance estimator to facilitate comparisons
-with the Wild bootstrap.\footnote{%
-  Simulation results for other kernels and variance estimators are similar and
-  available upon request.} %
+\cite{IK}. We use triangular kernel through out all the three procedures to facilitate direct comparisons.\footnote{%
+Simulation results for other kernels and variance estimators are similar and
+available upon request.} %
 
 \begin{table}[t]
   \centering
@@ -813,15 +812,14 @@ bootstrap and analytically-corrected estimators have essentially the same
 standard deviation across all of the DGPs.
 
 The column ``CI Coverage'' lists the experimental coverage of each interval.  In
-Panel A, all of the intervals from two robust estimators are reasonably close to
+Panel A, all the intervals from two robust estimators are reasonably close to
 their nominal coverage, although they slightly under cover the true treatment
-effect. The uncorrected intervals perform substantially worse---the naive
-analytical interval has coverage as bad as 35\% (in the second DGP) and never
+effect. Our proposed bootstrap procedure consistently performs well, as it is about a percentage point closer to nominal coverage than the analytically-corrected interval. The uncorrected interval performs substantially worse---the naive
+analytical interval has coverage as bad as 31\% (in the second DGP) and never
 higher than 86\%. In Panel B, the coverage does not change too much from Panel
-A. In presence of heteroskedasticity, the two robust procedures again perform
+A. It slightly increases in DGP 1 and decreases in DGP 2 and 3 for all three procedures. In presence of heteroskedasticity, the two robust procedures again perform
 similarly and have coverage close to the nominal level. The final column, ``CI
-Length,'' indicates that intervals from the two robust procedures have almost
-the same length on average, while interval from the naive procedure has much
+Length,'' indicates that intervals from the two robust procedures have average lengths close to each other, while interval from the naive procedure has much
 shorter length on average. Not surprisingly, the average length of intervals
 from all three procedures increases when the data is heteroskedastic.
 
