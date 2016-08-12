@@ -666,8 +666,6 @@ Evidence of the usefulness of the procedures proposed above and their relative p
 This section presents evidence from Monte Carlo simulations that the bootstrap
 procedures proposed in Section~\ref{boot} produce valid, robust confidence
 intervals (CIs) similar to those obtained by the analytical procedures established in CCT. 
-The CIs obtained are comparable to the analytical alternative, and in many cases provide
- coverage closer to the nominal size of the tests in the specifications implemented.
  We also observe that all of the bias corrected methods can offer substantial improvements over estimators that do not bias correct.
 
 The Monte Carlo experiments have a similar structure. For all of them, we generate 500 i.i.d.\ observations from the DGP
@@ -683,11 +681,11 @@ equals the unconditional value under homoskedasticity; i.e. $z(\gamma)$
 satisfies
 \[
   z(\gamma)^2
-    = \frac{1}{\sum_{i = 1}^n \mu_{j}(X_{i})^{2 \gamma}
-    \frac{\1\{\min(-\bar h, -\bar b) \leq X_i \leq \max(\bar h,\bar b)\}}
-    {\#\{X_i : \min(-\bar h, -\bar b) \leq X_i \leq \max(\bar h, \bar b)\}}};
+    = \frac{    {\#\{X_i\ :\ \min(-\bar h, -\bar b) \leq X_i \leq \max(\bar h, \bar b)\}}}
+  {\sum_{i = 1}^n \mu_{j}(X_{i})^{2 \gamma}
+  \1\{\min(-\bar h, -\bar b) \leq X_i \leq \max(\bar h,\bar b)\}}.
 \]
-for $\gamma = 0$ we have $z(\gamma) = 1$ and the errors are
+For $\gamma = 0$ we have $z(\gamma) = 1$ and the errors are
 homoskedastic.\footnote{%
   The values $\bar h$ and $\bar b$ are taken as the average values over 500
   homoskedastic simulations of the bandwidths returned by CCT's optimal
@@ -696,9 +694,9 @@ homoskedastic.\footnote{%
 This is the experimental design used by \citet{IK} and CCT for homoskedastic
 simulations, which we adopt here to make our simulation results directly
 comparable with theirs and with the rest of the literature.  The form of
-heteroskedasticity is motivated by \cite{mackinnon2013thirty}. Hence,
- we consider both homoskedastic and heteroskedastic cases by setting $\gamma$ equal to 0 and 2 for the simulations, respectively.
-We use the same three functional forms for $\mu_{j}$ as CCT.
+heteroskedasticity is motivated by \cite{mackinnon2013thirty}, and we consider
+$\gamma$ equal to 0 and 2 for the simulations.
+We use the same three functional forms for $\mu_{j}$ as CCT, which we describe below.
 
 \nocite{lee2008rand}%
 The first DGP is designed to match features of Lee's (2008) analysis of U.S.\
@@ -751,7 +749,7 @@ high curvature and local linear models are likely to exhibit high bias, making
 it a natural test case for both their analytical corrections and our bootstrap.
 
 To estimate the finite-sample coverage of our new bootstrap based confidence interval, we
-simulate 5000 samples from each of the three DGPs ($\gamma = 0$ and $\gamma = 2$) and calculate nominal 95\%
+simulate 5000 samples from each of the three DGPs (with $\gamma = 0$ and $\gamma = 2$) and calculate nominal 95\%
 two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
 calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
