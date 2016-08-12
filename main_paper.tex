@@ -157,17 +157,24 @@ corrected estimator, and then use the resulting bootstrap distribution to
 produce confidence intervals. This procedure, which requires bootstrapping the
 datasets produced by an initial bootstrap, is described in Algorithm~\ref{Alg2}
 and the resulting confidence intervals are shown to be asymptotically valid in
-Theorem~\ref{T2}.
+Theorem~\ref{T2}.\footnote{%
+  Since our bootstrap resamples the residuals but not the running variable, many
+  of the quantities used to prodcue the estimates do not change under the
+  bootstrap distribution and can be reused from the original
+  estimate. Exploiting this feature makes the iterated bootstrap much less
+  computationally burdensome; see the discussion following
+  Algoritnm~\ref{Alg2}.} %
 
 The methods presented in this paper are intended as a ``proof of concept'' that
 demonstrates that the analytical correction proposed by CCT can also be
-implemented through a new bootstrap procedure. We believe that this procedure is
-promising because it can allow applied researchers to construct
-accurate confidence intervals in settings where unusual forms of dependence
-would make it difficult to derive CCT's analytical correction---the dependence
+implemented through a new bootstrap procedure.  This procedure is promising
+because it, like other bootstrap methods, can allow applied researchers to
+construct accurate confidence intervals in settings where correct formulas for
+the asymptotic variance have not yet been derived, as can be the case when there
+is an unusual form of dependence---the dependence
 can be accommodated in principle by modifying the resampling algorithm to one
 that matches the dependence in the dataset. The specific version of the bootstrap
-presented in this paper, however, does not achieve that level of generality yet,
+presented in this paper, however, does not achieve that level of generality,
 and one limitation should be noted in particular. The confidence
 intervals produced by this bootstrap depend on two separate bandwidth parameters
 that must be generated elsewhere. Since these bandwidths are generated using
