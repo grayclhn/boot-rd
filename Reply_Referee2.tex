@@ -50,6 +50,16 @@ We have also relaxed the ``uniform kernel'' requirement and allow other kernels
 that are popular in practice. The title of the paper has been updated to reflect
 that change.
 
+The first referee expressed concern about the possible computational complexity of
+using an iterated bootstrap to produce confidence intervals. This is much less
+of an issue than it appears, because many of the matrix calculations can be
+computed once and then reused in the bootstrap replications. (Any calculation
+that does not involve $Y$ can be reused.) Each bootstrap replication only
+requires a small number of matrix-vector multiplications which can be completed
+very quickly. We have added a short section after Algorithm 2 that explains
+this implementation detail, and we have also provided open source R code that
+implements the procedure efficiently.
+
 Finally, the mathematical appendix defines more notation explicitly and
 summarizes several convergence results from Calonico, Cattaneo, and Titiunik
 (2014) that are referenced in the proofs and we have made some small additional
@@ -112,15 +122,17 @@ Thanks, we've made this change as discussed above.
 
 \item \textit{``It will be helpful to have simulation results for DGPs with heteroskedastic variance.''}
 
-  Thank you for this suggestion; we have added some additional simulations with conditional heteroskedasticity.
+  Thank you for this suggestion; we have added additional simulations with conditional heteroskedasticity.
 
 \item \textit{``In the Mathematical Appendix, the authors used min(h, b), which is redundant. (Page 19, line 4-5)''}
 
-Please see the discussion to about the relationship between $h$ and $b$ in previous comments number 4.
+Thanks for pointing this out. It is no longer redundant since we have relaxed
+the requirement that $h < b$.
 
 \item \textit{``The Mathematical Appendix should contain more details.''}
 
-Thank you very much for pointing out instances in the proofs that might require checking and clarifications. In the new proofs we have added some additional details. Since the proof for theorem 2 changed substantially with the adoption of the Wild Bootstrap scheme (which addresses the heteroskedasticity issue, as discussed before) we made substantial changes that hopefully will make the proof's steps clearer to the reader.
+Thank you for pointing this out. We have added much more exposition to the
+Mathematical Appendix.
 
 \end{enumerate}
 
