@@ -751,7 +751,7 @@ two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
 calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
 the bias. The bandwidths, $h$ and $b$,
-are chosen using the AMSE-optimal rule proposed by CCT and the Wild bootstrap
+are chosen using the AMSE-optimal rule proposed by CCT and the wild bootstrap
 uses the ``HC3'' transformation of \citet{DF08}.
 
 We include two other procedures for comparison: CCT's bias-corrected interval
@@ -801,7 +801,7 @@ available upon request.} %
 \end{table}
 
 Table~\ref{tbl:1} presents the results of these simulations. It consists of two panels, with results for homoskedastic data in Panel A and heteroskedastic data in Panel B. The row labeled
-``Wild bootstrap'' shows results for our proposed bootstrap interval; ``CCT'' shows
+``wild bootstrap'' shows results for our proposed bootstrap interval; ``CCT'' shows
 results for the analytically-corrected interval and ``Naive'' shows results for analytically-uncorrected interval. The first three columns give the bias,
 standard deviation, and Root-MSE of the point
 estimators corresponding to each approach.  As expected, both
@@ -865,7 +865,7 @@ effect on schooling from decennial census data.
 We reestimate the ATE on health and schooling with robust procedures. To be
 specific, we apply both the robust procedure proposed by CCT and the bootstrap
 procedure introduced in this paper.  Our bootstrap estimator uses the
-AMSE-optimal bandwidths proposed by CCT, the uniform kernel, and the HC3 Wild
+AMSE-optimal bandwidths proposed by CCT, the uniform kernel, and the HC3 wild
 bootstrap from \citet{DF08}. In the bootstrap
 procedure, we use 500 bootstraps for bias correction and 999 to calculate the
 confidence intervals. The analytical estimator using CCT's bias correction and variance estimator use
@@ -1185,7 +1185,7 @@ $\hat\mu_{\bullet,p}^{(\nu)}$, Lemmas SA3 and SA4 in particular,
 and standard arguments on the convergence of residuals to
 the population error term.
 
-Normality also follows standard arguments for the Wild
+Normality also follows standard arguments for the wild
 bootstrap. Conditional on the regressors and residuals,
 $\{R(X_i) \hat\varepsilon_i e_i^* \}$ is a sequence of independent and
 mean zero random variables for any measurable function $R$, each with
