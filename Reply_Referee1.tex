@@ -78,9 +78,10 @@ changes that the referees suggested.
   because of its ``automatic'' nature. It is easier to implement in cases of
   interest to applied researchers for which the analytical correction has not
   been developed; for example, analytical expressions for the standard errors
-  with clustered observations have been only recently available, but would be
-  relatively straightforward to calculate with a bootstrap.  We do not claim to
-  achieve this level of generality in this paper but we hope it will serve as a
+  with clustered observations have been only recently available despite heavy
+  demand and interest from applied researchers, but would be relatively
+  straightforward to calculate with a bootstrap.  We do not claim to achieve
+  this level of generality in this paper but we expect that it will serve as a
   stepping stone for these developments.
 
 \item \textit{`` The most critical point: Assumption 1.4 allows for heteroskedasticity but I suspect the residual bootstrap is invalid in this setting...''}
@@ -97,7 +98,8 @@ Thank you for this suggestion. We changed it on the latest draft.
 
 \item \textit{``...Is it possible to propose a bootstrap approximation that does not require iterations...?''}
 
-See discussion on item number 2 in the main comments section above.
+See discussion on item number 2 in the main comments section above. The
+iterations are less computationally demanding than they appear.
 
 \item \textit{``As mentioned earlier, I suspect Theorem 2 is incorrect unless conditional homoskedasticity is assumed....''}
 
@@ -109,8 +111,8 @@ See discussion on item number 2 in the main comments section above.
 
 \item \textit{``The proofs need to include more detailed steps. Be explicit about bootstrap parameters (e.g. $\tau^{*}$). Provide a detailed proof for the statement that follows after ``the bootstrap ensures that'' in page 19. What do you mean by the last formula of page 20? Also, it is not clear what equality in distribution in the first display of page 21 means. Where is $V(h,b)$ defined? I was unable to find it. The authors need to make sure that the convergence in distribution proof is valid under conditional heteroskedasticity.''}
 
-Thank you very much for pointing out instances in the proofs that might require checking and clarifications.
- In the new proofs we have added details to the statement ``the bootstrap ensures that'', previously on page 19.
+Thank you for calling our attention to these issues.
+ In the new proofs we have added details to the statement ``the bootstrap ensures that,'' previously on page 19.
  Since the proof for theorem 2 changed substantially with the adoption of the Wild Bootstrap scheme
  (which addresses the heteroskedasticity issue, as discussed before) we made substantial changes that hopefully
  will make the proof's steps clearer to the reader, addressing the remaining comments.

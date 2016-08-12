@@ -157,17 +157,24 @@ corrected estimator, and then use the resulting bootstrap distribution to
 produce confidence intervals. This procedure, which requires bootstrapping the
 datasets produced by an initial bootstrap, is described in Algorithm~\ref{Alg2}
 and the resulting confidence intervals are shown to be asymptotically valid in
-Theorem~\ref{T2}.
+Theorem~\ref{T2}.\footnote{%
+  Since our bootstrap resamples the residuals but not the running variable, many
+  of the quantities used to prodcue the estimates do not change under the
+  bootstrap distribution and can be reused from the original
+  estimate. Exploiting this feature makes the iterated bootstrap much less
+  computationally burdensome; see the discussion following
+  Algoritnm~\ref{Alg2}.} %
 
 The methods presented in this paper are intended as a ``proof of concept'' that
 demonstrates that the analytical correction proposed by CCT can also be
-implemented through a new bootstrap procedure. We believe that this procedure is
-promising because it can allow applied researchers to construct
-accurate confidence intervals in settings where unusual forms of dependence
-would make it difficult to derive CCT's analytical correction---the dependence
+implemented through a new bootstrap procedure.  This procedure is promising
+because it, like other bootstrap methods, can allow applied researchers to
+construct accurate confidence intervals in settings where correct formulas for
+the asymptotic variance have not yet been derived, as can be the case when there
+is an unusual form of dependence---the dependence
 can be accommodated in principle by modifying the resampling algorithm to one
 that matches the dependence in the dataset. The specific version of the bootstrap
-presented in this paper, however, does not achieve that level of generality yet,
+presented in this paper, however, does not achieve that level of generality,
 and one limitation should be noted in particular. The confidence
 intervals produced by this bootstrap depend on two separate bandwidth parameters
 that must be generated elsewhere. Since these bandwidths are generated using
@@ -751,7 +758,7 @@ two-sided confidence intervals. We use 999 bootstrap replications ($B_2$) to
 calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
 the bias. The bandwidths, $h$ and $b$,
-are chosen using the AMSE-optimal rule proposed by CCT and the Wild bootstrap
+are chosen using the AMSE-optimal rule proposed by CCT and the wild bootstrap
 uses the ``HC3'' transformation of \citet{DF08}.
 
 We include two other procedures for comparison: CCT's bias-corrected interval
@@ -801,7 +808,7 @@ available upon request.} %
 \end{table}
 
 Table~\ref{tbl:1} presents the results of these simulations. It consists of two panels, with results for homoskedastic data in Panel A and heteroskedastic data in Panel B. The row labeled
-``Wild bootstrap'' shows results for our proposed bootstrap interval; ``CCT'' shows
+``wild bootstrap'' shows results for our proposed bootstrap interval; ``CCT'' shows
 results for the analytically-corrected interval and ``Naive'' shows results for analytically-uncorrected interval. The first three columns give the bias,
 standard deviation, and Root-MSE of the point
 estimators corresponding to each approach.  As expected, both
@@ -865,7 +872,7 @@ effect on schooling from decennial census data.
 We reestimate the ATE on health and schooling with robust procedures. To be
 specific, we apply both the robust procedure proposed by CCT and the bootstrap
 procedure introduced in this paper.  Our bootstrap estimator uses the
-AMSE-optimal bandwidths proposed by CCT, the uniform kernel, and the HC3 Wild
+AMSE-optimal bandwidths proposed by CCT, the uniform kernel, and the HC3 wild
 bootstrap from \citet{DF08}. In the bootstrap
 procedure, we use 500 bootstraps for bias correction and 999 to calculate the
 confidence intervals. The analytical estimator using CCT's bias correction and variance estimator use
@@ -1185,7 +1192,7 @@ $\hat\mu_{\bullet,p}^{(\nu)}$, Lemmas SA3 and SA4 in particular,
 and standard arguments on the convergence of residuals to
 the population error term.
 
-Normality also follows standard arguments for the Wild
+Normality also follows standard arguments for the wild
 bootstrap. Conditional on the regressors and residuals,
 $\{R(X_i) \hat\varepsilon_i e_i^* \}$ is a sequence of independent and
 mean zero random variables for any measurable function $R$, each with
