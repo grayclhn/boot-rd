@@ -539,7 +539,9 @@ be ignored. Theorem~\ref{T1} presents the result formally.
   \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V^{bc}(h, b)^{1/2}}
   \to^{d} N(0,1),
 \end{equation}
-where $\Delta^*(h,b)$ is defined by Equation~\eqref{eq:9}.
+where $\Delta^*(h,b)$ is defined by Equation~\eqref{eq:9} and
+$V^{bc}(h, b) = V(h) + C(h, b)$, both which are defined in Equations~\eqref{eq:8}
+and~\eqref{eq:13} of the Mathematical Appendix.
 \end{theorem}
 
 Theorem~\ref{T1} implies that our bias-corrected
@@ -554,15 +556,14 @@ with a bootstrap. We propose bootstrapping $\hat\tau(h) - \Delta^*(h,b)$ using
 the same wild bootstrap method used in Algorithm~\ref{Alg1}. Algorithm~\ref{Alg2} provides the details of our procedure
 and Theorem~\ref{T2} establishes its theoretical properties.
 
-\begin{algorithm}[Confidence intervals]\label{Alg2}
+\begin{algorithm}[Distribution]\label{Alg2}
   Assume $h$ and $b$ are bandwidths as defined by Assumption~\ref{A2} and
   Algorithm~\ref{Alg1}.
   \begin{enumerate}
   \item Estimate $\hat{g}_{+}$ and $\hat{g}_{-}$ and generate $\hat g(\cdot)$
     and the residuals $\hat\varepsilon_i$ just as in Algorithm~\ref{Alg1}.
-  \item Repeat the following steps $B_{2}$ times to produce the
-    bootstrap estimates
-    $\hat\tau_1^{bc*}(h,b), \dots, \hat\tau_{B_{2}}^{bc*}(h,b)$. For the
+  \item Repeat the following steps $B_{2}$ times to produce
+    bootstrap estimates of the bias-corrected estimate. For the
     $k$th replication:
     \begin{enumerate}
     \item Draw i.i.d.\ random variables $e_i^{*}$ with mean zero, variance one,
@@ -638,7 +639,7 @@ where
   0 & 0 & \cdots & K_{+,h}(X_n) \end{pmatrix*}.
 \end{align*}
 The matrix $\mathbf{W}_{+,1}$ is not affected by the bootstrap so it can be
-computed once initially and reused in the bootstrap calculations and each
+computed once initially and reused in the bootstrap calculations. Then each
 bootstrap replication just requires a single matrix-vector multiplication. The
 other parameter estimates have this property as well. Consequently, the
 computational burden of this iterated bootstrap is much lower than might
@@ -1073,14 +1074,14 @@ for $\nu = 0,\dots,p$ and similar arguments to those used above imply that
 \end{equation*}
 
 For reference, define the variance terms
-\begin{equation*}
+\begin{equation}\label{eq:8}
   V(h)
   = \tfrac{1}{n} e_0' \big(\Gamma_{-,1}(h)^{-1} \Psi_{-,1,1}(h,h)
     \Gamma_{-,1}(h)^{-1}
   + \Gamma_{+,1}(h)^{-1} \Psi_{+,1,1}(h,h) \Gamma_{+,1}(h)^{-1} \big) e_0
-\end{equation*}
+\end{equation}
 and
-\begin{multline*}
+\begin{multline}\label{eq:13}
   C(h,b) =
   \tfrac{1}{n} \, e_2' \big[
     \Gamma_{+,2}(b)^{-1} \Psi_{+,2,2}(b,b) \Gamma_{+,2}(b)^{-1} \Bf_+(h)^2 +
@@ -1091,7 +1092,7 @@ and
     \Gamma_{+,1}(h)^{-1} \Psi_{+,1,2}(h,b) \Gamma_{+,2}(b)^{-1} \Bf_+(h) +
     \Gamma_{-,1}(h)^{-1} \Psi_{-,1,2}(h,b) \Gamma_{-,2}(b)^{-1} \Bf_-(h)
     \Big] e_2.
-\end{multline*}
+\end{multline}
 See CCT for more on the motivation and derivation of these formulas.
 
 \subsection{Proof of Theorem~\ref{T1}}
