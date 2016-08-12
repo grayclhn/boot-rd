@@ -402,7 +402,8 @@ paper, which are standard in this literature.
   The kernel function $K$ is positive, bounded, and continuous on the interval
   $[-\kappa,~\kappa]$ and zero outside that interval for some $\kappa > 0$.
 \end{assumption}
-To simplify notation, define the scaled and truncated kernel functions
+To simplify notation, let $m = \min(h,b)$ and
+define the scaled and truncated kernel functions
 \begin{align*}
   K_{+,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x \geq 0\} &
   K_{-,h}(x) &= \tfrac{1}{h} K(x/h) \1\{x < 0\}
@@ -613,9 +614,9 @@ that $B_1$ and $B_2$ are large enough that simulation error can be ignored.
   and
   \begin{equation*}
     \sup_{x,\tau}
-    \Big\rvert \Pr^*\big[ \sqrt{nh}
+    \Big\rvert \Pr^*\big[ \sqrt{nm}
     (\hat\tau^{*}(h) - \Delta^{**}(h,b) - \tau^*) \leq x \big]
-    - \Pr\big[ \sqrt{nh}
+    - \Pr\big[ \sqrt{nm}
     (\hat\tau(h) - \Delta^*(h,b) - \tau) \leq x \big] \Big\lvert \to^p 0.
   \end{equation*}
 \end{theorem}
@@ -1045,7 +1046,6 @@ as well as their population counterparts,
   \Psi_{\bullet,p} &= \int_{-\infty}^\infty
      r_p(u) r_p(u)' K(u)^2 \1_\bullet(u) du
 \end{align*}
-with $m = \min(h,b)$.
 Remember that $f$ is the pdf of the running variable. Lemmas
 SA1 and SA2 of CCT imply that all of these terms have well-defined limits under
 Assumptions~\ref{A1} and~\ref{A2} (for some, after normalization), namely that
@@ -1087,7 +1087,7 @@ Finally, define the variance components
 and
 \begin{multline}\label{eq:13}
   C(h,b) =
-  \tfrac{1}{n} \, e_2' \big[
+  \tfrac{h^4}{n b^4} \, e_2' \big[
     \Gamma_{+,2}(b)^{-1} \Psi_{+,2,2}(b,b) \Gamma_{+,2}(b)^{-1} \Bf_+(h)^2 +
     \Gamma_{-,2}(b)^{-1} \Psi_{-,2,2}(b,b) \Gamma_{-,2}(b)^{-1} \Bf_-(h)^2
   \big] e_2 \\
@@ -1109,8 +1109,8 @@ By construction,
 \begin{equation*}
   Y_i^* =
   \begin{cases}
-    r_2(X_i/b)'H_2(b) \beta_{+,2}^* + \varepsilon_i^* & X_i \geq 0 \\
-    r_2(X_i/b)'H_2(b) \beta_{-,2}^* + \varepsilon_i^* & X_i < 0
+    r_2(X_i/b)'H_2(b)^{-1} \beta_{+,2}^* + \varepsilon_i^* & X_i \geq 0 \\
+    r_2(X_i/b)'H_2(b)^{-1} \beta_{-,2}^* + \varepsilon_i^* & X_i < 0
   \end{cases}
 \end{equation*}
 which, along with the definitions at the beginning of the appendix,
@@ -1162,11 +1162,13 @@ the iterated bootstrap to get
   \sum_{i=1}^n r_1(X_i/h) K_{+,h}(X_i) \varepsilon_i^*\Big)
    - e_0' \Gamma_{-,1}(h)^{-1} \Big(\tfrac{1}{n}
   \sum_{i=1}^n r_1(X_i/h) K_{-,h}(X_i) \varepsilon_i^*\Big) \\
-  &\quad + h^2 e_2' \Gamma_{-,2}(b)^{-1}
+  &\quad + (h/b)^2 \cdot e_2' \Gamma_{-,2}(b)^{-1}
     \Big(\tfrac{1}{n} \sum_{i=1}^n r_2(X_i/b) K_{-,b}(X_i) \varepsilon_i^* \Big) \Bf_-(h) \\
-  &\quad - h^2 e_2' \Gamma_{+,2}(b)^{-1}
-    \Big(\tfrac{1}{n} \sum_{i=1}^n r_2(X_i/b) K_{+,b}(X_i) \varepsilon_i^*\Big) \Bf_+(h).
+  &\quad - (h/b)^2 \cdot e_2' \Gamma_{+,2}(b)^{-1}
+    \Big(\tfrac{1}{n} \sum_{i=1}^n r_2(X_i/b) K_{+,b}(X_i) \varepsilon_i^*\Big) \Bf_+(h)
 \end{align*}
+with the last equality holding from the relationship between the coefficient
+estimates discussed at the end of the introduction to the appendix.
 We will prove convergence of the variance first, then prove asymptotic
 normality.
 
@@ -1185,8 +1187,8 @@ appendix, it suffices to show that
   \hat\varepsilon_i^2 = \tfrac{1}{h} \Psit_{\bullet,1,1}(h,h) + o_p(\tfrac{1}{h})
   \label{eq:3} \\
   \tfrac{1}{n} \sum_{i=1}^n r_1(X_i/h) r_2(X_i/b)' K_{\bullet,h}(X_i)
-  K_{\bullet,b}(X_i) \hat\varepsilon_i^2 = \tfrac{1}{b^2} \Psit_{\bullet,1,2}(h,b)
-  + o_p(\tfrac{1}{b^2})
+  K_{\bullet,b}(X_i) \hat\varepsilon_i^2 = \tfrac{m}{hb} \Psit_{\bullet,1,2}(h,b)
+  + o_p(\tfrac{m}{hb})
   \label{eq:5} \\
   \tfrac{1}{n} \sum_{i=1}^n r_2(X_i/b) r_2(X_i/b)' K_{\bullet,b}(X_i)^2
   \hat\varepsilon_i^2 = \tfrac{1}{b} \Psit_{\bullet,2,2}(b,b) + o_p(\tfrac{1}{b}).
@@ -1212,12 +1214,18 @@ we establish that Liapunov's condition holds in probability, specifically that
 \end{equation}
 with
 \begin{equation*}
-  R_\bullet(X_i) = \gamma_1 r_1(X_i/h) K_{\bullet,h}(X_i) + h^2 \gamma_2 r_2(X_i/b) K_{\bullet,b}(X_i)
+  R_\bullet(X_i) = \gamma_1' r_1(X_i/h) K_{\bullet,h}(X_i) +
+  (h/b)^2 \cdot \gamma_2' r_2(X_i/b) K_{\bullet,b}(X_i)
 \end{equation*}
 for arbitrary nonzero vectors $\gamma_1$ and $\gamma_2$.
 \citep[See, for example,][Proposition 2.27 and Theorem 23.4.]{VDV00}
-But similar arguments to those used for the variance establish~\eqref{eq:17}
-and complete the proof. \qed
+But similar arguments to those used for the variance establish
+that
+\begin{equation}\label{eq:17}
+  \tfrac{1}{n} \sum_{i} m^{1+\delta} \lvert (R_+(X_i) - R_-(X_i))
+  \hat\varepsilon_i \rvert^{2+\delta}.
+\end{equation}
+obeys the LLN, implying that~\eqref{eq:17} holds and completing the proof. \qed
 
 \clearpage
 \bibliographystyle{jpe}
