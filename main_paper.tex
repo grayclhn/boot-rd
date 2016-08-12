@@ -814,26 +814,24 @@ determining the estimators' RMSE. Moreover, as Theorem~\ref{T1} suggests, the
 bootstrap and analytically-corrected estimators have essentially the same
 standard deviation across all of the DGPs.
 
-The column ``CI Coverage'' lists the experimental coverage of each interval.  In 
-Panel A, all the intervals from two robust estimators are reasonably close to 
+The column ``CI Coverage'' lists the experimental coverage of each procedure.  In 
+Panel A, all the intervals produced by the two robust estimators are reasonably close to 
 their nominal coverage, although they slightly under cover the true treatment effect.
 Our proposed bootstrap procedure consistently performs well, as it is about a percentage point 
 closer to nominal coverage than the analytically-corrected interval. The uncorrected interval performs substantially worse---the naive
-analytical interval has coverage as bad as 31\% (in the second DGP) and never
-higher than 86\%. In Panel B, the coverage does not change too much from Panel
-A. It slightly increases in DGP 1 and decreases in DGP 2 and 3 for all three procedures. In presence of heteroskedasticity, the two robust procedures again perform
-similarly and have coverage close to the nominal level. The final column, ``CI
-Length,'' indicates that intervals from the two robust procedures have average lengths close to each other, while interval from the naive procedure has much
-shorter length on average. Not surprisingly, the average length of intervals
-from all three procedures increases when the data is heteroskedastic.
+analytical interval has coverage as low as 31\% (in the second DGP) and never
+higher than 86\%. 
 
-These are DGPs where the naive confidence intervals are known to perform poorly,
-and this set of simulation results indicates that our proposed bootstrap approach
-is quite competitive with analytical methods for producing valid intervals.
-Overall, the bootstrap bias-correction procedure proposed in this paper provides
-a simple alternative to obtain valid robust confidence intervals in RD designs
-and similarly well compared to the analytical bias correction procedures proposed
-by CCT.
+Panel B presents results for the heteroskedastic case. The coverages obtained are similar to those in Panel A and highlight 
+the robustness of the wild bootstrap procedure proposed to heteroskedasticity. The two robust procedures again perform
+similarly and have coverage close to the nominal level. The final column, ``CI Length,'' indicates that intervals from the
+ two robust procedures have average lengths close to each other, while interval from the naive procedure has much shorter length on average.
+
+These are DGPs where the naive confidence intervals are known to perform poorly, 
+and this set of simulation results indicates that our proposed bootstrap approach is 
+quite competitive with analytical methods for producing robust intervals.
+Overall, the bootstrap bias-correction procedure proposed in this paper provides a simple alternative to obtain valid robust confidence intervals in RD designs
+and performs similarly well compared to the analytical bias correction procedures proposed by CCT.
 
 
 \section{Application}\label{application}
