@@ -665,15 +665,12 @@ Evidence of the usefulness of the procedures proposed above and their relative p
 \section{Simulation Evidence}\label{sim}
 This section presents evidence from Monte Carlo simulations that the bootstrap
 procedures proposed in Section~\ref{boot} produce valid, robust confidence
-intervals similar to those obtained by the analytical procedures established
-in CCT. The bootstrap CIs obtained are comparable to the analytical
-alternative, albeit with slightly lower coverage and shorter
-length of the intervals in the specifications implemented. We also find that
-all of the bias corrected methods can offer substantial improvements over
-estimators that do not bias correct.
+intervals (CIs) similar to those obtained by the analytical procedures established in CCT. 
+The CIs obtained are comparable to the analytical alternative, and in many cases provide
+ coverage closer to the nominal size of the tests in the specifications implemented.
+ We also observe that all of the bias corrected methods can offer substantial improvements over estimators that do not bias correct.
 
-The Monte Carlo experiments have a similar structure. For all of them, we
-generate 500 i.i.d.\ observations from the DGP
+The Monte Carlo experiments have a similar structure. For all of them, we generate 500 i.i.d.\ observations from the DGP
 \begin{align*}
 Y_{i}           &= \mu_{j}(X_{i}) + \varepsilon_{i} \\
 X_{i}           &\sim  2 \times \betarv(2,4) - 1 \\
@@ -699,17 +696,17 @@ homoskedastic.\footnote{%
 This is the experimental design used by \citet{IK} and CCT for homoskedastic
 simulations, which we adopt here to make our simulation results directly
 comparable with theirs and with the rest of the literature.  The form of
-heteroskedasticity is motivated by \cite{mackinnon2013thirty}, and we consider
-$\gamma$ equal to 0 and 2 for the simulations.
+heteroskedasticity is motivated by \cite{mackinnon2013thirty}. Hence,
+ we consider both homoskedastic and heteroskedastic cases by setting $\gamma$ equal to 0 and 2 for the simulations, respectively.
 We use the same three functional forms for $\mu_{j}$ as CCT.
 
 \nocite{lee2008rand}%
 The first DGP is designed to match features of Lee's (2008) analysis of U.S.\
-congressional elections. Lee estimates the incumbency advantage in electoral
-races for the House of Representatives --- parties that received the largest
-vote share in the previous election are the incumbents, which creates the
-discontinuity. The conditional expectation is a fifth order polynomial fit to
-that dataset, (after excluding a small number of extreme observations; see
+congressional elections. Lee estimates the incumbency advantage in electoral 
+races for the House of Representatives --- parties that received the largest 
+vote share in the previous election are the incumbents, which creates the 
+discontinuity. The conditional expectation is a fifth order polynomial fit to 
+that dataset, (after excluding a small number of extreme observations; see 
 \citealp{IK}, or CCT for further details) giving
 \begin{equation*}
   \mu_{1}(x) =
@@ -723,11 +720,11 @@ that dataset, (after excluding a small number of extreme observations; see
 The population ATE for this DGP is $0.04$ $(= 0.52 - 0.48)$.
 
 \nocite{ludwig2007}%
-The second DGP is based on Ludwig and Miller's (2007) analysis of the Head Start
-program. Funding eligibility is determined at the county level using the
-county's historical poverty rate, with a sharp threshold that determines the
-provision of services. We use the fifth order polynomial estimated on Ludwig and
-Miller's dataset as the conditional expectation for the second DGP:
+The second DGP is based on Ludwig and Miller's (2007) analysis of the Head Start program.
+As described in Section \ref{application}, eligibility to grant-writing assistance is determined
+ at the county level using the county's historical poverty rate, with a sharp threshold that
+ determines the provision of services. We use the fifth order polynomial estimated on Ludwig
+ and Miller's dataset as the conditional expectation for the second DGP:
 \begin{equation*}
   \mu_{2}(x) =
   \begin{cases}
@@ -838,6 +835,7 @@ Overall, the bootstrap bias-correction procedure proposed in this paper provides
 a simple alternative to obtain valid robust confidence intervals in RD designs
 and similarly well compared to the analytical bias correction procedures proposed
 by CCT.
+
 
 \section{Application}\label{application}
 
