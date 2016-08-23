@@ -658,7 +658,17 @@ heteroskedasticity-robust variance estimators. (\citealp{mackinnon1985some}, and
 the data available in any application, these finite-sample adjustments can be
 especially effective in improving performance, and we use the ``HC3''
 transformation proposed by \citet{DF08} in this paper's Monte Carlo simulations
-and empirical exercise.
+and empirical exercise; i.e.\ Algorithms~\ref{Alg1} and~\ref{Alg2} use the
+transformed residuals
+\begin{equation}\label{eq:14}
+  \frac{\hat\varepsilon_i}{1 - H_{ii}}
+\end{equation}
+instead of $\hat\varepsilon_i$, with $H_{ii}$ the $(i, i)$ element of the matrix
+\begin{equation}\label{eq:15}
+  \mathbf{H} = \mathbf{K}_+^{1/2} \mathbf{X} (\mathbf{X}' \mathbf{K}_+ \mathbf{X})^{-1} \mathbf{X}' \mathbf{K}_+^{1/2}.
+\end{equation}
+The matrix $\mathbf{H}$ is the projection matrix onto the kernel-weighted design
+matrix.
 
 Evidence of the usefulness of the procedures proposed above and their relative performance to the analytical bias correction proposed in CCT are presented in a series of Monte Carlo simulations in Section \ref{sim}.
 
@@ -755,7 +765,8 @@ calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
 the bias. The bandwidths, $h$ and $b$,
 are chosen using the AMSE-optimal rule proposed by CCT and the wild bootstrap
-uses the ``HC3'' transformation of \citet{DF08}.
+uses the ``HC3'' transformation of \citet{DF08}, defined in Equations~\eqref{eq:14}
+and~\eqref{eq:15}.
 
 We include two other procedures for comparison: CCT's bias-corrected interval and a ``naive'' uncorrected estimator.
  We estimate CCT's bias corrected procedure with AMSE-optimal bandwidth and estimate
@@ -873,7 +884,8 @@ We reestimate the ATE on health and schooling with robust procedures. To be
 specific, we apply both the robust procedure proposed by CCT and the bootstrap
 procedure introduced in this paper.  Our bootstrap estimator uses the
 AMSE-optimal bandwidths proposed by CCT, the uniform kernel, and the HC3 wild
-bootstrap from \citet{DF08}. In the bootstrap
+bootstrap from \citet{DF08}; see Equations~\eqref{eq:14} and~\eqref{eq:15} of
+this paper and the surrounding remarks. In the bootstrap
 procedure, we use 500 bootstraps for bias correction and 999 to calculate the
 confidence intervals. The analytical estimator using CCT's bias correction and
 variance estimator uses
