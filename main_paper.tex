@@ -626,7 +626,8 @@ required to estimate the local polynomials only involve the regressors and,
 therefore, only need to be computed once. For example, the parameter estimates
 for the linear model on the treated group are equal to
 \[
-\hat\beta_{+,1} = \underbrace{(\mathbf{X}' \mathbf{K}_+ \mathbf{X})^{-1} \mathbf{X}' \mathbf{K}_+}_{\mathbf{W}_{+,1}} \mathbf{Y}
+  (\mathbf{X}' \mathbf{K}_+ \mathbf{X})^{-1} \mathbf{X}' \mathbf{K}_+ \mathbf{Y}
+  \equiv \mathbf{W}_{+,1}\mathbf{Y}
 \]
 where
 \begin{align*}
