@@ -149,7 +149,8 @@ is therefore known
 under this distribution and can be calculated by averaging the error of the
 linear model's estimates across many bootstrap replications. This approach is
 described in detail by our Algorithm~\ref{Alg1} and the resulting bias corrected
-estimator is shown to be asymptotically normal with mean zero in our
+estimator is shown to be equivalent to CCT's, up to simulation error in the
+bootstrap, and asymptotically normal with mean zero in our
 Theorem~\ref{T1} under AMSE-optimal bandwidth rates.
 
 Just as in CCT, our bias correction step introduces additional
@@ -169,6 +170,9 @@ Theorem~\ref{T2}.\footnote{%
   estimate. Exploiting this feature makes the iterated bootstrap much less
   computationally burdensome; see the discussion following
   Algorithm~\ref{Alg2}.} %
+Simulation results presented in Section~\ref{sim} indicate that this iterated
+bootstrap provides very similar results in finite samples to CCT's analytical
+confidence intervals as well.
 
 The methods presented in this paper are intended as a ``proof of concept'' that
 demonstrates that the analytical correction proposed by CCT can also be
