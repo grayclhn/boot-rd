@@ -767,7 +767,16 @@ of those replications uses an additional 500 replications ($B_1$) to estimate
 the bias. The bandwidths, $h$ and $b$,
 are chosen using the AMSE-optimal rule proposed by CCT and the wild bootstrap
 uses the ``HC3'' transformation of \citet{DF08}, defined in Equations~\eqref{eq:14}
-and~\eqref{eq:15}. In our simulation studies as well as the application in the next section, we adopt two-point distribution for the $e_i^*$ when estimating our bootstrap procedure, i.e., $e_i^*$ equals $\frac{1 + \sqrt{5}}{2}$ with probability $ p = \frac{\sqrt{5} - 1}{2 \sqrt{5}}$ and $\frac{1 - \sqrt{5}}{2}$ with probability $1 - p$.
+and~\eqref{eq:15}. In these simulations, we use Mammen's (1993) \nocite{Mam93}
+two-point distribution for $e_i^*$ in the bootstrap:
+\begin{equation}
+  \label{eq:19}
+  e_i^* =
+  \begin{cases}
+    \frac{1 + \sqrt{5}}{2} & \text{with probability\ } \frac{\sqrt{5} - 1}{2 \sqrt{5}} \\
+    \frac{1 - \sqrt{5}}{2} & \text{otherwise}.
+  \end{cases}
+\end{equation}
 
 We include two other procedures for comparison: CCT's bias-corrected interval and a ``naive'' uncorrected estimator.
  We estimate CCT's bias corrected procedure with AMSE-optimal bandwidth and estimate
@@ -885,8 +894,10 @@ We reestimate the ATE on health and schooling with robust procedures. To be
 specific, we apply both the robust procedure proposed by CCT and the bootstrap
 procedure introduced in this paper.  Our bootstrap estimator uses the
 AMSE-optimal bandwidths proposed by CCT, the uniform kernel, and the HC3 wild
-bootstrap from \citet{DF08}; see Equations~\eqref{eq:14} and~\eqref{eq:15} of
-this paper and the surrounding remarks. In the bootstrap
+bootstrap from \citet{DF08} with Mammen's (1993) two-point distribution
+on $e^*_i$; see Equations~\eqref{eq:14} and~\eqref{eq:15} of
+this paper and their surrounding remarks as well as Equation~(\ref{eq:19}) for
+formal definitions. In the bootstrap
 procedure, we use 500 bootstraps for bias correction and 999 to calculate the
 confidence intervals. The analytical estimator using CCT's bias correction and
 variance estimator uses
