@@ -62,7 +62,7 @@ simulation.1 <- function(model.id, kernel, heteroskedasticity = F) {
   stopCluster(cl)
   
   t.true    <- ifelse(model.id ==2, -3.45, 0.04)
-  bias      <- t.true - mean(collect.simu[ , 1])
+  bias      <- mean(collect.simu[ , 1]) - t.true
   SD        <- sd(collect.simu[ , 1])
   MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
   coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
@@ -100,7 +100,7 @@ simulation.2 <- function(model.id, kernel, heteroskedasticity = F) {
   stopCluster(cl)
   
   t.true    <- ifelse(model.id ==2, -3.45, 0.04)
-  bias      <- t.true - mean(collect.simu[ , 1])
+  bias      <- mean(collect.simu[ , 1]) - t.true
   SD        <- sd(collect.simu[ , 1])
   MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
   coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
@@ -134,7 +134,7 @@ simulation.3 <- function(model.id, kernel, heteroskedasticity = F) {
   stopCluster(cl)
   
   t.true    <- ifelse(model.id ==2, -3.45, 0.04)
-  bias      <- t.true - mean(collect.simu[ , 1])
+  bias      <- mean(collect.simu[ , 1]) - t.true
   SD        <- sd(collect.simu[ , 1])
   MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
   coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
@@ -172,7 +172,7 @@ simulation.4 <- function(model.id, kernel, heteroskedasticity = F) {
   stopCluster(cl)
   
   t.true    <- ifelse(model.id ==2, -3.45, 0.04)
-  bias      <- t.true - mean(collect.simu[ , 1])
+  bias      <- mean(collect.simu[ , 1]) - t.true
   SD        <- sd(collect.simu[ , 1])
   MSE       <- sqrt(mean((collect.simu[ , 1] - t.true)^2))
   coverage  <- mean(collect.simu[ , 2] <= t.true & collect.simu[ , 3] >= t.true)
