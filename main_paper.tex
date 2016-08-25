@@ -1260,20 +1260,20 @@ $\lvert R(X_i) \hat\varepsilon_i \rvert^q \E \lvert e_i^*
 The result then holds as a consequence of the Lindeberg-Feller CLT if
 we establish that Liapunov's condition holds in probability, specifically that
 \begin{equation}\label{eq:17}
-  (\tfrac{m}{n})^{1+\delta/2} \sum_{i} \lvert (R_+(X_i) - R_-(X_i))
+  \big(\tfrac{1}{n}\big)^{1+\delta/2} \sum_{i} \lvert (R_+(X_i) - R_-(X_i))
   \hat\varepsilon_i \rvert^{2+\delta} \to^{p} 0.
 \end{equation}
 with
 \begin{equation*}
-  R_\bullet(X_i) = \gamma_1' r_1(X_i/h) K_{\bullet,h}(X_i) +
-  (h/b)^2 \cdot \gamma_2' r_2(X_i/b) K_{\bullet,b}(X_i)
+  R_\bullet(X_i) = h^{1/2} \cdot \gamma_1' r_1(X_i/h) K_{\bullet,h}(X_i)
+  + b^{1/2} \cdot \gamma_2' r_2(X_i/b) K_{\bullet,b}(X_i)
 \end{equation*}
 for arbitrary nonzero vectors $\gamma_1$ and $\gamma_2$.
 \citep[See, for example,][Proposition 2.27 and Theorem 23.4.]{VDV00}
 But similar arguments to those used for the variance establish
 that
 \begin{equation}\label{eq:17}
-  \tfrac{1}{n} \sum_{i} m^{1+\delta} \lvert (R_+(X_i) - R_-(X_i))
+  \tfrac{1}{n} \sum_{i} \lvert (R_+(X_i) - R_-(X_i))
   \hat\varepsilon_i \rvert^{2+\delta}.
 \end{equation}
 obeys the LLN, implying that~\eqref{eq:17} holds and completing the proof. \qed
