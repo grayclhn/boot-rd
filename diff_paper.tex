@@ -435,8 +435,9 @@ paper, which are standard in this literature.
 \begin{assumption}[Bandwidth and kernel]\label{A2}
   Let $h$ be the bandwidth used to estimate the local linear model and let
   $b$ be the bandwidth used to estimate a second local quadratic model. Then
-  $n h \to \infty$, $n b \to \infty$, $n h^{5} b^{2} \to 0$, and
-  $n b^{5} h^{2} \to 0$ as $n \to \infty$.\footnote{%
+  $n h \to \infty$, $n b \to \infty$, \DIFdelbegin \DIFdel{$n h^{5} b^{2} \to 0$, and
+  $n b^{5} h^{2} \to 0$ }\DIFdelend \DIFaddbegin \DIFadd{and
+  $n \times \min(h, b)^{5} \times \max(h, b)^2$ }\DIFaddend as $n \to \infty$.\footnote{%
     Unless otherwise stated, all limits in this paper are assumed to hold as
     $n \to \infty$.}
   The kernel function $K$ is positive, bounded, and continuous on the interval
