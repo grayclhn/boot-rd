@@ -25,7 +25,12 @@
   \protect\url{http://gray.clhn.org};
   He: \protect\url{yanghe@iastate.edu}. Source code for the Monte Carlo
   experiments and empirical component of this paper are available online
-  at \protect\url{https://github.com/grayclhn/boot-rd}.}}
+  at \protect\url{https://github.com/grayclhn/boot-rd}. We would like to
+  thank Matias Cattaneo, Juan Carlos Escanciano, Sebastian Calonico, Max Farrell, Helle Bunzel, Brent Kreider, Quentin Brummet, seminar participants at
+  the Advances in Econometrics conference on Regression Discontinuity
+  Designs, Third Annual Conference of the International Association for Applied Econometrics,
+ 2016 North American Summer Meeting of the Econometric Society and the $69^{th}$ European Meeting of the Econometric Society, and especially the two anonymous referees for
+  substantial help and advice on earlier versions of this paper.}}
 
 \begin{document}
 \maketitle
@@ -537,7 +542,7 @@ be ignored. Theorem~\ref{T1} presents the result formally.
   Under Assumptions~\ref{A1} and~\ref{A2},
 \begin{equation}
   \label{eq:4}
-  \frac{(\hat\tau(h) - \Delta^{*}(h,b) - \tau)}{ V^{bc}(h, b)^{1/2}}
+  \frac{\hat\tau(h) - \Delta^{*}(h,b) - \tau}{ V^{bc}(h, b)^{1/2}}
   \to^{d} N(0,1),
 \end{equation}
 where $\Delta^*(h,b)$ is defined by Equation~\eqref{eq:9} and
@@ -627,7 +632,8 @@ required to estimate the local polynomials only involve the regressors and,
 therefore, only need to be computed once. For example, the parameter estimates
 for the linear model on the treated group are equal to
 \[
-\hat\beta_{+,1} = \underbrace{(\mathbf{X}' \mathbf{K}_+ \mathbf{X})^{-1} \mathbf{X}' \mathbf{K}_+}_{\mathbf{W}_{+,1}} \mathbf{Y}
+  (\mathbf{X}' \mathbf{K}_+ \mathbf{X})^{-1} \mathbf{X}' \mathbf{K}_+ \mathbf{Y}
+  \equiv \mathbf{W}_{+,1}\mathbf{Y}
 \]
 where
 \begin{align*}
@@ -659,7 +665,17 @@ heteroskedasticity-robust variance estimators. (\citealp{mackinnon1985some}, and
 the data available in any application, these finite-sample adjustments can be
 especially effective in improving performance, and we use the ``HC3''
 transformation proposed by \citet{DF08} in this paper's Monte Carlo simulations
-and empirical exercise.
+and empirical exercise; i.e.\ Algorithms~\ref{Alg1} and~\ref{Alg2} use the
+transformed residuals
+\begin{equation}\label{eq:14}
+  \frac{\hat\varepsilon_i}{1 - H_{ii}}
+\end{equation}
+instead of $\hat\varepsilon_i$, with $H_{ii}$ the $(i, i)$ element of the matrix
+\begin{equation}\label{eq:15}
+  \mathbf{H} = \mathbf{K}_+^{1/2} \mathbf{X} (\mathbf{X}' \mathbf{K}_+ \mathbf{X})^{-1} \mathbf{X}' \mathbf{K}_+^{1/2}.
+\end{equation}
+The matrix $\mathbf{H}$ is the projection matrix onto the kernel-weighted design
+matrix.
 
 Evidence of the usefulness of the procedures proposed above and their relative performance to the analytical bias correction proposed in CCT are presented in a series of Monte Carlo simulations in Section \ref{sim}.
 
@@ -756,7 +772,17 @@ calculate the asymptotic distribution of the bias corrected estimator, and each
 of those replications uses an additional 500 replications ($B_1$) to estimate
 the bias. The bandwidths, $h$ and $b$,
 are chosen using the AMSE-optimal rule proposed by CCT and the wild bootstrap
-uses the ``HC3'' transformation of \citet{DF08}.
+uses the ``HC3'' transformation of \citet{DF08}, defined in Equations~\eqref{eq:14}
+and~\eqref{eq:15}. In these simulations, we use Mammen's (1993) \nocite{Mam93}
+two-point distribution for $e_i^*$ in the bootstrap:
+\begin{equation}
+  \label{eq:19}
+  e_i^* =
+  \begin{cases}
+    \frac{1 + \sqrt{5}}{2} & \text{with probability\ } \frac{\sqrt{5} - 1}{2 \sqrt{5}} \\
+    \frac{1 - \sqrt{5}}{2} & \text{otherwise}.
+  \end{cases}
+\end{equation}
 
 We include two other procedures for comparison: CCT's bias-corrected interval and a ``naive'' uncorrected estimator.
  We estimate CCT's bias corrected procedure with AMSE-optimal bandwidth and estimate
@@ -772,26 +798,26 @@ Simulation results for other kernels and variance estimators produced similar ou
     \midrule                                                     \\
     \multicolumn{7}{l}{Homoskedastic data with $\gamma = 0$ (Panel A)}  \\
     \midrule
-    1 & Wild bootstrap & --0.011 & 0.067 & 0.068 & 0.926 & 0.247 \\ 
-      & CCT            & --0.011 & 0.067 & 0.068 & 0.914 & 0.239 \\ 
-      & Naive          & --0.037 & 0.041 & 0.055 & 0.823 & 0.152 \\ 
-    2 & Wild bootstrap & --0.008 & 0.086 & 0.086 & 0.938 & 0.334 \\ 
-      & CCT            & --0.008 & 0.086 & 0.086 & 0.932 & 0.346 \\ 
-      & Naive          & --0.145 & 0.065 & 0.159 & 0.311 & 0.224 \\ 
-    3 & Wild bootstrap & --0.005 & 0.065 & 0.065 & 0.945 & 0.252 \\ 
-      & CCT            & --0.005 & 0.065 & 0.065 & 0.934 & 0.244 \\ 
-      & Naive          &   0.034 & 0.051 & 0.061 & 0.851 & 0.185 \\  \\
+    1 & Wild bootstrap & 0.011 & 0.067 & 0.068 & 0.926 & 0.247 \\
+      & CCT            & 0.011 & 0.067 & 0.068 & 0.914 & 0.239 \\
+      & Naive          & 0.037 & 0.041 & 0.055 & 0.823 & 0.152 \\
+    2 & Wild bootstrap & 0.008 & 0.086 & 0.086 & 0.938 & 0.334 \\
+      & CCT            & 0.008 & 0.086 & 0.086 & 0.932 & 0.346 \\
+      & Naive          & 0.145 & 0.065 & 0.159 & 0.311 & 0.224 \\
+    3 & Wild bootstrap & 0.005 & 0.065 & 0.065 & 0.945 & 0.252 \\
+      & CCT            & 0.005 & 0.065 & 0.065 & 0.934 & 0.244 \\
+      & Naive          & --0.034 & 0.051 & 0.061 & 0.851 & 0.185 \\  \\
     \multicolumn{7}{l}{Heteroskedastic data with $\gamma = 2$ (Panel B)}  \\
     \midrule
-    1 & Wild bootstrap & --0.010 & 0.073 & 0.074 & 0.935 & 0.276 \\
-      & CCT            & --0.010 & 0.073 & 0.074 & 0.923 & 0.265 \\ 
-      & Naive          & --0.035 & 0.046 & 0.058 & 0.838 & 0.165 \\ 
-    2 & Wild bootstrap & --0.007 & 0.084 & 0.084 & 0.922 & 0.312 \\ 
-      & CCT            & --0.007 & 0.084 & 0.084 & 0.929 & 0.340 \\ 
-      & Naive          & --0.144 & 0.064 & 0.158 & 0.277 & 0.211 \\ 
-    3 & Wild bootstrap & --0.002 & 0.081 & 0.081 & 0.940 & 0.311 \\ 
-      & CCT            & --0.002 & 0.081 & 0.081 & 0.926 & 0.297 \\ 
-      & Naive          &   0.033 & 0.059 & 0.068 & 0.835 & 0.194 \\  
+    1 & Wild bootstrap & 0.010 & 0.073 & 0.074 & 0.935 & 0.276 \\
+      & CCT            & 0.010 & 0.073 & 0.074 & 0.923 & 0.265 \\
+      & Naive          & 0.035 & 0.046 & 0.058 & 0.838 & 0.165 \\
+    2 & Wild bootstrap & 0.007 & 0.084 & 0.084 & 0.922 & 0.312 \\
+      & CCT            & 0.007 & 0.084 & 0.084 & 0.929 & 0.340 \\
+      & Naive          & 0.144 & 0.064 & 0.158 & 0.277 & 0.211 \\
+    3 & Wild bootstrap & 0.002 & 0.081 & 0.081 & 0.940 & 0.311 \\
+      & CCT            & 0.002 & 0.081 & 0.081 & 0.926 & 0.297 \\
+      & Naive          & --0.033 & 0.059 & 0.068 & 0.835 & 0.194 \\
     \bottomrule
   \end{tabular}
   \caption{%
@@ -874,7 +900,10 @@ We reestimate the ATE on health and schooling with robust procedures. To be
 specific, we apply both the robust procedure proposed by CCT and the bootstrap
 procedure introduced in this paper.  Our bootstrap estimator uses the
 AMSE-optimal bandwidths proposed by CCT, the uniform kernel, and the HC3 wild
-bootstrap from \citet{DF08}. In the bootstrap
+bootstrap from \citet{DF08} with Mammen's (1993) two-point distribution
+on $e^*_i$; see Equations~\eqref{eq:14} and~\eqref{eq:15} of
+this paper and their surrounding remarks as well as Equation~(\ref{eq:19}) for
+formal definitions. In the bootstrap
 procedure, we use 500 bootstraps for bias correction and 999 to calculate the
 confidence intervals. The analytical estimator using CCT's bias correction and
 variance estimator uses
@@ -1045,7 +1074,7 @@ as well as their population counterparts,
      r_p(\tfrac{m}{h} u) r_q(\tfrac{m}{b} u)' K(\tfrac{m}{b} u) K(\tfrac{m}{h} u)
      \V(Y_i \mid X_i = um) f(um) \1_\bullet(u) du \\
   \Psi_{\bullet,p} &= \int_{-\infty}^\infty
-     r_p(u) r_p(u)' K(u)^2 \1_\bullet(u) du
+     r_p(u) r_p(u)' K(u)^2 \1_\bullet(u) du.
 \end{align*}
 Remember that $f$ is the pdf of the running variable. Lemmas
 SA1 and SA2 of CCT imply that all of these terms have well-defined limits under
@@ -1057,7 +1086,7 @@ the following relationships hold:
   \Bf_{\bullet}(h) &= \Bft_{\bullet}(h) + o_p(1) &
   \Bft_{\bullet}(h) &= \Bf_{\bullet} + o_p(1) \label{eq:11} \\
   \tfrac{hb}{m} \Psi_{\bullet,p,q}(h, b) &= \Psit_{\bullet,p,q}(h,b) + o_p(1) &
-  \Psit_{\bullet,p,p}(h,h) &= f(0) \, \sigma^2_{\bullet}(0) \, \Psi_{\bullet,p} + o(1) \label{eq:12}
+  \Psit_{\bullet,p,p}(h,h) &= f(0) \, \sigma^2_{\bullet}(0) \, \Psi_{\bullet,p} + o(1). \label{eq:12}
 \end{align}
 Implicitly the right column of equations holds as $h \to 0$.
 
@@ -1204,9 +1233,9 @@ Normality also follows standard arguments for the wild
 bootstrap. Conditional on the regressors and residuals,
 $\{R(X_i) \hat\varepsilon_i e_i^* \}$ is a sequence of independent and
 mean zero random variables for any measurable function $R$, each with
-$p$th absolute moment
-$\lvert R(X_i) \hat\varepsilon_i \rvert^p \E \lvert e_i^*
-\rvert^{p}$.
+$q$th absolute moment
+$\lvert R(X_i) \hat\varepsilon_i \rvert^q \E \lvert e_i^*
+\rvert^{q}$.
 The result then holds as a consequence of the Lindeberg-Feller CLT if
 we establish that Liapunov's condition holds in probability, specifically that
 \begin{equation}\label{eq:17}
