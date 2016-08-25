@@ -26,8 +26,8 @@ average_bw <- function(model.id, kernel) {
 
 ## this function generate data with heteroskedasticity
 # standard error is firstly set to the square of expected outcome
-# rescale all standard error by a common factor 
-# so that they are on average 0.1295 within avebw
+# rescale all variance by a common factor 
+# so that they are on average 0.1295^2 within avebw
 
 generate.data.h <- function(model.id, avebw) {
   x <- 2*rbeta(500, 2, 4) - 1
