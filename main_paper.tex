@@ -149,7 +149,8 @@ is therefore known
 under this distribution and can be calculated by averaging the error of the
 linear model's estimates across many bootstrap replications. This approach is
 described in detail by our Algorithm~\ref{Alg1} and the resulting bias corrected
-estimator is shown to be asymptotically normal with mean zero in our
+estimator is shown to be equivalent to CCT's, up to simulation error in the
+bootstrap, and asymptotically normal with mean zero in our
 Theorem~\ref{T1} under AMSE-optimal bandwidth rates.
 
 Just as in CCT, our bias correction step introduces additional
@@ -169,6 +170,9 @@ Theorem~\ref{T2}.\footnote{%
   estimate. Exploiting this feature makes the iterated bootstrap much less
   computationally burdensome; see the discussion following
   Algorithm~\ref{Alg2}.} %
+Simulation results presented in Section~\ref{sim} indicate that this iterated
+bootstrap provides very similar results in finite samples to CCT's analytical
+confidence intervals as well.
 
 The methods presented in this paper are intended as a ``proof of concept'' that
 demonstrates that the analytical correction proposed by CCT can also be
@@ -541,6 +545,12 @@ be ignored. Theorem~\ref{T1} presents the result formally.
 \begin{theorem}\label{T1}
   Under Assumptions~\ref{A1} and~\ref{A2},
 \begin{equation}
+  \label{eq:18}
+  \Delta^*(h,b) = h^{2} \Big[\tfrac{\hat{\mu}_{+}^{(2)}(b)}{2} \Bf_{+}(h)
+  - \tfrac{\hat{\mu}_{-}^{(2)}(b)}{2}\Bf_{-}(h) \Big]
+\end{equation}
+almost surely and
+\begin{equation}
   \label{eq:4}
   \frac{\hat\tau(h) - \Delta^{*}(h,b) - \tau}{ V^{bc}(h, b)^{1/2}}
   \to^{d} N(0,1),
@@ -550,10 +560,13 @@ $V^{bc}(h, b) = V(h) + C(h, b)$, both which are defined in Equations~\eqref{eq:8
 and~\eqref{eq:13} of the Mathematical Appendix.
 \end{theorem}
 
-Theorem~\ref{T1} implies that our bias-corrected
+For practical purposes, Theorem~\ref{T1} implies that our bias-corrected
 estimator has the same asymptotic distribution as CCT's. This equivalence should
 be unsurprising; both estimators use a second order polynomial to directly estimate
 the bias of the local linear model, so they should behave very similarly.
+Equation~\eqref{eq:18} implies an even stronger relationship between the two
+results, that the bias correction is equivalent to CCT's up to simulation error
+in the bootstrap.
 
 Since the second order polynomial captures the relevant aspects of the DGP for
 estimating the variance as well as the bias, the asymptotic distribution of the
@@ -836,9 +849,14 @@ standard deviation, and Root-MSE of the point
 estimators corresponding to each approach.  As expected, both
 bias corrected estimators have
 bias close to zero, with their standard deviation largely
-determining the estimators' RMSE. Moreover, as Theorem~\ref{T1} suggests, the
-bootstrap and analytically-corrected estimators have essentially the same
-standard deviation across all of the DGPs.
+determining the estimators' RMSE.
+As we remark earlier, the bias correction from the wild bootstrap is equivalent
+to CCT's bias correction up to simulation error from the bootstrap and this
+equivalence is apparent in the Monte Carlo. This equivalence also explains why
+the bootstrap and analytically-corrected estimators have essentially the same
+standard deviation across all of the DGPs.\footnote{%
+  Note that this table reports the estimators' variance across simulations,
+  not the \emph{estimated} variance used for the confidence intervals.} %
 
 The column ``CI Coverage'' lists the experimental coverage of each procedure.  In 
 Panel A, all the intervals produced by the two robust estimators are reasonably close to 
@@ -1154,6 +1172,9 @@ almost surely and, consequently,
   \E^* \hat\tau^*(h) - \tau^{*} = h^2\, \mu_+^{*(2)} \Bf_+(h)/2
   - h^2\, \mu_{-}^{*(2)} \Bf_{-}(h)/2.
 \end{equation*}
+Equation~\eqref{eq:18} holds because
+$\mu_\bullet^{*(2)} = \hat\mu_{\bullet,2}^{(2)}(b)$ almost surely.
+
 CCT's Lemma A1 implies that
 \begin{equation*}
   \E \hat\tau(h) - \tau = h^2\, \mu_+^{(2)} \Bf_+(h)/2
@@ -1172,8 +1193,7 @@ as well, giving
   &\pushright{- h^2 (\hat\mu_{+,2}^{(2)}(b) - \mu_+^{(2)}) \Bf_{+}(h) / 2
    + O_p(h^{3})}
 \end{align}
-The second equality holds because
-$\mu_\bullet^{*(2)} = \hat\mu_{\bullet,2}^{(2)}(b)$ almost surely. Asymptotic
+Asymptotic
 normality then follows from normality of $\hat\tau(h) - \E\hat\tau(h)$ and
 $\hat\mu_{\bullet,2}^{(2)}(b) - \mu_\bullet^{(2)}$ using similar arguments to
 CCT's Lemma SA4.D.\qed
