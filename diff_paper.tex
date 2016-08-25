@@ -1,7 +1,7 @@
 \documentclass[12pt,fleqn]{article}
 %DIF LATEXDIFF DIFFERENCE FILE
-%DIF DEL main_paper_v6.tex   Thu Aug 25 14:55:15 2016
-%DIF ADD main_paper.tex      Thu Aug 25 14:55:27 2016
+%DIF DEL main_paper_m.tex   Thu Aug 25 15:57:18 2016
+%DIF ADD main_paper.tex     Thu Aug 25 15:57:36 2016
 
 % Add commit information from Git to the pdf. It is automatically
 % generated with the R script 'tex/git and can be run from
@@ -506,10 +506,12 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
     \end{align}
     with
     \begin{align*}
-      \hat\beta_{-} &= \argmin_\beta \sum_{i = 1}^n
-      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{-,b}(X_{i}) \\
-      \hat\beta_{+} &= \argmin_\beta \sum_{i = 1}^n
-      (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{+,b}(X_{i}).
+      \DIFaddbegin \DIFadd{(\hat\beta_{-,0}, \hat\beta_{-,1}, \hat\beta_{-,2})'}\DIFaddend
+      &= \argmin_{\DIFdelbegin \DIFdel{\beta} \DIFdelend \DIFaddbegin \DIFadd{\beta_0, \beta_1, \beta_2}\DIFaddend}
+      \sum_{i = 1}^n (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{-,b}(X_{i}) \\
+      \DIFaddbegin \DIFadd{(\hat\beta_{+,0}, \hat\beta_{+,1}, \hat\beta_{+,2})'}\DIFaddend
+      &= \argmin_{\DIFdelbegin \DIFdel{\beta} \DIFdelend \DIFaddbegin \DIFadd{\beta_0, \beta_1, \beta_2}\DIFaddend}
+      \sum_{i = 1}^n (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{+,b}(X_{i}).
     \end{align*}
     Let
     \[
