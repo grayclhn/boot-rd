@@ -1353,8 +1353,12 @@ that
 \begin{equation}\label{eq:16}
   \tfrac{1}{n} \sum_{i} \DIFdelbegin \DIFdel{m^{1+\delta} }\DIFdelend \lvert (R_+(X_i) - R_-(X_i))
   \hat\varepsilon_i \rvert^{2+\delta}.
+  \DIFaddbegin \DIFadd{= O_p(h^{-\delta/2}) + O_p(b^{-\delta/2})}\DIFaddend .
 \end{equation}
-obeys the LLN, implying that~\eqref{eq:17} holds and completing the proof. \qed
+\DIFdelbegin \DIFdel{obeys the LLN,implying }\DIFdelend \DIFaddbegin \DIFadd{Since $nb \to \infty$ and $n h \to \infty$ by
+assumption,~}\eqref{eq:16} \DIFadd{implies }\DIFaddend that~\eqref{eq:17} holds and
+\DIFaddbegin \DIFadd{completes} \DIFaddend\DIFdelbegin \DIFdel{completing}
+\DIFdelend the proof. \qed
 
 \clearpage
 \bibliographystyle{jpe}
