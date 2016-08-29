@@ -512,9 +512,11 @@ Algorithm~\ref{Alg1} explains the bias-correction steps in detail.
     \end{align}
     with
     \begin{align*}
+      \DIFdelbegin \DIFdel{\hat\beta_-} \DIFdelend
       \DIFaddbegin \DIFadd{(\hat\beta_{-,0}, \hat\beta_{-,1}, \hat\beta_{-,2})'}\DIFaddend
       &= \argmin_{\DIFdelbegin \DIFdel{\beta} \DIFdelend \DIFaddbegin \DIFadd{\beta_0, \beta_1, \beta_2}\DIFaddend}
       \sum_{i = 1}^n (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{-,b}(X_{i}) \\
+      \DIFdelbegin \DIFdel{\hat\beta_+} \DIFdelend
       \DIFaddbegin \DIFadd{(\hat\beta_{+,0}, \hat\beta_{+,1}, \hat\beta_{+,2})'}\DIFaddend
       &= \argmin_{\DIFdelbegin \DIFdel{\beta} \DIFdelend \DIFaddbegin \DIFadd{\beta_0, \beta_1, \beta_2}\DIFaddend}
       \sum_{i = 1}^n (Y_i - \beta_0 - \beta_1 X_i - \beta_2 X_i^2)^{2} K_{+,b}(X_{i}).
