@@ -153,14 +153,16 @@ rdboot_ForMc <- function(y, x, a = 0.05, Nbc = 500, Nci = 999, p = 1, q = 2,
   
   e.ql.adj <- switch (residual,
                       HC0 = 1,
-                      HC1 = sqrt(length(yql)/(length(yql) - q - 1)),
+                      HC1 = sqrt(sum(kweight(xql, 0, b, kernel))/
+                                   (sum(kweight(xql, 0, b, kernel)) - q - 1)),
                       HC2 = 1/sqrt(1 - hl),
                       HC3 = 1/(1 - hl)
   )
   
   e.qr.adj <- switch (residual,
                       HC0 = 1,
-                      HC1 = sqrt(length(yqr)/(length(yqr) - q - 1)),
+                      HC1 = sqrt(sum(kweight(xqr, 0, b, kernel))/
+                                   (sum(kweight(xqr, 0, b, kernel)) - q - 1)),
                       HC2 = 1/sqrt(1 - hr),
                       HC3 = 1/(1 - hr)
   )
