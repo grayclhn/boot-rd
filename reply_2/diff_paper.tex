@@ -12,11 +12,11 @@
 % If VERSION.tex does not exist we can't add information from
 % Git, so we'll use today's date as a fallback.
 
-\IfFileExists{./VERSION.tex}{\input{VERSION}}{%
+\IfFileExists{./VERSION.tex}{\input{../VERSION}}{%
 \providecommand\VERSION{\today}}
 
-\input{tex/setup}
-\input{tex/macros}
+\input{../tex/setup}
+\input{../tex/macros}
 
 \title{Bootstrap Confidence Intervals for Sharp Regression Discontinuity Designs}
 
@@ -1356,7 +1356,7 @@ obeys the LLN, implying that~\eqref{eq:17} holds and completing the proof. \qed
 
 \clearpage
 \bibliographystyle{jpe}
-\bibliography{tex/references}
+\bibliography{../tex/references}
 \end{document}
 
 %%% Local Variables:
