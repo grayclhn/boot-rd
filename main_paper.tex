@@ -120,11 +120,16 @@ AMSE-optimal rate. They also show that this bias-correction term contributes
 to the asymptotic variance of the resulting treatment effect estimator and
 provide a new formula for the asymptotic variance of the bias-corrected
 estimator. The resulting confidence intervals have accurate coverage even when
-the naive RD interval does not. Furthermore, \cite{CCF15} analyzes properties of
-the proposed bias-corrected studentized statistics based on a fixed-$n$ calculation
- for standard errors and demonstrates through higher-order expansions that confidence intervals based on these
- statistics achieve superior coverage-error convergence rates relative to undersmoothing.
-Additionally, they provide bandwidth choice procedures which are ``coverage-error optimal.''
+the naive RD interval does not.
+Furthermore, as shown by \citet{CCF15}, these intervals can achieve faster
+convergence rates than previously believed, outperforming intervals produced
+by undersmoothing in some settings while maintaining grater robustness to
+the choice of bandwidth parameter. Previous research by \citet{Hall93} and
+\citet{Neumann97} has found that undersmoothing outperforms naive
+bias-corrected confidence intervals, but \citet{CCF15} show that the naive
+variance estimator implicitly requires more restrictions than CCT's
+expression and those restrictions artificially limit the intervals'
+performance.
 
 In this paper, we propose a bootstrap alternative to CCT's analytical
 corrections. CCT motivate their estimator by showing that the bias and
